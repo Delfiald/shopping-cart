@@ -1,0 +1,11 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Something truthy and falsy > render app 1`] = `
+<div>
+  <header>
+    <h1>
+      Hello World React
+    </h1>
+  </header>
+</div>
+`;

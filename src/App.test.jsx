@@ -10,10 +10,14 @@ describe("Something truthy and falsy", () => {
   expect(false).toBe(false);
  });
 
+ it("render app", () => {
+  const { container } = render(<App />);
+  expect(container).toMatchSnapshot();
+ });
+
  it("renders headline", () => {
   render(<App title="React" />);
 
-  screen.debug();
   const headline = screen.getByText(/react/i);
   expect(headline).toBeInTheDocument();
  });
