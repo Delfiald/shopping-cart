@@ -1,19 +1,20 @@
 import PropTypes from "prop-types";
 
-function Header(props) {
+function Header(props = { name: "Hello World React" }) {
+ const handleHeroChange = () => {
+  props.setName((prevName) => prevName + " Clicked!");
+ };
+
  return (
   <header>
-   <h1>{props.name}</h1>
+   <h1 onClick={handleHeroChange}>{props.name}</h1>
   </header>
  );
 }
 
 Header.propTypes = {
  name: PropTypes.string,
-};
-
-Header.defaultProps = {
- name: "Hello World React",
+ setName: PropTypes.func.isRequired,
 };
 
 export default Header;
