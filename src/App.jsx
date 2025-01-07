@@ -1,10 +1,11 @@
 import { useState } from "react";
-import Header from "./components/Header/Header";
+import { Outlet } from "react-router-dom";
 
 function App() {
- const [name, setName] = useState("Hello World React");
+ const [cartItem, setCartItem] = useState([]);
+ const [cartOpen, setCartOpen] = useState(false);
 
- return <Header name={name} setName={setName} />;
+ return <Outlet context={{ cartItem, cartOpen, setCartOpen }} />;
 }
 
 export default App;
