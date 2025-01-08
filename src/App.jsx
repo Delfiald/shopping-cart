@@ -8,6 +8,9 @@ function App() {
  const [hoverButton, setHoverButton] = useState(null);
  const [searchInput, setSearchInput] = useState("");
 
+ const [error, setError] = useState(null);
+ const [loading, setLoading] = useState(null);
+
  return (
   <>
    <Outlet
