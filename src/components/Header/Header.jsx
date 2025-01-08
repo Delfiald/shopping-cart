@@ -1,10 +1,17 @@
 import styles from "./header.module.css";
 
-import { Search, ShoppingCart } from "lucide-react";
+import { Bell, Search, ShoppingCart } from "lucide-react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 
-function Header({ cartItem = 0, cartOpen, setCartOpen }) {
+function Header({
+ cartItem,
+ notificationItem,
+ hoverButton,
+ setHoverButton,
+ searchInput,
+ setSearchInput,
+}) {
  const navigate = useNavigate();
 
  const handleCartClick = () => {
@@ -12,8 +19,12 @@ function Header({ cartItem = 0, cartOpen, setCartOpen }) {
   navigate("/cart");
  };
 
- const handleCartHover = (isCartOpen) => {
-  setCartOpen(isCartOpen);
+ const handleHoverButton = (isCartOpen) => {
+  setHoverButton(isCartOpen);
+ };
+
+ const handleInputChange = (value) => {
+  setSearchInput(value);
  };
 
  return (
@@ -26,27 +37,58 @@ function Header({ cartItem = 0, cartOpen, setCartOpen }) {
      <label htmlFor="search">
       <Search size={16} title="Search Icon" />
      </label>
-     <input type="text" id="search" placeholder="Search Here..." />
+     <input
+      onChange={(e) => handleInputChange(e.target.value)}
+      type="text"
+      id="search"
+      placeholder="Search Here..."
+      value={searchInput}
+     />
     </div>
     <button
      onClick={handleCartClick}
-     onMouseEnter={() => handleCartHover(true)}
-     onMouseLeave={() => handleCartHover(false)}
+     onMouseEnter={() => handleHoverButton("cart")}
+     onMouseLeave={() => handleHoverButton(null)}
      data-testid="cart-button"
      className={styles["cart-button"]}
     >
      <ShoppingCart size={16} title="Cart Button" />
-     {cartItem.length > 0 && (
+     {cartItem && cartItem.length > 0 && (
       <div data-testid="item-count" className={styles["item-count"]}>
        {cartItem.length}
       </div>
      )}
-     {cartOpen && (
+     {hoverButton === "cart" && (
       <div>
        <ul>
-        <li>item 1</li>
-        <li>item 2</li>
-        <li>item 3</li>
+        {cartItem.map((item) => (
+         <li key={item.id}>{item.description}</li>
+        ))}
+       </ul>
+      </div>
+     )}
+    </button>
+    <button
+     onMouseEnter={() => handleHoverButton("notification")}
+     onMouseLeave={() => handleHoverButton(null)}
+     data-testid="notification-button"
+     className={styles["notification-button"]}
+    >
+     <Bell size={16} />
+     {notificationItem && notificationItem.length > 0 && (
+      <div
+       data-testid="notification-count"
+       className={styles["notification-count"]}
+      >
+       {notificationItem.length}
+      </div>
+     )}
+     {hoverButton === "notification" && (
+      <div>
+       <ul>
+        {notificationItem.map((item) => (
+         <li key={item.id}>{item.description}</li>
+        ))}
        </ul>
       </div>
      )}
@@ -58,8 +100,11 @@ function Header({ cartItem = 0, cartOpen, setCartOpen }) {
 
 Header.propTypes = {
  cartItem: PropTypes.array.isRequired,
- cartOpen: PropTypes.bool.isRequired,
- setCartOpen: PropTypes.func.isRequired,
+ notificationItem: PropTypes.array.isRequired,
+ hoverButton: PropTypes.string.isRequired,
+ setHoverButton: PropTypes.func.isRequired,
+ searchInput: PropTypes.string.isRequired,
+ setSearchInput: PropTypes.func.isRequired,
 };
 
 export default Header;
