@@ -5,6 +5,8 @@ import userEvent from "@testing-library/user-event";
 import Cart from "../Cart/Cart";
 import { useState } from "react";
 import PropTypes from "prop-types";
+import { expect } from "vitest";
+import Shop from "../Shop/Shop";
 
 const MockRouter = ({
  context = {
@@ -18,6 +20,7 @@ const MockRouter = ({
     <Route path="/" element={<Outlet context={context} />}>
      <Route index element={<Home />} />
      <Route path="cart" element={<Cart />} />
+     <Route path="shop" element={<Shop />} />
     </Route>
    </Routes>
   </MemoryRouter>
@@ -102,9 +105,12 @@ describe("Home Page Test", () => {
   const shoppingCartButton = screen.getByTestId("cart-button");
   await user.click(shoppingCartButton);
 
-  const cartHeading = screen.getByText(/cart/i);
+  const cartHeading = screen.getByText("Cart");
 
   expect(cartHeading).toBeInTheDocument();
+
+  const cartMain = screen.getByText("Cart Main");
+  expect(cartMain).toBeInTheDocument();
  });
 
  it(`Doesn't Render Item Counter in Cart`, () => {
@@ -183,5 +189,18 @@ describe("Home Page Test", () => {
 
   await event.type(searchInput, "Hello World");
   expect(searchInput).toHaveValue("Hello World");
+ });
+
+ it("Should Render Call to Action Section", async () => {
+  const event = userEvent.setup();
+  render(<MockRouter />);
+
+  const ctaButton = screen.getByRole("button", { name: "Shop Now" });
+  expect(ctaButton).toBeInTheDocument();
+
+  await event.click(ctaButton);
+
+  const shopMainHeading = screen.getByText("Shop Main");
+  expect(shopMainHeading).toBeInTheDocument();
  });
 });

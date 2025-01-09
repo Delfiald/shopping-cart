@@ -122,6 +122,17 @@ exports[`Home Page Test > Renders Home Page 1`] = `
         Categories
       </h2>
     </div>
+    <div
+      class="_call-to-action_716e15"
+    >
+      <img
+        alt="Call to Action Background"
+        src=""
+      />
+      <button>
+        Shop Now
+      </button>
+    </div>
   </main>
 </div>
 `;
