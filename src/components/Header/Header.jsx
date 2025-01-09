@@ -15,7 +15,6 @@ function Header({
  const navigate = useNavigate();
 
  const handleCartClick = () => {
-  console.log("Navigate to Cart");
   navigate("/cart");
  };
 
@@ -99,12 +98,12 @@ function Header({
 }
 
 Header.propTypes = {
- cartItem: PropTypes.array.isRequired,
- notificationItem: PropTypes.array.isRequired,
- hoverButton: PropTypes.string.isRequired,
- setHoverButton: PropTypes.func.isRequired,
- searchInput: PropTypes.string.isRequired,
- setSearchInput: PropTypes.func.isRequired,
+ cartItem: PropTypes.array,
+ notificationItem: PropTypes.array,
+ hoverButton: PropTypes.string,
+ setHoverButton: PropTypes.func,
+ searchInput: PropTypes.string,
+ setSearchInput: PropTypes.func,
 };
 
 export default Header;

@@ -1,7 +1,7 @@
 import App from "../App";
 import Cart from "../pages/Cart/Cart";
 import Home from "../pages/Home/Home";
-import Item from "../pages/Item/Item";
+import Product from "../pages/Product/Product";
 import Shop from "../pages/Shop/Shop";
 import ErrorPage from "./ErrorPage";
 
@@ -14,7 +14,7 @@ const Routes = [
    { index: true, element: <Home /> },
    { path: "cart", element: <Cart /> },
    { path: "shop", element: <Shop /> },
-   { path: "item:id", element: <Item /> },
+   { path: "product:id", element: <Product /> },
   ],
  },
 ];

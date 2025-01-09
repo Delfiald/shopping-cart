@@ -8,11 +8,7 @@ import PropTypes from "prop-types";
 
 const MockRouter = ({
  context = {
-  cartItem: [],
-  notificationItem: [],
-  hoverButton: null,
   setHoverButton: () => {},
-  searchInput: "",
   setSearchInput: () => {},
  },
 }) => {
