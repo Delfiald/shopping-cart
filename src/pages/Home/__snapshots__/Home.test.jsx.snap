@@ -107,15 +107,32 @@ exports[`Home Page Test > Renders Home Page 1`] = `
   </header>
   <main>
     <div
-      class="hero"
+      class="_hero_716e15"
     >
       <div
-        class="carousel"
+        class="_carousel_716e15"
+        data-testid="products-carousel-section"
       />
     </div>
     <div
-      class="category"
-    />
+      class="_categories_716e15"
+      data-testid="categories-section"
+    >
+      <h2>
+        Categories
+      </h2>
+    </div>
+    <div
+      class="_call-to-action_716e15"
+    >
+      <img
+        alt="Call to Action Background"
+        src=""
+      />
+      <button>
+        Shop Now
+      </button>
+    </div>
   </main>
 </div>
 `;

@@ -1,16 +1,6 @@
 import Header from "../../components/Header/Header";
+import Main from "../../components/Main/HomeMain";
 import { useOutletContext } from "react-router-dom";
-
-function Main() {
- return (
-  <main>
-   <div className="hero">
-    <div className="carousel"></div>
-   </div>
-   <div className="category"></div>
-  </main>
- );
-}
 
 function Home() {
  const {
@@ -20,6 +10,8 @@ function Home() {
   setHoverButton,
   searchInput,
   setSearchInput,
+  categories,
+  products,
  } = useOutletContext();
 
  return (
@@ -32,7 +24,7 @@ function Home() {
     searchInput={searchInput}
     setSearchInput={setSearchInput}
    />
-   <Main />
+   <Main categories={categories} products={products} />
   </>
  );
 }
