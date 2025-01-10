@@ -1,11 +1,12 @@
+import Header from "../../components/Header/Header";
 import ShopMain from "../../components/Main/ShopMain";
 
 function Shop() {
  return (
-  <section>
-   <h1>Shop</h1>
+  <>
+   <Header />
    <ShopMain />
-  </section>
+  </>
  );
 }
 
