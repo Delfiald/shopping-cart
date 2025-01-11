@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import Footer from "./components/Footer/Footer";
 import { fetchData } from "./services/fakeStoreAPI";
+import Header from "./components/Header/Header";
 
 function App() {
  const [cartItem, setCartItem] = useState([]);
@@ -36,14 +37,16 @@ function App() {
 
  return (
   <>
+   <Header
+    cartItem={cartItem}
+    notificationItem={notificationItem}
+    hoverButton={hoverButton}
+    setHoverButton={setHoverButton}
+    searchInput={searchInput}
+    setSearchInput={setSearchInput}
+   />
    <Outlet
     context={{
-     cartItem,
-     notificationItem,
-     hoverButton,
-     setHoverButton,
-     searchInput,
-     setSearchInput,
      categories,
      products,
     }}
