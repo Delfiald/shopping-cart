@@ -2,10 +2,38 @@
 
 exports[`Test Home Page > Should Render Home Page 1`] = `
 <div>
+  <aside>
+    <div
+      class="categories"
+    >
+      <div>
+        Categories
+      </div>
+      <div
+        class="category-lists"
+        data-testid="category-lists"
+      >
+        <button
+          class="category"
+        >
+          category-1
+        </button>
+        <button
+          class="category"
+        >
+          category-2
+        </button>
+      </div>
+    </div>
+    <div
+      class="filter"
+    />
+  </aside>
   <main>
     <h2>
-      Shop Main
+      All Products
     </h2>
+    <section />
   </main>
 </div>
 `;

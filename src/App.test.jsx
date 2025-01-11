@@ -9,9 +9,9 @@ import PropTypes from "prop-types";
 import ErrorPage from "./router/ErrorPage";
 import userEvent from "@testing-library/user-event";
 
-const MockRouter = ({ path }) => {
+const MockRouter = ({ initialPath = "/" }) => {
  return (
-  <MemoryRouter initialEntries={[path]}>
+  <MemoryRouter initialEntries={[initialPath]}>
    <Routes>
     <Route path="/" element={<App />}>
      <Route index element={<Home />} />
@@ -26,17 +26,17 @@ const MockRouter = ({ path }) => {
 };
 
 MockRouter.propTypes = {
- path: PropTypes.string,
+ initialPath: PropTypes.string,
 };
 
 describe("It Render App", () => {
  it("render app", () => {
-  const { container } = render(<MockRouter path={"/"} />);
+  const { container } = render(<MockRouter />);
   expect(container).toMatchSnapshot();
  });
 
  it("Renders Header, Footer, and Home page correctly", () => {
-  render(<MockRouter path={"/"} />);
+  render(<MockRouter />);
 
   const header = screen.getByRole("heading", { name: /shoppers/i });
   expect(header).toBeInTheDocument();
@@ -49,7 +49,7 @@ describe("It Render App", () => {
  });
 
  it("Render ErrorPage when path not found", () => {
-  render(<MockRouter path={"/err"} />);
+  render(<MockRouter initialPath={"/err"} />);
 
   const errorPage = screen.getByText("Path Not Found 404");
   expect(errorPage).toBeInTheDocument();
@@ -57,7 +57,7 @@ describe("It Render App", () => {
 
  it("Should Routes to Cart Page when Click Cart Button on Header", async () => {
   const user = userEvent.setup();
-  render(<MockRouter path="/" />);
+  render(<MockRouter />);
 
   const shoppingCartButton = screen.getByTestId("cart-button");
   await user.click(shoppingCartButton);
@@ -68,5 +68,17 @@ describe("It Render App", () => {
 
   const cartMain = screen.getByText("Cart Main");
   expect(cartMain).toBeInTheDocument();
+ });
+
+ it("Should Routes to Shop Page when Click CTA Button on Home Main", async () => {
+  const user = userEvent.setup();
+  render(<MockRouter />);
+
+  const ctaButton = screen.getByRole("button", { name: "Shop Now" });
+  await user.click(ctaButton);
+
+  const shopHeading = screen.getByText("All Products");
+
+  expect(shopHeading).toBeInTheDocument();
  });
 });

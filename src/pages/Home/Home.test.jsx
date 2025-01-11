@@ -6,16 +6,11 @@ import Cart from "../Cart/Cart";
 import PropTypes from "prop-types";
 import Shop from "../Shop/Shop";
 
-const MockRouter = ({
- context = {
-  setHoverButton: () => {},
-  setSearchInput: () => {},
- },
-}) => {
+const MockRouter = () => {
  return (
   <MemoryRouter initialEntries={["/"]}>
    <Routes>
-    <Route path="/" element={<Outlet context={context} />}>
+    <Route path="/" element={<Outlet context={{}} />}>
      <Route index element={<Home />} />
      <Route path="cart" element={<Cart />} />
      <Route path="shop" element={<Shop />} />
@@ -44,7 +39,7 @@ describe("Home Page Test", () => {
 
   await event.click(ctaButton);
 
-  const shopMainHeading = screen.getByText("Shop Main");
+  const shopMainHeading = screen.getByText("All Products");
   expect(shopMainHeading).toBeInTheDocument();
  });
 });

@@ -2,7 +2,8 @@ import { render, screen } from "@testing-library/react";
 import HomeMain from "./HomeMain";
 import { useNavigate } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, expect, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import ShopMain from "./ShopMain";
 
 const mockCategories = ["category-1", "category-2", "category-3", "category-4"];
 
@@ -114,5 +115,19 @@ describe("Test Main component of Home", () => {
 
   expect(mockNavigate).toHaveBeenCalledWith("/shop");
   expect(mockNavigate).toHaveBeenCalledOnce();
+ });
+});
+
+describe("Test Main component of Shop", () => {
+ it("Should Render Shop Main Product Card", () => {
+  render(<ShopMain products={mockProducts} />);
+
+  expect(
+   screen.getByRole("heading", { name: "All Products" })
+  ).toBeInTheDocument();
+
+  expect(screen.getAllByTestId("product-card")).toHaveLength(
+   mockProducts.length
+  );
  });
 });
