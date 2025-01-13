@@ -1,8 +1,15 @@
 import PropTypes from "prop-types";
 import ShopMain from "../../components/Main/ShopMain";
-import { useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
+import { useState } from "react";
 
 function Aside({ categories }) {
+ const navigate = useNavigate();
+
+ const handleCategoryRouting = (category) => {
+  navigate(`categories:/${category}`);
+ };
+
  return (
   <aside>
    <div className="categories">
@@ -10,7 +17,11 @@ function Aside({ categories }) {
     <div data-testid="category-lists" className="category-lists">
      {categories &&
       categories.map((category, index) => (
-       <button className="category" key={index}>
+       <button
+        onClick={() => handleCategoryRouting(category)}
+        className="category"
+        key={index}
+       >
         {category}
        </button>
       ))}
@@ -23,10 +34,19 @@ function Aside({ categories }) {
 
 function Shop() {
  const { categories, products } = useOutletContext();
+
+ const [page, setPage] = useState(1);
+ const [itemPerPage, setItemPerPage] = useState(10);
  return (
   <>
    <Aside categories={categories} />
-   <ShopMain products={products} />
+   <ShopMain
+    products={products}
+    page={page}
+    setPage={setPage}
+    itemPerPage={itemPerPage}
+    setItemPerPage={setItemPerPage}
+   />
   </>
  );
 }
