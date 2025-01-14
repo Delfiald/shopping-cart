@@ -33,10 +33,6 @@ exports[`Test Home Page > Should Render Home Page 1`] = `
     <h2>
       All Products
     </h2>
-    <section
-      class="_product-list-wrapper_716e15"
-      data-testid="product-card"
-    />
   </main>
 </div>
 `;

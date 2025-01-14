@@ -162,6 +162,7 @@ const DropdownTest = () => {
   <MemoryRouter>
    <ShopMain
     products={mockProducts}
+    page={1}
     itemPerPage={itemPerPage}
     setItemPerPage={setItemPerPage}
     sort={sort}
@@ -195,16 +196,14 @@ describe("Test Main component of Shop", () => {
    screen.getByRole("heading", { name: "All Products" })
   ).toBeInTheDocument();
 
-  expect(screen.getByTestId("product-card").children).toHaveLength(
-   mockProducts.length
-  );
+  expect(screen.getByTestId("product-card").children).toHaveLength(1);
 
-  mockProducts.forEach((product) => {
-   expect(screen.getByTestId(`product-card-${product.id}`)).toBeInTheDocument();
-   expect(screen.getByAltText(product.title)).toBeInTheDocument();
-   expect(screen.getByText(product.title)).toBeInTheDocument();
-   expect(screen.getByText(product.price)).toBeInTheDocument();
-  });
+  expect(
+   screen.getByTestId(`product-card-${mockProducts[0].id}`)
+  ).toBeInTheDocument();
+  expect(screen.getByAltText(mockProducts[0].title)).toBeInTheDocument();
+  expect(screen.getByText(mockProducts[0].title)).toBeInTheDocument();
+  expect(screen.getByText(mockProducts[0].price)).toBeInTheDocument();
  });
 
  it("Should Route to Product Page when clicked Product", async () => {
@@ -531,23 +530,26 @@ describe("Test Main component of Shop", () => {
 
   expect(itemPerPageButton).toBeInTheDocument();
   expect(itemPerPageValue.children[0]).toHaveTextContent("1");
+  expect(screen.getByTestId("product-card").children).toHaveLength(1);
 
   await event.hover(itemPerPageButton);
 
   let itemPerPageOption = screen.queryByTestId("item-per-page-dropdown");
   expect(itemPerPageOption).toBeInTheDocument();
-  const itemPerPageOptionOne = screen.getByTestId("item-per-page-option-1");
-  expect(itemPerPageOptionOne).toBeInTheDocument();
+  const itemPerPageOptionThree = screen.getByTestId("item-per-page-option-3");
+  expect(itemPerPageOptionThree).toBeInTheDocument();
 
   expect(screen.getByTestId("item-per-page-dropdown")).toBeInTheDocument();
 
   await act(async () => {
    await event.hover(itemPerPageButton);
-   await event.click(itemPerPageOptionOne);
+   await event.click(itemPerPageOptionThree);
   });
 
   itemPerPageValue = screen.queryByTestId("item-per-page-value");
-  expect(itemPerPageValue).toHaveTextContent("5");
+  expect(itemPerPageValue).toHaveTextContent("Show All");
+
+  expect(screen.getByTestId("product-card").children).toHaveLength(4);
 
   await act(async () => {
    await event.hover(itemPerPageButton);

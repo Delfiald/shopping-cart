@@ -154,6 +154,32 @@ function ProductListHeader(props) {
  );
 }
 
+function ProductListWrapper(props) {
+ if (!props.products) {
+  return null;
+ }
+
+ const currentProducts =
+  props.itemPerPage === null
+   ? props.products
+   : props.products.slice(
+      (props.page - 1) * props.itemPerPage,
+      props.page * props.itemPerPage
+     );
+
+ return (
+  <section
+   data-testid="product-card"
+   className={styles["product-list-wrapper"]}
+  >
+   {props.products &&
+    currentProducts.map((product) => (
+     <Card key={product.id} product={product} />
+    ))}
+  </section>
+ );
+}
+
 function ProductListBottom(props) {
  const totalPage = Math.ceil(props.totalProducts / props.itemPerPage);
 
@@ -275,15 +301,11 @@ function ShopMain(props) {
      setHoverButton={props.setHoverButton}
     />
    )}
-   <section
-    data-testid="product-card"
-    className={styles["product-list-wrapper"]}
-   >
-    {props.products &&
-     props.products.map((product) => (
-      <Card key={product.id} product={product} />
-     ))}
-   </section>
+   <ProductListWrapper
+    products={props.products}
+    page={props.page}
+    itemPerPage={props.itemPerPage}
+   />
    {props.products && (
     <ProductListBottom
      totalProducts={props.products.length}
@@ -321,6 +343,12 @@ ProductListHeader.propTypes = {
  setSort: PropTypes.func,
  hoverButton: PropTypes.string,
  setHoverButton: PropTypes.func,
+};
+
+ProductListWrapper.propTypes = {
+ products: PropTypes.array,
+ page: PropTypes.number,
+ itemPerPage: PropTypes.number,
 };
 
 ProductListBottom.propTypes = {
