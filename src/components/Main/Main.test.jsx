@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import HomeMain from "./HomeMain";
 import {
  MemoryRouter,
@@ -153,6 +153,26 @@ const PaginationButtonTest = ({ newProduct }) => {
  );
 };
 
+const DropdownTest = () => {
+ const [hoverButton, setHoverButton] = useState(null);
+ const [itemPerPage, setItemPerPage] = useState(1);
+ const [sort, setSort] = useState("name-asc");
+
+ return (
+  <MemoryRouter>
+   <ShopMain
+    products={mockProducts}
+    itemPerPage={itemPerPage}
+    setItemPerPage={setItemPerPage}
+    sort={sort}
+    setSort={setSort}
+    hoverButton={hoverButton}
+    setHoverButton={setHoverButton}
+   />
+  </MemoryRouter>
+ );
+};
+
 PaginationButtonTest.propTypes = {
  newProduct: PropTypes.object,
 };
@@ -161,7 +181,13 @@ describe("Test Main component of Shop", () => {
  it("Should Render Shop Main Product Card", () => {
   render(
    <MemoryRouter>
-    <ShopMain products={mockProducts} />
+    <ShopMain
+     products={mockProducts}
+     page={1}
+     setPage={() => vi.fn()}
+     itemPerPage={1}
+     setItemPerPage={() => vi.fn()}
+    />
    </MemoryRouter>
   );
 
@@ -493,5 +519,78 @@ describe("Test Main component of Shop", () => {
   expect(dotsAfter).not.toBeInTheDocument();
   expect(lastPageButton).toBeInTheDocument();
   expect(lastPageButton).toHaveTextContent("5");
+ });
+
+ it("Should Render Item Per Page Downdown and Change Value", async () => {
+  const event = userEvent.setup();
+
+  render(<DropdownTest />);
+
+  const itemPerPageButton = screen.getByTestId("item-per-page");
+  let itemPerPageValue = screen.getByTestId("item-per-page-value");
+
+  expect(itemPerPageButton).toBeInTheDocument();
+  expect(itemPerPageValue.children[0]).toHaveTextContent("1");
+
+  await event.hover(itemPerPageButton);
+
+  let itemPerPageOption = screen.queryByTestId("item-per-page-dropdown");
+  expect(itemPerPageOption).toBeInTheDocument();
+  const itemPerPageOptionOne = screen.getByTestId("item-per-page-option-1");
+  expect(itemPerPageOptionOne).toBeInTheDocument();
+
+  expect(screen.getByTestId("item-per-page-dropdown")).toBeInTheDocument();
+
+  await act(async () => {
+   await event.hover(itemPerPageButton);
+   await event.click(itemPerPageOptionOne);
+  });
+
+  itemPerPageValue = screen.queryByTestId("item-per-page-value");
+  expect(itemPerPageValue).toHaveTextContent("5");
+
+  await act(async () => {
+   await event.hover(itemPerPageButton);
+   await userEvent.unhover(itemPerPageButton);
+  });
+
+  expect(
+   screen.queryByTestId("item-per-page-dropdown")
+  ).not.toBeInTheDocument();
+ });
+
+ it("Should Render Item Per Page Downdown and Change Value", async () => {
+  const event = userEvent.setup();
+
+  render(<DropdownTest />);
+
+  const sortButton = screen.getByTestId("sort-button");
+  let sortButtonValue = screen.getByTestId("sort-value");
+  expect(sortButtonValue).toHaveTextContent("Name Asc");
+
+  await event.hover(sortButton);
+
+  const sortDropdown = screen.getByTestId("sort-dropdown");
+  expect(sortDropdown).toBeInTheDocument();
+  expect(sortDropdown.children).toHaveLength(4);
+
+  const sortOption = screen.getByTestId("sort-option-2");
+  expect(sortOption).toBeInTheDocument();
+
+  await act(async () => {
+   await event.hover(sortButton);
+   await event.click(sortOption);
+  });
+
+  sortButtonValue = screen.getByTestId("sort-value");
+
+  expect(sortButtonValue).toHaveTextContent("Name Desc");
+
+  await act(async () => {
+   await event.hover(sortButton);
+   await event.unhover(sortButton);
+  });
+
+  expect(screen.queryByTestId("sort-dropdown")).not.toBeInTheDocument();
  });
 });

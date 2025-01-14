@@ -49,6 +49,8 @@ function App() {
     context={{
      categories,
      products,
+     hoverButton,
+     setHoverButton,
     }}
    />
    <Footer />

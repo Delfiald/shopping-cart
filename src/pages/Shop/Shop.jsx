@@ -33,10 +33,12 @@ function Aside({ categories }) {
 }
 
 function Shop() {
- const { categories, products } = useOutletContext();
+ const { categories, products, hoverButton, setHoverButton } =
+  useOutletContext();
 
  const [page, setPage] = useState(1);
  const [itemPerPage, setItemPerPage] = useState(10);
+ const [sort, setSort] = useState("name-asc");
  return (
   <>
    <Aside categories={categories} />
@@ -46,6 +48,10 @@ function Shop() {
     setPage={setPage}
     itemPerPage={itemPerPage}
     setItemPerPage={setItemPerPage}
+    sort={sort}
+    setSort={setSort}
+    hoverButton={hoverButton}
+    setHoverButton={setHoverButton}
    />
   </>
  );

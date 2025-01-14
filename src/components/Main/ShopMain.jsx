@@ -2,7 +2,18 @@ import { Link } from "react-router-dom";
 import styles from "./main.module.css";
 
 import PropTypes from "prop-types";
-import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+ ChevronDown,
+ ChevronLeft,
+ ChevronRight,
+ ChevronUp,
+} from "lucide-react";
+
+const ITEM_PER_PAGE = {
+ FIVE: 5,
+ TEN: 10,
+ SHOW_ALL: null,
+};
 
 function Card({ product }) {
  return (
@@ -19,38 +30,124 @@ function Card({ product }) {
 }
 
 function ProductListHeader(props) {
+ const sortValue = () => {
+  if (props.sort === "name-asc") {
+   return "Name Asc";
+  } else if (props.sort === "name-desc") {
+   return "Name Desc";
+  } else if (props.sort === "price-asc") {
+   return "Lowest Price";
+  } else if (props.sort === "price-desc") {
+   return "Highest Price";
+  }
+ };
+
+ const handleMouseLeave = () => {
+  props.setHoverButton("");
+ };
+
+ const handleItemPerPageDropdown = (value) => {
+  console.log("called with value: " + value);
+  props.setItemPerPage(value);
+ };
+
  return (
-  <div className="product-list-header">
+  <div className={styles["product-list-header"]}>
    <div data-testid="list-header">
-    <div className="item-information">
+    <div className={styles["item-information"]}>
      {`Showing ${props.page && (props.page - 1) * props.itemPerPage + 1} - ${
       props.totalProducts &&
       Math.min(props.page * props.itemPerPage, props.totalProducts)
      } products`}
     </div>
-    <div className="sort-wrapper">
+    <div className={styles["sort-wrapper"]}>
      <p>Sort:</p>
-     <div className="sort-button">
-      <div>
-       Lowest Price <ChevronDown size={16} />
+     <div
+      data-testid="sort-button"
+      className={styles["sort-button"]}
+      onMouseEnter={() => props.setHoverButton("sort")}
+      onMouseLeave={handleMouseLeave}
+     >
+      <div data-testid="sort-value">
+       <p>{props.sort && sortValue()}</p>
+       {props.hoverButton && props.hoverButton === "sort" ? (
+        <ChevronUp size={16} />
+       ) : (
+        <ChevronDown size={16} />
+       )}
       </div>
-      <div className="dropdown-wrapper">
-       <div className="item">Name Asc</div>
-       <div className="item">Name Desc</div>
-       <div className="item">Highest Price</div>
-       <div className="item">Lowest Price</div>
-      </div>
+      {props.hoverButton && props.hoverButton === "sort" && (
+       <div data-testid="sort-dropdown" className={styles["dropdown-wrapper"]}>
+        <div
+         data-testid="sort-option-1"
+         onClick={() => props.setSort("name-asc")}
+        >
+         Name Asc
+        </div>
+        <div
+         data-testid="sort-option-2"
+         onClick={() => props.setSort("name-desc")}
+        >
+         Name Desc
+        </div>
+        <div
+         data-testid="sort-option-3"
+         onClick={() => props.setSort("price-asc")}
+        >
+         Lowest Price
+        </div>
+        <div
+         data-testid="sort-option-4"
+         onClick={() => props.setSort("price-desc")}
+        >
+         Highest Price
+        </div>
+       </div>
+      )}
      </div>
     </div>
-    <div className="item-per-page">
-     <div className="show">
-      {props.itemPerPage} <ChevronDown size={16} />
+    <div
+     data-testid="item-per-page"
+     className={styles["item-per-page"]}
+     onMouseEnter={() => props.setHoverButton("item-per-page")}
+     onMouseLeave={handleMouseLeave}
+    >
+     <div
+      data-testid="item-per-page-value"
+      className={styles["item-per-page-value"]}
+     >
+      <p>{props.itemPerPage ? props.itemPerPage : "Show All"}</p>
+      {props.hoverButton && props.hoverButton === "item-per-page" ? (
+       <ChevronUp size={16} />
+      ) : (
+       <ChevronDown size={16} />
+      )}
      </div>
-     <div className="dropdown-wrapper">
-      <div>5</div>
-      <div>10</div>
-      <div>Show All</div>
-     </div>
+     {props.hoverButton && props.hoverButton === "item-per-page" && (
+      <div
+       data-testid="item-per-page-dropdown"
+       className={styles["dropdown-wrapper"]}
+      >
+       <div
+        data-testid="item-per-page-option-1"
+        onClick={() => handleItemPerPageDropdown(ITEM_PER_PAGE.FIVE)}
+       >
+        5
+       </div>
+       <div
+        data-testid="item-per-page-option-2"
+        onClick={() => handleItemPerPageDropdown(ITEM_PER_PAGE.TEN)}
+       >
+        10
+       </div>
+       <div
+        data-testid="item-per-page-option-3"
+        onClick={() => handleItemPerPageDropdown(ITEM_PER_PAGE.SHOW_ALL)}
+       >
+        Show All
+       </div>
+      </div>
+     )}
     </div>
    </div>
   </div>
@@ -60,17 +157,17 @@ function ProductListHeader(props) {
 function ProductListBottom(props) {
  const totalPage = Math.ceil(props.totalProducts / props.itemPerPage);
 
- if (totalPage <= 1) {
+ if (!totalPage && totalPage <= 1) {
   return null;
  }
  return (
-  <div className="product-list-bottom">
-   <div className="pagination">
-    <div className="arrow-button">
+  <div className={styles["product-list-bottom"]}>
+   <div className={styles.pagination}>
+    <div className={styles["arrow-button"]}>
      {props.page > 1 && (
       <button
        data-testid="prev-button"
-       className="prev-button"
+       className={styles["prev-button"]}
        onClick={() => props.setPage(props.page - 1)}
       >
        <ChevronLeft size={16} />
@@ -79,14 +176,14 @@ function ProductListBottom(props) {
      {props.page < totalPage && (
       <button
        data-testid="next-button"
-       className="next-button"
+       className={styles["next-button"]}
        onClick={() => props.setPage(props.page + 1)}
       >
        <ChevronRight size={16} />
       </button>
      )}
     </div>
-    <div className="number-button">
+    <div className={styles["number-button"]}>
      {/* If Current Page not 1 or Last it Render 1 and last Page Number */}
      {props.page !== 1 && (
       <div data-testid="first-page-button" onClick={() => props.setPage(1)}>
@@ -119,7 +216,7 @@ function ProductListBottom(props) {
      )}
 
      {/* It render current Page Number */}
-     <div data-testid="current-page-button" className="active">
+     <div data-testid="current-page-button" className={styles["active"]}>
       {props.page}
      </div>
 
@@ -171,6 +268,11 @@ function ShopMain(props) {
      totalProducts={props.products.length}
      page={props.page}
      itemPerPage={props.itemPerPage}
+     setItemPerPage={props.setItemPerPage}
+     sort={props.sort}
+     setSort={props.setSort}
+     hoverButton={props.hoverButton}
+     setHoverButton={props.setHoverButton}
     />
    )}
    <section
@@ -200,6 +302,10 @@ ShopMain.propTypes = {
  setPage: PropTypes.func,
  itemPerPage: PropTypes.number,
  setItemPerPage: PropTypes.func,
+ sort: PropTypes.string,
+ setSort: PropTypes.func,
+ hoverButton: PropTypes.string,
+ setHoverButton: PropTypes.func,
 };
 
 Card.propTypes = {
@@ -210,6 +316,11 @@ ProductListHeader.propTypes = {
  totalProducts: PropTypes.number,
  page: PropTypes.number,
  itemPerPage: PropTypes.number,
+ setItemPerPage: PropTypes.func,
+ sort: PropTypes.string,
+ setSort: PropTypes.func,
+ hoverButton: PropTypes.string,
+ setHoverButton: PropTypes.func,
 };
 
 ProductListBottom.propTypes = {
