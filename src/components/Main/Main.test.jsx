@@ -1,19 +1,14 @@
 import { act, render, screen } from "@testing-library/react";
 import HomeMain from "./HomeMain";
-import {
- MemoryRouter,
- Outlet,
- Route,
- Routes,
- useNavigate,
-} from "react-router-dom";
+import { MemoryRouter, Outlet, Route, Routes } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import ShopMain from "./ShopMain";
 import Shop from "../../pages/Shop/Shop";
 import Product from "../../pages/Product/Product";
 import { useState } from "react";
 import PropTypes from "prop-types";
+import Home from "../../pages/Home/Home";
 
 const mockCategories = ["category-1", "category-2", "category-3", "category-4"];
 
@@ -23,45 +18,38 @@ const mockProducts = [
   title: "product-1",
   image: "/image/product-1.png",
   price: 100,
+  category: "category-1",
  },
  {
   id: 2,
   title: "product-2",
   image: "/image/product-2.png",
   price: 135,
+  category: "category-2",
  },
  {
   id: 3,
   title: "product-3",
   image: "/image/product-3.png",
   price: 120,
+  category: "category-3",
  },
  {
   id: 4,
   title: "product-4",
   image: "/image/product-4.png",
   price: 90,
+  category: "category-4",
  },
 ];
 
-vi.mock("react-router-dom", async () => {
- const actual = await vi.importActual("react-router-dom");
- return {
-  ...actual,
-  useNavigate: vi.fn(),
- };
-});
-
 describe("Test Main component of Home", () => {
- const mockNavigate = vi.fn();
-
- beforeEach(() => {
-  vi.resetAllMocks();
-  useNavigate.mockImplementation(() => mockNavigate);
- });
-
  it("Should Render Categories Section", () => {
-  render(<HomeMain categories={mockCategories} products={mockProducts} />);
+  render(
+   <MemoryRouter>
+    <HomeMain categories={mockCategories} products={mockProducts} />
+   </MemoryRouter>
+  );
 
   const categoriesContainer = screen.getByTestId("categories-section");
   const categoriesHeader = screen.getByRole("heading", { name: "Categories" });
@@ -76,7 +64,11 @@ describe("Test Main component of Home", () => {
  });
 
  it(`Shouldn't Render categories list when theres no category`, () => {
-  render(<HomeMain categories={[]} products={mockProducts} />);
+  render(
+   <MemoryRouter>
+    <HomeMain categories={[]} products={mockProducts} />
+   </MemoryRouter>
+  );
 
   const categoriesContainer = screen.getByTestId("categories-section");
   expect(categoriesContainer.children).toHaveLength(1);
@@ -87,7 +79,11 @@ describe("Test Main component of Home", () => {
  });
 
  it("Should Render Carousel", () => {
-  render(<HomeMain categories={mockCategories} products={mockProducts} />);
+  render(
+   <MemoryRouter>
+    <HomeMain categories={mockCategories} products={mockProducts} />
+   </MemoryRouter>
+  );
 
   const carousel = screen.getByTestId("products-carousel-section");
   expect(carousel.children).toHaveLength(4);
@@ -106,7 +102,11 @@ describe("Test Main component of Home", () => {
  });
 
  it("Should not render carousel", () => {
-  render(<HomeMain categories={mockCategories} products={[]} />);
+  render(
+   <MemoryRouter>
+    <HomeMain categories={mockCategories} products={[]} />
+   </MemoryRouter>
+  );
 
   const carousel = screen.getByTestId("products-carousel-section");
   expect(carousel.children).toHaveLength(0);
@@ -119,16 +119,33 @@ describe("Test Main component of Home", () => {
  });
 
  it("Should Render Call to Action Section", async () => {
-  const event = userEvent.setup();
-  render(<HomeMain categories={[]} products={[]} />);
+  render(
+   <MemoryRouter initialEntries={["/"]}>
+    <Routes>
+     <Route
+      path="/"
+      element={
+       <Outlet
+        context={{
+         products: mockProducts,
+         categories: mockCategories,
+        }}
+       />
+      }
+     >
+      <Route index element={<Home />} />
+      <Route path="shop" element={<Shop />} />
+     </Route>
+    </Routes>
+   </MemoryRouter>
+  );
 
   const ctaButton = screen.getByRole("button", { name: "Shop Now" });
   expect(ctaButton).toBeInTheDocument();
 
-  await event.click(ctaButton);
+  await userEvent.click(ctaButton);
 
-  expect(mockNavigate).toHaveBeenCalledWith("/shop");
-  expect(mockNavigate).toHaveBeenCalledOnce();
+  expect(screen.getByText("All Products")).toBeInTheDocument();
  });
 });
 
@@ -223,6 +240,8 @@ describe("Test Main component of Shop", () => {
   const productLink = screen.getByTestId("product-card-1");
   expect(productLink).toBeInTheDocument();
   await event.click(productLink);
+
+  expect(screen.getByText("Product 1")).toBeInTheDocument();
  });
 
  it("Should Render Product List Header", () => {
@@ -594,5 +613,47 @@ describe("Test Main component of Shop", () => {
   });
 
   expect(screen.queryByTestId("sort-dropdown")).not.toBeInTheDocument();
+ });
+
+ it("Should Update Shop Main Title When a Category Is Selected", async () => {
+  const user = userEvent.setup();
+
+  render(
+   <MemoryRouter initialEntries={["/shop"]}>
+    <Routes>
+     <Route
+      path="/"
+      element={
+       <Outlet
+        context={{
+         products: mockProducts,
+         categories: mockCategories,
+        }}
+       />
+      }
+     >
+      <Route path="shop" element={<Shop />} />
+      <Route path="shop/categories/:category" element={<Shop />} />
+     </Route>
+    </Routes>
+   </MemoryRouter>
+  );
+
+  // Test Shop Main Title with content All Products
+  let shopMainTitle = screen.getByRole("heading", { name: "All Products" });
+  expect(shopMainTitle).toBeInTheDocument();
+
+  // Is Categories Button on Aside
+  const categoriesButtonLists = screen.getByTestId("category-lists");
+  expect(categoriesButtonLists).toBeInTheDocument();
+  expect(categoriesButtonLists.children).toHaveLength(4);
+  expect(categoriesButtonLists.children[0]).toHaveTextContent("category-1");
+
+  await user.click(screen.getByTestId("category-button-0"));
+
+  shopMainTitle = screen.getByRole("heading", { name: "category-1" });
+  expect(shopMainTitle).toBeInTheDocument();
+
+  expect(screen.getByTestId("product-card-1")).toBeInTheDocument();
  });
 });

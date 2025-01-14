@@ -15,11 +15,13 @@ exports[`Test Home Page > Should Render Home Page 1`] = `
       >
         <button
           class="category"
+          data-testid="category-button-0"
         >
           category-1
         </button>
         <button
           class="category"
+          data-testid="category-button-1"
         >
           category-2
         </button>

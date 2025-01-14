@@ -288,7 +288,7 @@ function ProductListBottom(props) {
 function ShopMain(props) {
  return (
   <main>
-   <h2>All Products</h2>
+   <h2>{props.category ? props.category : "All Products"}</h2>
    {props.products && (
     <ProductListHeader
      totalProducts={props.products.length}
@@ -319,6 +319,7 @@ function ShopMain(props) {
 }
 
 ShopMain.propTypes = {
+ category: PropTypes.string,
  products: PropTypes.array,
  page: PropTypes.number,
  setPage: PropTypes.func,
