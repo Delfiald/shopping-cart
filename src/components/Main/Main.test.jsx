@@ -150,22 +150,25 @@ describe("Test Main component of Home", () => {
 });
 
 const PaginationButtonTest = ({ newProduct }) => {
- const [page, setPage] = useState(2);
- const [itemPerPage, setItemPerPage] = useState(1);
-
- const localProduct = newProduct
-  ? [...mockProducts, newProduct]
-  : [...mockProducts];
+ const localProduct = newProduct ? [...newProduct] : [...mockProducts];
 
  return (
-  <MemoryRouter>
-   <ShopMain
-    products={localProduct}
-    page={page}
-    setPage={setPage}
-    itemPerPage={itemPerPage}
-    setItemPerPage={setItemPerPage}
-   />
+  <MemoryRouter initialEntries={["/shop"]}>
+   <Routes>
+    <Route
+     path="/"
+     element={
+      <Outlet
+       context={{
+        products: localProduct,
+        categories: mockCategories,
+       }}
+      />
+     }
+    >
+     <Route path="shop" element={<Shop />} />
+    </Route>
+   </Routes>
   </MemoryRouter>
  );
 };
@@ -192,7 +195,21 @@ const DropdownTest = () => {
 };
 
 PaginationButtonTest.propTypes = {
- newProduct: PropTypes.object,
+ newProduct: PropTypes.array,
+};
+
+const generateMockProducts = (num) => {
+ const products = [];
+ for (let i = 1; i <= num; i++) {
+  products.push({
+   id: i,
+   title: `product-${i}`,
+   image: `/image/product-${i}.png`,
+   price: 100 + (i % 10) * 10,
+   category: `category-${(i % 5) + 1}`,
+  });
+ }
+ return products;
 };
 
 describe("Test Main component of Shop", () => {
@@ -267,31 +284,15 @@ describe("Test Main component of Shop", () => {
 
  it("Should Render Pagination Arrow Buttons Based on Current Page", async () => {
   const event = userEvent.setup();
-  render(<PaginationButtonTest />);
-  let prevArrowButton = screen.queryByTestId("prev-button");
+
+  render(<PaginationButtonTest newProduct={generateMockProducts(15)} />);
+
   let nextArrowButton = screen.queryByTestId("next-button");
-
-  expect(prevArrowButton).toBeInTheDocument();
-  expect(nextArrowButton).toBeInTheDocument();
-
-  await event.click(prevArrowButton);
-
-  prevArrowButton = screen.queryByTestId("prev-button");
-  nextArrowButton = screen.queryByTestId("next-button");
+  let prevArrowButton = screen.queryByTestId("prev-button");
 
   expect(prevArrowButton).not.toBeInTheDocument();
   expect(nextArrowButton).toBeInTheDocument();
 
-  await event.click(nextArrowButton);
-
-  prevArrowButton = screen.queryByTestId("prev-button");
-  nextArrowButton = screen.queryByTestId("next-button");
-
-  expect(prevArrowButton).toBeInTheDocument();
-  expect(nextArrowButton).toBeInTheDocument();
-
-  await event.click(nextArrowButton);
-  await event.click(nextArrowButton);
   await event.click(nextArrowButton);
 
   prevArrowButton = screen.queryByTestId("prev-button");
@@ -303,7 +304,7 @@ describe("Test Main component of Shop", () => {
 
  it("Should Render Pagination Page Number Button Based on Current Page", async () => {
   const event = userEvent.setup();
-  render(<PaginationButtonTest />);
+  render(<PaginationButtonTest newProduct={generateMockProducts(50)} />);
 
   let firstPageButton = screen.queryByTestId("first-page-button");
   let dotsBefore = screen.queryByTestId("dots-before");
@@ -316,35 +317,6 @@ describe("Test Main component of Shop", () => {
   let lastPageButton = screen.queryByTestId("last-page-button");
 
   expect(currentPageButton).toBeInTheDocument();
-
-  // Not Rendered (current page 2)
-  expect(prevPrevPageButton).not.toBeInTheDocument();
-  expect(prevPageButton).not.toBeInTheDocument();
-
-  // Instead Render First Page Button
-  expect(firstPageButton).toBeInTheDocument();
-
-  expect(nextPageButton).toBeInTheDocument();
-
-  expect(dotsBefore).not.toBeInTheDocument();
-  expect(dotsAfter).not.toBeInTheDocument();
-
-  expect(nextNextPageButton).not.toBeInTheDocument();
-  expect(lastPageButton).toBeInTheDocument();
-
-  // Click First Page Button
-  await event.click(firstPageButton);
-
-  firstPageButton = screen.queryByTestId("first-page-button");
-  dotsBefore = screen.queryByTestId("dots-before");
-  prevPrevPageButton = screen.queryByTestId("prev-prev-page-button");
-  prevPageButton = screen.queryByTestId("prev-page-button");
-  currentPageButton = screen.queryByTestId("current-page-button");
-  nextPageButton = screen.queryByTestId("next-page-button");
-  nextNextPageButton = screen.queryByTestId("next-next-page-button");
-  dotsAfter = screen.queryByTestId("dots-after");
-  lastPageButton = screen.queryByTestId("last-page-button");
-
   expect(firstPageButton).not.toBeInTheDocument();
   expect(dotsBefore).not.toBeInTheDocument();
   expect(prevPrevPageButton).not.toBeInTheDocument();
@@ -355,9 +327,9 @@ describe("Test Main component of Shop", () => {
   expect(nextPageButton).toHaveTextContent("2");
   expect(nextNextPageButton).toBeInTheDocument();
   expect(nextNextPageButton).toHaveTextContent("3");
-  expect(dotsAfter).not.toBeInTheDocument();
+  expect(dotsAfter).toBeInTheDocument();
   expect(lastPageButton).toBeInTheDocument();
-  expect(lastPageButton).toHaveTextContent("4");
+  expect(lastPageButton).toHaveTextContent("5");
 
   // Click Next Page Button
   await event.click(nextPageButton);
@@ -382,9 +354,9 @@ describe("Test Main component of Shop", () => {
   expect(nextPageButton).toBeInTheDocument();
   expect(nextPageButton).toHaveTextContent("3");
   expect(nextNextPageButton).not.toBeInTheDocument();
-  expect(dotsAfter).not.toBeInTheDocument();
+  expect(dotsAfter).toBeInTheDocument();
   expect(lastPageButton).toBeInTheDocument();
-  expect(lastPageButton).toHaveTextContent("4");
+  expect(lastPageButton).toHaveTextContent("5");
 
   // Click Next Button
   await event.click(nextPageButton);
@@ -406,11 +378,11 @@ describe("Test Main component of Shop", () => {
   expect(prevPageButton).toBeInTheDocument();
   expect(currentPageButton).toBeInTheDocument();
   expect(currentPageButton).toHaveTextContent("3");
-  expect(nextPageButton).not.toBeInTheDocument();
+  expect(nextPageButton).toBeInTheDocument();
   expect(nextNextPageButton).not.toBeInTheDocument();
   expect(dotsAfter).not.toBeInTheDocument();
   expect(lastPageButton).toBeInTheDocument();
-  expect(lastPageButton).toHaveTextContent("4");
+  expect(lastPageButton).toHaveTextContent("5");
 
   // Click Last Page Button
   await event.click(lastPageButton);
@@ -427,13 +399,13 @@ describe("Test Main component of Shop", () => {
 
   expect(firstPageButton).toBeInTheDocument();
   expect(firstPageButton).toHaveTextContent("1");
-  expect(dotsBefore).not.toBeInTheDocument();
+  expect(dotsBefore).toBeInTheDocument();
   expect(prevPrevPageButton).toBeInTheDocument();
   expect(prevPrevPageButton).toBeInTheDocument("2");
   expect(prevPageButton).toBeInTheDocument();
-  expect(prevPageButton).toHaveTextContent("3");
+  expect(prevPageButton).toHaveTextContent("4");
   expect(currentPageButton).toBeInTheDocument();
-  expect(currentPageButton).toHaveTextContent("4");
+  expect(currentPageButton).toHaveTextContent("5");
   expect(nextPageButton).not.toBeInTheDocument();
   expect(nextNextPageButton).not.toBeInTheDocument();
   expect(dotsAfter).not.toBeInTheDocument();
@@ -443,16 +415,7 @@ describe("Test Main component of Shop", () => {
  it("Should Render Dots on Pagination", async () => {
   const event = userEvent.setup();
 
-  render(
-   <PaginationButtonTest
-    newProduct={{
-     id: 5,
-     title: "product-5",
-     image: "/image/product-5.png",
-     price: 95,
-    }}
-   />
-  );
+  render(<PaginationButtonTest newProduct={generateMockProducts(50)} />);
 
   // Should Only Render Before Dots
   let lastPageButton = screen.queryByTestId("last-page-button");
@@ -613,6 +576,8 @@ describe("Test Main component of Shop", () => {
   });
 
   expect(screen.queryByTestId("sort-dropdown")).not.toBeInTheDocument();
+
+  expect(screen.getByText("product-4")).toBeInTheDocument();
  });
 
  it("Should Update Shop Main Title When a Category Is Selected", async () => {
@@ -633,7 +598,6 @@ describe("Test Main component of Shop", () => {
       }
      >
       <Route path="shop" element={<Shop />} />
-      <Route path="shop/categories/:category" element={<Shop />} />
      </Route>
     </Routes>
    </MemoryRouter>
@@ -655,5 +619,14 @@ describe("Test Main component of Shop", () => {
   expect(shopMainTitle).toBeInTheDocument();
 
   expect(screen.getByTestId("product-card-1")).toBeInTheDocument();
+
+  expect(screen.getByTestId("remove-category")).toBeInTheDocument();
+  await user.click(screen.getByTestId("remove-category"));
+
+  shopMainTitle = screen.getByRole("heading", { name: "All Products" });
+
+  expect(screen.getByTestId("product-card").children).toHaveLength(
+   mockProducts.length
+  );
  });
 });

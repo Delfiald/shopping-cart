@@ -47,7 +47,6 @@ function ProductListHeader(props) {
  };
 
  const handleItemPerPageDropdown = (value) => {
-  console.log("called with value: " + value);
   props.setItemPerPage(value);
  };
 
@@ -181,11 +180,15 @@ function ProductListWrapper(props) {
 }
 
 function ProductListBottom(props) {
+ if (!props.itemPerPage) {
+  return null;
+ }
  const totalPage = Math.ceil(props.totalProducts / props.itemPerPage);
 
  if (!totalPage && totalPage <= 1) {
   return null;
  }
+
  return (
   <div className={styles["product-list-bottom"]}>
    <div className={styles.pagination}>
@@ -286,9 +289,31 @@ function ProductListBottom(props) {
 }
 
 function ShopMain(props) {
+ // Displayed Products Sorted
+ const displayedProducts = props.products
+  ? [...props.products].sort((a, b) => {
+     switch (props.sort) {
+      case "name-asc":
+       return a.title.localeCompare(b.title);
+      case "name-desc":
+       return b.title.localeCompare(a.title);
+      case "price-asc":
+       return a.price - b.price;
+      case "price-desc":
+       return b.price - a.price;
+      default:
+       return 0;
+     }
+    })
+  : props.products;
+
  return (
   <main>
-   <h2>{props.category ? props.category : "All Products"}</h2>
+   <h2>
+    {props.category && props.category !== "all"
+     ? props.category
+     : "All Products"}
+   </h2>
    {props.products && (
     <ProductListHeader
      totalProducts={props.products.length}
@@ -302,7 +327,7 @@ function ShopMain(props) {
     />
    )}
    <ProductListWrapper
-    products={props.products}
+    products={displayedProducts}
     page={props.page}
     itemPerPage={props.itemPerPage}
    />
