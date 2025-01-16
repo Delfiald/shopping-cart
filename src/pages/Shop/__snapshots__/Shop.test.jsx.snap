@@ -1,0 +1,40 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Test Home Page > Should Render Home Page 1`] = `
+<div>
+  <aside>
+    <div
+      class="categories"
+    >
+      <div>
+        Categories
+      </div>
+      <div
+        class="category-lists"
+        data-testid="category-lists"
+      >
+        <button
+          class="category"
+          data-testid="category-button-0"
+        >
+          category-1
+        </button>
+        <button
+          class="category"
+          data-testid="category-button-1"
+        >
+          category-2
+        </button>
+      </div>
+    </div>
+    <div
+      class="filter"
+    />
+  </aside>
+  <main>
+    <h2>
+      All Products
+    </h2>
+  </main>
+</div>
+`;

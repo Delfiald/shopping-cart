@@ -19,6 +19,7 @@ export default [
     it: "readonly",
     test: "readonly",
     vi: "readonly",
+    beforeEach: "readonly",
    },
    parserOptions: {
     ecmaVersion: "latest",
