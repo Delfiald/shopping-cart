@@ -1,42 +1,7 @@
-import PropTypes from "prop-types";
 import ShopMain from "../../components/Main/ShopMain";
+import Aside from "../../components/Aside/Aside";
 import { useOutletContext, useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
-import { CrossIcon } from "lucide-react";
-
-function Aside({ categories, category, handleFilterChange }) {
- return (
-  <aside>
-   <div className="categories">
-    <div>Categories</div>
-    {category && category !== "all" && (
-     <div
-      data-testid="remove-category"
-      className="remove-category"
-      onClick={() => handleFilterChange(`all`)}
-     >
-      <CrossIcon size={16} />
-      <p>Remove Category</p>
-     </div>
-    )}
-    <div data-testid="category-lists" className="category-lists">
-     {categories &&
-      categories.map((category, index) => (
-       <button
-        onClick={() => handleFilterChange(category)}
-        className="category"
-        key={index}
-        data-testid={`category-button-${index}`}
-       >
-        {category}
-       </button>
-      ))}
-    </div>
-   </div>
-   <div className="filter"></div>
-  </aside>
- );
-}
 
 function Shop() {
  const [searchParams, setSearchParams] = useSearchParams();
@@ -131,11 +96,5 @@ function Shop() {
   </>
  );
 }
-
-Aside.propTypes = {
- categories: PropTypes.array,
- category: PropTypes.string,
- handleFilterChange: PropTypes.func,
-};
 
 export default Shop;
