@@ -1,0 +1,133 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Test Product Page > Should Render Product Page Component 1`] = `
+<div>
+  <div
+    class="breadcrumb"
+    data-testid="breadcrumb"
+  >
+    <div>
+      Home
+    </div>
+    <svg
+      class="lucide lucide-chevron-right"
+      fill="none"
+      height="16"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      viewBox="0 0 24 24"
+      width="16"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="m9 18 6-6-6-6"
+      />
+    </svg>
+    <div>
+      Shop
+    </div>
+    <svg
+      class="lucide lucide-chevron-right"
+      fill="none"
+      height="16"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      viewBox="0 0 24 24"
+      width="16"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="m9 18 6-6-6-6"
+      />
+    </svg>
+    <div>
+      category-2
+    </div>
+    <svg
+      class="lucide lucide-chevron-right"
+      fill="none"
+      height="16"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      viewBox="0 0 24 24"
+      width="16"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="m9 18 6-6-6-6"
+      />
+    </svg>
+    product-1
+  </div>
+  <main>
+    <section
+      class="detail"
+    >
+      <div
+        class="top-detail"
+      >
+        <h2
+          class="product-title"
+        >
+          product-1
+        </h2>
+        <div
+          class="product-price"
+        >
+          110
+        </div>
+      </div>
+      <div
+        class="main-detail"
+      >
+        <div
+          class="detail-option"
+        >
+          <div
+            class="detail-button"
+            data-testid="detail-button"
+          >
+            Detail
+          </div>
+          <div
+            class="info-button"
+            data-testid="info-button"
+          >
+            Important Information
+          </div>
+        </div>
+        <div
+          class="detail-content"
+        >
+          <div
+            class="product-detail"
+          >
+            <div
+              class="min-order"
+            >
+              Min Order: 1 Pcs
+            </div>
+            <div
+              class="product-category"
+            >
+              Category: 
+              category-2
+            </div>
+            <div
+              class="product-description"
+            >
+              product bla bla bla number - 1
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+`;

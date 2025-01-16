@@ -9,6 +9,7 @@ import Product from "../../pages/Product/Product";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import Home from "../../pages/Home/Home";
+import ProductMain from "./ProductMain";
 
 const mockCategories = ["category-1", "category-2", "category-3", "category-4"];
 
@@ -258,7 +259,9 @@ describe("Test Main component of Shop", () => {
   expect(productLink).toBeInTheDocument();
   await event.click(productLink);
 
-  expect(screen.getByText("Product 1")).toBeInTheDocument();
+  expect(
+   screen.getByRole("heading", { name: "product-1" })
+  ).toBeInTheDocument();
  });
 
  it("Should Render Product List Header", () => {
@@ -628,5 +631,66 @@ describe("Test Main component of Shop", () => {
   expect(screen.getByTestId("product-card").children).toHaveLength(
    mockProducts.length
   );
+ });
+});
+
+describe("Test Main component of Product", () => {
+ it("Should Render Product Main Detail", async () => {
+  const user = userEvent.setup();
+  render(
+   <MemoryRouter>
+    <ProductMain product={mockProducts[0]} />
+   </MemoryRouter>
+  );
+
+  // Test Product Detail Title
+  const productTitle = screen.getByRole("heading", {
+   name: mockProducts[0].title,
+  });
+  expect(productTitle).toBeInTheDocument();
+
+  expect(screen.getByText("Min Order: 1 Pcs")).toBeInTheDocument();
+  const infoButton = screen.getByTestId("info-button");
+  expect(screen.queryByText(/lorem/i)).not.toBeInTheDocument();
+
+  await user.click(infoButton);
+
+  expect(screen.queryByText("Min Order: 1 Pcs")).not.toBeInTheDocument();
+  expect(screen.getByText(/lorem/i)).toBeInTheDocument();
+ });
+
+ it("Should Render Breadcrumb on Product Page and Navigate to Correct Route on Click", async () => {
+  const user = userEvent.setup();
+  render(
+   <MemoryRouter initialEntries={["/product/1"]}>
+    <Routes>
+     <Route
+      path="/"
+      element={
+       <Outlet
+        context={{ products: mockProducts, categories: mockCategories }}
+       />
+      }
+     >
+      <Route path="/shop" element={<Shop />} />
+      <Route path="/product/:id" element={<Product />} />
+     </Route>
+    </Routes>
+   </MemoryRouter>
+  );
+
+  // Test Breadcrumb
+  const productTitle = screen.getByTestId("breadcrumb");
+  expect(productTitle).toBeInTheDocument();
+
+  const categoriesButton = screen.getByText(mockProducts[0].category);
+  expect(categoriesButton).toBeInTheDocument();
+
+  // Route to Category By clicking Category Button in Breadcrumb
+  await user.click(categoriesButton);
+
+  expect(
+   screen.getByRole("heading", { name: mockProducts[0].category })
+  ).toBeInTheDocument();
  });
 });
