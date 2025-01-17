@@ -6,6 +6,7 @@ import Header from "./components/Header/Header";
 
 function App() {
  const [cartItem, setCartItem] = useState([]);
+ const [wishlistItem, setWishlistItem] = useState([]);
  const [notificationItem, setNotificationItem] = useState([]);
  const [hoverButton, setHoverButton] = useState(null);
  const [searchInput, setSearchInput] = useState("");
@@ -51,6 +52,10 @@ function App() {
      products,
      hoverButton,
      setHoverButton,
+     cartItem,
+     setCartItem,
+     wishlistItem,
+     setWishlistItem,
     }}
    />
    <Footer />

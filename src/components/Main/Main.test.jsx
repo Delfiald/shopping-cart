@@ -693,4 +693,156 @@ describe("Test Main component of Product", () => {
    screen.getByRole("heading", { name: mockProducts[0].category })
   ).toBeInTheDocument();
  });
+
+ it("Should Render Media for Product", async () => {
+  const user = userEvent.setup();
+  render(
+   <MemoryRouter>
+    <ProductMain product={mockProducts[0]} />
+   </MemoryRouter>
+  );
+
+  let displayImage = screen.getByTestId("display-image");
+  expect(displayImage).toBeInTheDocument();
+
+  const image2 = screen.getByTestId("image-2");
+  await user.click(image2);
+
+  displayImage = screen.getByTestId("display-image");
+  expect(displayImage).toBeInTheDocument();
+ });
+
+ it("Should Render Option Section", async () => {
+  const user = userEvent.setup();
+
+  const setCartItem = vi.fn();
+
+  render(
+   <MemoryRouter>
+    <ProductMain product={mockProducts[0]} setCartItem={setCartItem} />
+   </MemoryRouter>
+  );
+
+  let productAmount = screen.getByTestId("amount");
+  expect(productAmount).toBeInTheDocument();
+  expect(productAmount).toHaveTextContent(1);
+
+  let subtotal = screen.getByTestId("subtotal");
+  expect(subtotal).toHaveTextContent(mockProducts[0].price * 1);
+
+  // Reduce button disabled
+  let reduceButton = screen.getByTestId("reduce-amount");
+  expect(reduceButton).toHaveAttribute("disabled", "");
+
+  // User Click that disabled reduce button
+  await user.click(reduceButton);
+
+  // amount value doesn't change
+  productAmount = screen.getByTestId("amount");
+  expect(productAmount).toHaveTextContent(1);
+
+  const addButton = screen.getByTestId("add-amount");
+  expect(addButton).toBeInTheDocument();
+
+  // User click add amount button
+  await user.click(addButton);
+
+  // Amount value added by 1
+  productAmount = screen.getByTestId("amount");
+  expect(productAmount).toHaveTextContent(2);
+  subtotal = screen.getByTestId("subtotal");
+  expect(subtotal).toHaveTextContent(mockProducts[0].price * 2);
+
+  // Reduce button remove disabled attribute
+  reduceButton = screen.getByTestId("reduce-amount");
+  expect(reduceButton).not.toHaveAttribute("disabled");
+
+  // User click active reduce button
+  await user.click(reduceButton);
+  // Amount value reduced by 1
+  productAmount = screen.getByTestId("amount");
+  expect(productAmount).toHaveTextContent(1);
+  subtotal = screen.getByTestId("subtotal");
+  expect(subtotal).toHaveTextContent(mockProducts[0].price * 1);
+
+  const addToCartButton = screen.getByTestId("add-to-cart");
+
+  await user.click(addToCartButton);
+
+  expect(setCartItem).toHaveBeenCalled();
+
+  let updaterFunction = setCartItem.mock.calls[0][0];
+  let prevCartItem = [];
+  let newCartItem = updaterFunction(prevCartItem);
+
+  expect(newCartItem).toEqual([
+   {
+    id: 1,
+    title: "product-1",
+    image: "/image/product-1.png",
+    price: 100,
+    category: "category-1",
+    amount: 1,
+   },
+  ]);
+
+  await user.click(addButton);
+  await user.click(addButton);
+  expect(productAmount).toHaveTextContent(3);
+
+  await user.click(addToCartButton);
+
+  updaterFunction = setCartItem.mock.calls[1][0];
+  prevCartItem = newCartItem;
+  newCartItem = updaterFunction(prevCartItem);
+
+  expect(newCartItem).toEqual([
+   {
+    id: 1,
+    title: "product-1",
+    image: "/image/product-1.png",
+    price: 100,
+    category: "category-1",
+    amount: 4,
+   },
+  ]);
+ });
+
+ it("Should Toggle wishlist Item", async () => {
+  const user = userEvent.setup();
+
+  const setWishlistItem = vi.fn();
+
+  render(
+   <MemoryRouter>
+    <ProductMain
+     product={mockProducts[0]}
+     isWishlistItem={false}
+     setWishlistItem={setWishlistItem}
+    />
+   </MemoryRouter>
+  );
+
+  let wishlistButton = screen.getByTestId("wishlist-button");
+  expect(wishlistButton).toBeInTheDocument();
+  expect(wishlistButton).toHaveClass("wishlist false");
+
+  await user.click(wishlistButton);
+
+  expect(setWishlistItem).toHaveBeenCalled();
+
+  let updaterFunction = setWishlistItem.mock.calls[0][0];
+  let prevWishlistItem = [];
+  let newWishlistItem = updaterFunction(prevWishlistItem);
+
+  expect(newWishlistItem).toEqual([
+   {
+    id: 1,
+    title: "product-1",
+    image: "/image/product-1.png",
+    price: 100,
+    category: "category-1",
+   },
+  ]);
+ });
 });
