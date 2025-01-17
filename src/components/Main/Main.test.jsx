@@ -825,7 +825,7 @@ describe("Test Main component of Product", () => {
 
   let wishlistButton = screen.getByTestId("wishlist-button");
   expect(wishlistButton).toBeInTheDocument();
-  expect(wishlistButton).toHaveClass("wishlist false");
+  expect(wishlistButton).toHaveClass("wishlist inactive");
 
   await user.click(wishlistButton);
 

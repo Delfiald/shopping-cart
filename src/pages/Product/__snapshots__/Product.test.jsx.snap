@@ -337,7 +337,7 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
           class="actions"
         >
           <div
-            class="wishlist undefined"
+            class="wishlist inactive"
             data-testid="wishlist-button"
           >
             <svg

@@ -184,7 +184,7 @@ function Option(props) {
     <div className="actions">
      <div
       data-testid="wishlist-button"
-      className={`wishlist ${props.isWishlistItem}`}
+      className={`wishlist ${props.isWishlistItem ? "active" : "inactive"}`}
       onClick={props.handleWishListItem}
      >
       <Heart size={16} />
@@ -199,8 +199,6 @@ function Option(props) {
   </aside>
  );
 }
-
-function Review() {}
 
 function ProductMain({
  product,
@@ -282,7 +280,6 @@ function ProductMain({
      handleWishListItem={handleWishListItem}
      isWishlistItem={isWishlistItem}
     />
-    <Review />
    </main>
   </>
  );
