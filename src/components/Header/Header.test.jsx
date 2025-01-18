@@ -1,13 +1,71 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import Header from "./Header";
-import { MemoryRouter, useNavigate } from "react-router-dom";
+import { MemoryRouter, Outlet, Route, Routes } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
+import { expect, it } from "vitest";
+import Product from "../../pages/Product/Product";
+import Home from "../../pages/Home/Home";
+import Cart from "../../pages/Cart/Cart";
+
+const generateMockProducts = (num) => {
+ const products = [];
+ for (let i = 1; i <= num; i++) {
+  products.push({
+   id: i,
+   title: `product-${i}`,
+   image: `/image/product-${i}.png`,
+   price: 100 + (i % 10) * 10,
+   category: `category-${(i % 5) + 1}`,
+   description: `product bla bla bla number - ${i}`,
+  });
+ }
+ return products;
+};
+
+const MockNavigate = () => {
+ const [hoverButton, setHoverButton] = useState(null);
+ const [searchInput, setSearchInput] = useState("");
+
+ return (
+  <MemoryRouter initialEntries={["/"]}>
+   <Header
+    products={generateMockProducts(3)}
+    cartItem={mockCartItem}
+    notificationItem={mockNotificationItem}
+    hoverButton={hoverButton}
+    setHoverButton={setHoverButton}
+    searchInput={searchInput}
+    setSearchInput={setSearchInput}
+   />
+   <Routes>
+    <Route
+     path="/"
+     element={
+      <Outlet
+       context={{
+        products: generateMockProducts(3),
+        hoverButton,
+        setHoverButton,
+        cartItem: mockCartItem,
+       }}
+      />
+     }
+    >
+     <Route index element={<Home />} />
+     <Route path="/cart" element={<Cart />} />
+     <Route path="/product/:id" element={<Product />} />
+    </Route>
+   </Routes>
+  </MemoryRouter>
+ );
+};
 
 const MockHeader = () => {
  return (
   <MemoryRouter>
    <Header
+    products={[]}
     cartItem={[]}
     notificationItem={[]}
     hoverButton={null}
@@ -19,20 +77,13 @@ const MockHeader = () => {
  );
 };
 
-vi.mock("react-router-dom", async () => {
- const actual = await vi.importActual("react-router-dom");
- return {
-  ...actual,
-  useNavigate: vi.fn(),
- };
-});
-
 function HoverCartButtonTest() {
  const [hoverButton, setHoverButton] = useState(null);
 
  return (
   <MemoryRouter>
    <Header
+    products={generateMockProducts(4)}
     cartItem={mockCartItem}
     hoverButton={hoverButton}
     setHoverButton={setHoverButton}
@@ -47,6 +98,7 @@ function HoverNotificationButtonTest() {
  return (
   <MemoryRouter>
    <Header
+    products={generateMockProducts(4)}
     notificationItem={mockNotificationItem}
     hoverButton={hoverButton}
     setHoverButton={setHoverButton}
@@ -60,15 +112,19 @@ function SearchInputTest() {
 
  return (
   <MemoryRouter>
-   <Header searchInput={searchInput} setSearchInput={setSearchInput} />
+   <Header
+    products={[]}
+    searchInput={searchInput}
+    setSearchInput={setSearchInput}
+   />
   </MemoryRouter>
  );
 }
 
 const mockCartItem = [
- { id: 1, description: "item1" },
- { id: 2, description: "item2" },
- { id: 3, description: "item3" },
+ { id: 1, amount: 1 },
+ { id: 2, amount: 2 },
+ { id: 3, amount: 3 },
 ];
 
 const mockNotificationItem = [
@@ -77,13 +133,6 @@ const mockNotificationItem = [
 ];
 
 describe("Test Header", () => {
- const mockNavigate = vi.fn();
-
- beforeEach(() => {
-  vi.resetAllMocks();
-  useNavigate.mockImplementation(() => mockNavigate);
- });
-
  it("Should Render Header", () => {
   render(<MockHeader />);
 
@@ -112,20 +161,19 @@ describe("Test Header", () => {
 
  it("Cart Button Routes to Cart Page when Clicked", async () => {
   const user = userEvent.setup();
-  render(<MockHeader />);
+  render(<MockNavigate />);
 
   const shoppingCartButton = screen.getByTestId("cart-button");
 
   await user.click(shoppingCartButton);
 
-  expect(mockNavigate).toHaveBeenCalledWith("/cart");
-  expect(mockNavigate).toHaveBeenCalledOnce();
+  expect(screen.getByRole("heading", { name: "Cart" })).toBeInTheDocument();
  });
 
  it(`Doesn't Render Item Counter in Cart`, () => {
   render(
    <MemoryRouter>
-    <Header cartItem={[]} />
+    <Header products={[]} cartItem={[]} />
    </MemoryRouter>
   );
 
@@ -136,13 +184,13 @@ describe("Test Header", () => {
  it("Render Item Counter in Cart", () => {
   render(
    <MemoryRouter>
-    <Header cartItem={mockCartItem} />
+    <Header products={[]} cartItem={mockCartItem} />
    </MemoryRouter>
   );
 
   const itemCounter = screen.getByTestId("item-count");
   expect(itemCounter).toBeInTheDocument();
-  expect(itemCounter).toHaveTextContent(mockCartItem.length);
+  expect(itemCounter).toHaveTextContent(6);
  });
 
  it("Open Cart when Hovered and Close it when not", async () => {
@@ -153,11 +201,11 @@ describe("Test Header", () => {
   const shoppingCartButton = screen.getByTestId("cart-button");
 
   await event.hover(shoppingCartButton);
-  const cartItems = screen.getAllByText(/item/i);
+  const cartItems = screen.getAllByText(/product/i);
   expect(cartItems).toHaveLength(mockCartItem.length);
 
   await event.unhover(shoppingCartButton);
-  expect(screen.queryAllByText(/item/i)).toHaveLength(0);
+  expect(screen.queryAllByText(/product/i)).toHaveLength(0);
  });
 
  it("Render Notifications Button", () => {
@@ -170,7 +218,7 @@ describe("Test Header", () => {
  it(`Doesn't render notification Counter`, () => {
   render(
    <MemoryRouter>
-    <Header notificationItem={[]} />
+    <Header products={[]} notificationItem={[]} />
    </MemoryRouter>
   );
 
@@ -181,7 +229,7 @@ describe("Test Header", () => {
  it("Render Notification Counter", () => {
   render(
    <MemoryRouter>
-    <Header notificationItem={mockNotificationItem} />
+    <Header products={[]} notificationItem={mockNotificationItem} />
    </MemoryRouter>
   );
 
@@ -216,5 +264,46 @@ describe("Test Header", () => {
 
   await event.type(searchInput, "Hello World");
   expect(searchInput).toHaveValue("Hello World");
+ });
+
+ it("Should Navigate to Product Page When Click the Product on Hover", async () => {
+  const user = userEvent.setup();
+
+  render(<MockNavigate />);
+
+  const cartButtonWrapper = screen.getByTestId("cart-button-wrapper");
+  await user.hover(cartButtonWrapper);
+
+  const seeAllButton = screen.getByRole("button", { name: "See All" });
+  expect(seeAllButton).toBeInTheDocument();
+  const productOne = screen.getByTestId("product-1");
+  expect(productOne).toBeInTheDocument();
+
+  await act(async () => {
+   await user.hover(cartButtonWrapper);
+   await user.click(seeAllButton);
+   await user.unhover(cartButtonWrapper);
+  });
+
+  expect(screen.getByRole("heading", { name: "Cart" })).toBeInTheDocument();
+ });
+
+ it("Should Navigate to Product Page when Click Product on Cart Button when Hovered", async () => {
+  const user = userEvent.setup();
+
+  render(<MockNavigate />);
+
+  const cartButtonWrapper = screen.getByTestId("cart-button-wrapper");
+  await user.hover(cartButtonWrapper);
+
+  const productOne = screen.getByTestId("product-1");
+  expect(productOne).toBeInTheDocument();
+
+  await act(async () => {
+   await user.click(productOne);
+   await user.unhover(cartButtonWrapper);
+  });
+
+  expect(screen.getByTestId("display-image")).toBeInTheDocument();
  });
 });

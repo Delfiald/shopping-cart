@@ -39,6 +39,7 @@ function App() {
  return (
   <>
    <Header
+    products={products}
     cartItem={cartItem}
     notificationItem={notificationItem}
     hoverButton={hoverButton}

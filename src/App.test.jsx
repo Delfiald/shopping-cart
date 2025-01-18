@@ -66,7 +66,7 @@ describe("It Render App", () => {
 
   expect(cartHeading).toBeInTheDocument();
 
-  const cartMain = screen.getByText("Cart Main");
+  const cartMain = screen.getByRole("heading", { name: "Cart" });
   expect(cartMain).toBeInTheDocument();
  });
 

@@ -184,8 +184,8 @@ function Option(props) {
     <div className="actions">
      <div
       data-testid="wishlist-button"
-      className={`wishlist ${props.isWishlistItem ? "active" : "inactive"}`}
-      onClick={props.handleWishListItem}
+      className={`wishlist ${props.isWishlistItem() ? "active" : "inactive"}`}
+      onClick={props.handleWishlistItem}
      >
       <Heart size={16} />
       Wishlist
@@ -200,12 +200,7 @@ function Option(props) {
  );
 }
 
-function ProductMain({
- product,
- setCartItem,
- isWishlistItem,
- setWishlistItem,
-}) {
+function ProductMain({ product, setCartItem, wishlistItem, setWishlistItem }) {
  const navigate = useNavigate();
  const [detail, setDetail] = useState("detail");
  const [displayedImage, setDisplayedImage] = useState(product.image);
@@ -225,24 +220,25 @@ function ProductMain({
     );
    }
 
-   return [...prevCartItem, { ...product, amount: amount }];
+   return [...prevCartItem, { id: product.id, amount: amount }];
   });
  };
 
- const handleWishListItem = () => {
+ const isWishlist = () =>
+  wishlistItem.some((wishlist) => wishlist.id === product.id);
+
+ const handleWishlistItem = () => {
   setWishlistItem((prevWishlistItem) => {
    const exists = prevWishlistItem.find((item) => item.id === product.id);
-
-   if (exists) {
-    return prevWishlistItem.filter((item) => item.id !== product.id);
-   }
-
-   return [...prevWishlistItem, product];
+   const updatedWishlist = exists
+    ? prevWishlistItem.filter((item) => item.id !== product.id)
+    : [...prevWishlistItem, { id: product.id }];
+   return updatedWishlist;
   });
  };
 
  return (
-  <>
+  <main>
    <div data-testid="breadcrumb" className="breadcrumb">
     <div onClick={handleNavigate}>Home</div>
     <ChevronRight size={16} />
@@ -277,18 +273,18 @@ function ProductMain({
      amount={amount}
      setAmount={setAmount}
      handleAddToCart={handleAddToCart}
-     handleWishListItem={handleWishListItem}
-     isWishlistItem={isWishlistItem}
+     handleWishlistItem={handleWishlistItem}
+     isWishlistItem={isWishlist}
     />
    </main>
-  </>
+  </main>
  );
 }
 
 ProductMain.propTypes = {
- product: PropTypes.object,
+ product: PropTypes.object.isRequired,
  setCartItem: PropTypes.func,
- isWishlistItem: PropTypes.bool,
+ wishlistItem: PropTypes.array.isRequired,
  setWishlistItem: PropTypes.func,
 };
 
@@ -316,8 +312,8 @@ Option.propTypes = {
  amount: PropTypes.number,
  setAmount: PropTypes.func,
  handleAddToCart: PropTypes.func,
- handleWishListItem: PropTypes.func,
- isWishlistItem: PropTypes.bool,
+ handleWishlistItem: PropTypes.func,
+ isWishlistItem: PropTypes.func,
 };
 
 export default ProductMain;
