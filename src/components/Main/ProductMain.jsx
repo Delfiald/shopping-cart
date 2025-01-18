@@ -184,7 +184,7 @@ function Option(props) {
     <div className="actions">
      <div
       data-testid="wishlist-button"
-      className={`wishlist ${props.isWishlistItem ? "active" : "inactive"}`}
+      className={`wishlist ${props.isWishlistItem() ? "active" : "inactive"}`}
       onClick={props.handleWishlistItem}
      >
       <Heart size={16} />
@@ -200,12 +200,7 @@ function Option(props) {
  );
 }
 
-function ProductMain({
- product,
- setCartItem,
- isWishlistItem,
- setWishlistItem,
-}) {
+function ProductMain({ product, setCartItem, wishlistItem, setWishlistItem }) {
  const navigate = useNavigate();
  const [detail, setDetail] = useState("detail");
  const [displayedImage, setDisplayedImage] = useState(product.image);
@@ -225,17 +220,20 @@ function ProductMain({
     );
    }
 
-   return [...prevCartItem, { ...product, amount: amount }];
+   return [...prevCartItem, { id: product.id, amount: amount }];
   });
  };
+
+ const isWishlist = () =>
+  wishlistItem.some((wishlist) => wishlist.id === product.id);
 
  const handleWishlistItem = () => {
   setWishlistItem((prevWishlistItem) => {
    const exists = prevWishlistItem.find((item) => item.id === product.id);
-
-   return exists
+   const updatedWishlist = exists
     ? prevWishlistItem.filter((item) => item.id !== product.id)
-    : [...prevWishlistItem, product];
+    : [...prevWishlistItem, { id: product.id }];
+   return updatedWishlist;
   });
  };
 
@@ -276,7 +274,7 @@ function ProductMain({
      setAmount={setAmount}
      handleAddToCart={handleAddToCart}
      handleWishlistItem={handleWishlistItem}
-     isWishlistItem={isWishlistItem}
+     isWishlistItem={isWishlist}
     />
    </main>
   </main>
@@ -284,9 +282,9 @@ function ProductMain({
 }
 
 ProductMain.propTypes = {
- product: PropTypes.object,
+ product: PropTypes.object.isRequired,
  setCartItem: PropTypes.func,
- isWishlistItem: PropTypes.bool,
+ wishlistItem: PropTypes.array.isRequired,
  setWishlistItem: PropTypes.func,
 };
 
@@ -315,7 +313,7 @@ Option.propTypes = {
  setAmount: PropTypes.func,
  handleAddToCart: PropTypes.func,
  handleWishlistItem: PropTypes.func,
- isWishlistItem: PropTypes.bool,
+ isWishlistItem: PropTypes.func,
 };
 
 export default ProductMain;

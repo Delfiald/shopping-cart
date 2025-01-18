@@ -12,14 +12,12 @@ function Product() {
 
  const product = products.find((product) => product.id === parseInt(id));
 
- const isWishlistItem = wishlistItem.some((item) => item.id === product.id);
-
  return (
   <>
    <ProductMain
     product={product}
     setCartItem={setCartItem}
-    isWishlistItem={isWishlistItem}
+    wishlistItem={wishlistItem}
     setWishlistItem={setWishlistItem}
    />
   </>

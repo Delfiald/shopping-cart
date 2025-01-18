@@ -5,10 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { BuyModal } from "../Modal/Modal";
 
 function CartContents({
- cartItem = [],
  wishlistItem = [],
  setCartItem,
  setWishlistItem,
+ getCartDetails,
 }) {
  const navigate = useNavigate();
 
@@ -33,9 +33,7 @@ function CartContents({
    if (exists) {
     return prevWishlistItem.filter((item) => item.id !== product.id);
    } else {
-    const productWithoutAmount = { ...product };
-    delete productWithoutAmount.amount;
-    return [...prevWishlistItem, productWithoutAmount];
+    return [...prevWishlistItem, { id: product.id }];
    }
   });
  };
@@ -43,47 +41,47 @@ function CartContents({
  return (
   <section className="cart-contents">
    <div data-testid="item-list" className="item-list">
-    {cartItem.map((item) => {
+    {getCartDetails().map((cartItemProduct) => {
      const isWishlist = wishlistItem.some(
-      (wishlist) => wishlist.id === item.id
+      (wishlist) => wishlist.id === cartItemProduct.id
      );
      return (
-      <div className="item" key={item.id}>
+      <div className="item" key={cartItemProduct.id}>
        {/* Product Image */}
        <div
         className="product-image"
-        onClick={() => navigate(`/product/${item.id}`)}
+        onClick={() => navigate(`/product/${cartItemProduct.id}`)}
        >
-        <img src={item.image} alt={item.title} />
+        <img src={cartItemProduct.image} alt={cartItemProduct.title} />
        </div>
 
        {/* Product Title */}
        <div
         className="product-title"
-        onClick={() => navigate(`/product/${item.id}`)}
+        onClick={() => navigate(`/product/${cartItemProduct.id}`)}
        >
-        {item.title}
+        {cartItemProduct.title}
        </div>
 
        {/* Product Price */}
-       <div className="product-price">${item.price}</div>
+       <div className="product-price">${cartItemProduct.price}</div>
 
        {/* Product Options */}
        <div className="product-option">
         {/* Wishlist Button */}
         <div
-         data-testid={`wishlist-button-${item.id}`}
+         data-testid={`wishlist-button-${cartItemProduct.id}`}
          className={`wishlist-button ${isWishlist ? "active" : "inactive"}`}
-         onClick={() => handleWishlistItem(item)}
+         onClick={() => handleWishlistItem(cartItemProduct)}
         >
          <Heart size={16} />
         </div>
 
         {/* Remove Button */}
         <div
-         data-testid={`remove-button-${item.id}`}
+         data-testid={`remove-button-${cartItemProduct.id}`}
          className="remove-button"
-         onClick={() => handleRemoveCart(item.id)}
+         onClick={() => handleRemoveCart(cartItemProduct.id)}
         >
          <Trash size={16} />
         </div>
@@ -91,20 +89,20 @@ function CartContents({
         {/* Amount Control */}
         <div className="product-amount">
          <button
-          data-testid={`reduce-button-${item.id}`}
+          data-testid={`reduce-button-${cartItemProduct.id}`}
           className="reduce-button"
-          disabled={item.amount <= 1}
-          onClick={() => handleAmount(-1, item.id)}
+          disabled={cartItemProduct.amount <= 1}
+          onClick={() => handleAmount(-1, cartItemProduct.id)}
          >
           <Minus size={16} />
          </button>
-         <div data-testid={`amount-${item.id}`} className="amount">
-          {item.amount}
+         <div data-testid={`amount-${cartItemProduct.id}`} className="amount">
+          {cartItemProduct.amount}
          </div>
          <button
-          data-testid={`add-button-${item.id}`}
+          data-testid={`add-button-${cartItemProduct.id}`}
           className="add-button"
-          onClick={() => handleAmount(1, item.id)}
+          onClick={() => handleAmount(1, cartItemProduct.id)}
          >
           <Plus size={16} />
          </button>
@@ -137,18 +135,34 @@ function Summary({ totalPrice, orderAmount, setModal }) {
  );
 }
 
-function CartMain(props) {
+function CartMain({
+ products = [],
+ cartItem = [],
+ setCartItem,
+ wishlistItem = [],
+ setWishlistItem,
+}) {
  const [modal, setModal] = useState("");
 
+ const getCartDetails = () => {
+  return cartItem.map((cart) => {
+   const product = products.find((p) => p.id === cart.id);
+   return {
+    ...product,
+    amount: cart.amount,
+   };
+  });
+ };
+
  const totalPrice = () => {
-  return props.cartItem.reduce(
-   (prevItem, item) => prevItem + item.price * item.amount,
-   0
-  );
+  const cartDetails = getCartDetails();
+  return cartDetails.reduce((total, item) => {
+   return total + item.price * item.amount;
+  }, 0);
  };
 
  const orderAmount = () => {
-  return props.cartItem.reduce((prevItem, item) => prevItem + item.amount, 0);
+  return cartItem.reduce((prevItem, item) => prevItem + item.amount, 0);
  };
 
  return (
@@ -156,11 +170,11 @@ function CartMain(props) {
    <main>
     <h2>Cart</h2>
     <CartContents
-     cartItem={props.cartItem}
-     setCartItem={props.setCartItem}
-     wishlistItem={props.wishlistItem}
-     setWishlistItem={props.setWishlistItem}
+     setCartItem={setCartItem}
+     wishlistItem={wishlistItem}
+     setWishlistItem={setWishlistItem}
      setModal={setModal}
+     getCartDetails={getCartDetails}
     />
     <Summary
      totalPrice={totalPrice}
@@ -174,6 +188,7 @@ function CartMain(props) {
 }
 
 CartMain.propTypes = {
+ products: PropTypes.array,
  cartItem: PropTypes.array,
  setCartItem: PropTypes.func,
  wishlistItem: PropTypes.array,
@@ -185,6 +200,7 @@ CartContents.propTypes = {
  setCartItem: PropTypes.func,
  wishlistItem: PropTypes.array,
  setWishlistItem: PropTypes.func,
+ getCartDetails: PropTypes.func,
 };
 
 Summary.propTypes = {

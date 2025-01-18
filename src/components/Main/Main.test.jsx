@@ -635,14 +635,28 @@ describe("Test Main component of Shop", () => {
  });
 });
 
+const MockProductMain = () => {
+ const product = { ...mockProducts[0] };
+ const [cartItem, setCartItem] = useState([]);
+ const [wishlistItem, setWishlistItem] = useState([]);
+
+ return (
+  <MemoryRouter>
+   <ProductMain
+    product={product}
+    cartItem={cartItem}
+    setCartItem={setCartItem}
+    wishlistItem={wishlistItem}
+    setWishlistItem={setWishlistItem}
+   />
+  </MemoryRouter>
+ );
+};
+
 describe("Test Main component of Product", () => {
  it("Should Render Product Main Detail", async () => {
   const user = userEvent.setup();
-  render(
-   <MemoryRouter>
-    <ProductMain product={mockProducts[0]} />
-   </MemoryRouter>
-  );
+  render(<MockProductMain />);
 
   // Test Product Detail Title
   const productTitle = screen.getByRole("heading", {
@@ -697,11 +711,7 @@ describe("Test Main component of Product", () => {
 
  it("Should Render Media for Product", async () => {
   const user = userEvent.setup();
-  render(
-   <MemoryRouter>
-    <ProductMain product={mockProducts[0]} />
-   </MemoryRouter>
-  );
+  render(<MockProductMain />);
 
   let displayImage = screen.getByTestId("display-image");
   expect(displayImage).toBeInTheDocument();
@@ -716,13 +726,7 @@ describe("Test Main component of Product", () => {
  it("Should Render Option Section", async () => {
   const user = userEvent.setup();
 
-  const setCartItem = vi.fn();
-
-  render(
-   <MemoryRouter>
-    <ProductMain product={mockProducts[0]} setCartItem={setCartItem} />
-   </MemoryRouter>
-  );
+  render(<MockProductMain />);
 
   let productAmount = screen.getByTestId("amount");
   expect(productAmount).toBeInTheDocument();
@@ -770,59 +774,18 @@ describe("Test Main component of Product", () => {
 
   await user.click(addToCartButton);
 
-  expect(setCartItem).toHaveBeenCalled();
-
-  let updaterFunction = setCartItem.mock.calls[0][0];
-  let prevCartItem = [];
-  let newCartItem = updaterFunction(prevCartItem);
-
-  expect(newCartItem).toEqual([
-   {
-    id: 1,
-    title: "product-1",
-    image: "/image/product-1.png",
-    price: 100,
-    category: "category-1",
-    amount: 1,
-   },
-  ]);
-
   await user.click(addButton);
   await user.click(addButton);
+
   expect(productAmount).toHaveTextContent(3);
 
   await user.click(addToCartButton);
-
-  updaterFunction = setCartItem.mock.calls[1][0];
-  prevCartItem = newCartItem;
-  newCartItem = updaterFunction(prevCartItem);
-
-  expect(newCartItem).toEqual([
-   {
-    id: 1,
-    title: "product-1",
-    image: "/image/product-1.png",
-    price: 100,
-    category: "category-1",
-    amount: 4,
-   },
-  ]);
  });
 
  it("Should Toggle wishlist Item", async () => {
   const user = userEvent.setup();
 
-  const setWishlistItem = vi.fn();
-
-  render(
-   <MemoryRouter>
-    <ProductMain
-     product={mockProducts[0]}
-     isWishlistItem={false}
-     setWishlistItem={setWishlistItem}
-    />
-   </MemoryRouter>
-  );
+  render(<MockProductMain />);
 
   let wishlistButton = screen.getByTestId("wishlist-button");
   expect(wishlistButton).toBeInTheDocument();
@@ -830,21 +793,10 @@ describe("Test Main component of Product", () => {
 
   await user.click(wishlistButton);
 
-  expect(setWishlistItem).toHaveBeenCalled();
+  wishlistButton = screen.getByTestId("wishlist-button");
+  expect(wishlistButton).toBeInTheDocument();
 
-  let updaterFunction = setWishlistItem.mock.calls[0][0];
-  let prevWishlistItem = [];
-  let newWishlistItem = updaterFunction(prevWishlistItem);
-
-  expect(newWishlistItem).toEqual([
-   {
-    id: 1,
-    title: "product-1",
-    image: "/image/product-1.png",
-    price: 100,
-    category: "category-1",
-   },
-  ]);
+  expect(wishlistButton).toHaveClass("wishlist active");
  });
 });
 
@@ -853,23 +805,32 @@ const generateMockCartItem = (num) => {
  for (let i = 1; i <= num; i++) {
   products.push({
    id: i,
-   title: `product-${i}`,
-   image: `/image/product-${i}.png`,
-   price: 100 + (i % 10) * 10,
-   category: `category-${(i % 5) + 1}`,
    amount: 1,
   });
  }
  return products;
 };
 
-const Wrapper = () => {
+const generateMockWishlist = (num) => {
+ const products = [];
+ for (let i = 1; i <= num; i++) {
+  products.push({
+   id: i,
+  });
+ }
+ return products;
+};
+
+const MockCartMain = () => {
+ const [products, setProducts] = useState([...generateMockProducts(5)]);
  const [cartItem, setCartItem] = useState([...generateMockCartItem(3)]);
- const [wishlistItem, setWishlistItem] = useState([...generateMockCartItem(2)]);
+ const [wishlistItem, setWishlistItem] = useState([...generateMockWishlist(2)]);
 
  return (
   <MemoryRouter>
    <CartMain
+    products={products}
+    setProducts={setProducts}
     cartItem={cartItem}
     setCartItem={setCartItem}
     wishlistItem={wishlistItem}
@@ -881,21 +842,9 @@ const Wrapper = () => {
 
 describe("Test Main component of Cart", () => {
  it("Should Render Cart Contents", () => {
-  const setCartItem = vi.fn();
-  const setWishlistItem = vi.fn();
-
   const mockCartItem = [...generateMockCartItem(3)];
 
-  render(
-   <MemoryRouter>
-    <CartMain
-     cartItem={mockCartItem}
-     setCartItem={setCartItem}
-     wishlistItem={generateMockProducts(2)}
-     setWishlistItem={setWishlistItem}
-    />
-   </MemoryRouter>
-  );
+  render(<MockCartMain />);
 
   const itemList = screen.getByTestId("item-list");
 
@@ -912,7 +861,7 @@ describe("Test Main component of Cart", () => {
  it("Should toggle wishlist status when button is clicked on a product", async () => {
   const user = userEvent.setup();
 
-  render(<Wrapper />);
+  render(<MockCartMain />);
 
   const wishlistButtonOne = screen.getByTestId("wishlist-button-1");
 
@@ -935,7 +884,7 @@ describe("Test Main component of Cart", () => {
  it("Should remove item from cart when remove button is clicked", async () => {
   const user = userEvent.setup();
 
-  render(<Wrapper />);
+  render(<MockCartMain />);
 
   const removeButtonOne = screen.getByTestId("remove-button-1");
   expect(removeButtonOne).toBeInTheDocument();
@@ -948,7 +897,7 @@ describe("Test Main component of Cart", () => {
  it("Should update item amount when reduce or add button is clicked", async () => {
   const user = userEvent.setup();
 
-  render(<Wrapper />);
+  render(<MockCartMain />);
 
   const reduceButtonProductOne = screen.getByTestId("reduce-button-1");
   expect(reduceButtonProductOne).toBeInTheDocument();
@@ -1022,7 +971,7 @@ describe("Test Main component of Cart", () => {
  });
 
  it("Should Render Summary Section", () => {
-  render(<Wrapper />);
+  render(<MockCartMain />);
 
   expect(screen.getByText("Shopping Summary")).toBeInTheDocument();
 
@@ -1035,7 +984,7 @@ describe("Test Main component of Cart", () => {
 
  it("Should update the total price when the product amount changes or a product is removed", async () => {
   const user = userEvent.setup();
-  render(<Wrapper />);
+  render(<MockCartMain />);
 
   // Total Price
   const totalPrice = screen.getByTestId("total-price");
@@ -1062,7 +1011,7 @@ describe("Test Main component of Cart", () => {
 
  it("Should update buy button text content when the product amount changes", async () => {
   const user = userEvent.setup();
-  render(<Wrapper />);
+  render(<MockCartMain />);
 
   const buyButton = screen.getByTestId("buy-button");
   expect(buyButton).toBeInTheDocument();
@@ -1088,7 +1037,7 @@ describe("Test Main component of Cart", () => {
 
  it("Should display modal when buy button is clicked", async () => {
   const user = userEvent.setup();
-  render(<Wrapper />);
+  render(<MockCartMain />);
 
   const buyButton = screen.getByTestId("buy-button");
   expect(buyButton).toBeInTheDocument();

@@ -2,11 +2,12 @@ import { useOutletContext } from "react-router-dom";
 import CartMain from "../../components/Main/CartMain";
 
 function Cart() {
- const { cartItem, setCartItem, wishlistItem, setWishlistItem } =
+ const { products, cartItem, setCartItem, wishlistItem, setWishlistItem } =
   useOutletContext();
  return (
   <>
    <CartMain
+    products={products}
     cartItem={cartItem}
     setCartItem={setCartItem}
     wishlistItem={wishlistItem}
