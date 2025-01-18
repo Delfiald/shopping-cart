@@ -185,7 +185,7 @@ function Option(props) {
      <div
       data-testid="wishlist-button"
       className={`wishlist ${props.isWishlistItem ? "active" : "inactive"}`}
-      onClick={props.handleWishListItem}
+      onClick={props.handleWishlistItem}
      >
       <Heart size={16} />
       Wishlist
@@ -229,20 +229,18 @@ function ProductMain({
   });
  };
 
- const handleWishListItem = () => {
+ const handleWishlistItem = () => {
   setWishlistItem((prevWishlistItem) => {
    const exists = prevWishlistItem.find((item) => item.id === product.id);
 
-   if (exists) {
-    return prevWishlistItem.filter((item) => item.id !== product.id);
-   }
-
-   return [...prevWishlistItem, product];
+   return exists
+    ? prevWishlistItem.filter((item) => item.id !== product.id)
+    : [...prevWishlistItem, product];
   });
  };
 
  return (
-  <>
+  <main>
    <div data-testid="breadcrumb" className="breadcrumb">
     <div onClick={handleNavigate}>Home</div>
     <ChevronRight size={16} />
@@ -277,11 +275,11 @@ function ProductMain({
      amount={amount}
      setAmount={setAmount}
      handleAddToCart={handleAddToCart}
-     handleWishListItem={handleWishListItem}
+     handleWishlistItem={handleWishlistItem}
      isWishlistItem={isWishlistItem}
     />
    </main>
-  </>
+  </main>
  );
 }
 
@@ -316,7 +314,7 @@ Option.propTypes = {
  amount: PropTypes.number,
  setAmount: PropTypes.func,
  handleAddToCart: PropTypes.func,
- handleWishListItem: PropTypes.func,
+ handleWishlistItem: PropTypes.func,
  isWishlistItem: PropTypes.bool,
 };
 

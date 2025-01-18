@@ -2,254 +2,91 @@
 
 exports[`Test Product Page > Should Render Product Page Component 1`] = `
 <div>
-  <div
-    class="breadcrumb"
-    data-testid="breadcrumb"
-  >
-    <div>
-      Home
-    </div>
-    <svg
-      class="lucide lucide-chevron-right"
-      fill="none"
-      height="16"
-      stroke="currentColor"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      stroke-width="2"
-      viewBox="0 0 24 24"
-      width="16"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="m9 18 6-6-6-6"
-      />
-    </svg>
-    <div>
-      Shop
-    </div>
-    <svg
-      class="lucide lucide-chevron-right"
-      fill="none"
-      height="16"
-      stroke="currentColor"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      stroke-width="2"
-      viewBox="0 0 24 24"
-      width="16"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="m9 18 6-6-6-6"
-      />
-    </svg>
-    <div>
-      category-2
-    </div>
-    <svg
-      class="lucide lucide-chevron-right"
-      fill="none"
-      height="16"
-      stroke="currentColor"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      stroke-width="2"
-      viewBox="0 0 24 24"
-      width="16"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="m9 18 6-6-6-6"
-      />
-    </svg>
-    product-1
-  </div>
   <main>
-    <section
-      class="media"
+    <div
+      class="breadcrumb"
+      data-testid="breadcrumb"
     >
-      <div
-        class="display-image"
+      <div>
+        Home
+      </div>
+      <svg
+        class="lucide lucide-chevron-right"
+        fill="none"
+        height="16"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="16"
+        xmlns="http://www.w3.org/2000/svg"
       >
-        <img
-          alt="product-1"
-          data-testid="display-image"
-          src="/image/product-1.png"
+        <path
+          d="m9 18 6-6-6-6"
         />
+      </svg>
+      <div>
+        Shop
       </div>
-      <div
-        class="image-carousel"
+      <svg
+        class="lucide lucide-chevron-right"
+        fill="none"
+        height="16"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="16"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="m9 18 6-6-6-6"
+        />
+      </svg>
+      <div>
+        category-2
+      </div>
+      <svg
+        class="lucide lucide-chevron-right"
+        fill="none"
+        height="16"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="16"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="m9 18 6-6-6-6"
+        />
+      </svg>
+      product-1
+    </div>
+    <main>
+      <section
+        class="media"
       >
         <div
-          class="left-arrow"
-        >
-          <svg
-            class="lucide lucide-chevron-left"
-            fill="none"
-            height="16"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="m15 18-6-6 6-6"
-            />
-          </svg>
-        </div>
-        <div
-          class="carousel-track"
-        >
-          <div
-            class="image displayed"
-            data-testid="image-1"
-          >
-            <img
-              alt="product-1"
-              src="/image/product-1.png"
-            />
-          </div>
-          <div
-            class="image displayed"
-            data-testid="image-2"
-          >
-            <img
-              alt="product-1"
-              src="/image/product-1.png"
-            />
-          </div>
-          <div
-            class="image displayed"
-            data-testid="image-3"
-          >
-            <img
-              alt="product-1"
-              src="/image/product-1.png"
-            />
-          </div>
-          <div
-            class="image displayed"
-            data-testid="image-4"
-          >
-            <img
-              alt="product-1"
-              src="/image/product-1.png"
-            />
-          </div>
-        </div>
-        <div
-          class="right-arrow"
-        >
-          <svg
-            class="lucide lucide-chevron-right"
-            fill="none"
-            height="16"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="m9 18 6-6-6-6"
-            />
-          </svg>
-        </div>
-      </div>
-    </section>
-    <section
-      class="detail"
-    >
-      <div
-        class="top-detail"
-      >
-        <h2
-          class="product-title"
-        >
-          product-1
-        </h2>
-        <div
-          class="product-price"
-        >
-          110
-        </div>
-      </div>
-      <div
-        class="main-detail"
-      >
-        <div
-          class="detail-option"
-        >
-          <div
-            class="detail-button"
-            data-testid="detail-button"
-          >
-            Detail
-          </div>
-          <div
-            class="info-button"
-            data-testid="info-button"
-          >
-            Important Information
-          </div>
-        </div>
-        <div
-          class="detail-content"
-        >
-          <div
-            class="product-detail"
-          >
-            <div
-              class="min-order"
-            >
-              Min Order: 1 Pcs
-            </div>
-            <div
-              class="product-category"
-            >
-              Category: 
-              category-2
-            </div>
-            <div
-              class="product-description"
-            >
-              product bla bla bla number - 1
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <aside>
-      <div
-        class="option-container"
-      >
-        <div>
-          Order Option
-        </div>
-        <div
-          class="product-image"
+          class="display-image"
         >
           <img
             alt="product-1"
+            data-testid="display-image"
             src="/image/product-1.png"
           />
         </div>
         <div
-          class="order-amount"
+          class="image-carousel"
         >
-          <button
-            class="reduce-amount"
-            data-testid="reduce-amount"
-            disabled=""
+          <div
+            class="left-arrow"
           >
             <svg
-              class="lucide lucide-minus"
+              class="lucide lucide-chevron-left"
               fill="none"
               height="16"
               stroke="currentColor"
@@ -261,19 +98,220 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M5 12h14"
+                d="m15 18-6-6 6-6"
               />
             </svg>
-          </button>
+          </div>
           <div
-            class="amount"
-            data-testid="amount"
+            class="carousel-track"
           >
-            1
+            <div
+              class="image displayed"
+              data-testid="image-1"
+            >
+              <img
+                alt="product-1"
+                src="/image/product-1.png"
+              />
+            </div>
+            <div
+              class="image displayed"
+              data-testid="image-2"
+            >
+              <img
+                alt="product-1"
+                src="/image/product-1.png"
+              />
+            </div>
+            <div
+              class="image displayed"
+              data-testid="image-3"
+            >
+              <img
+                alt="product-1"
+                src="/image/product-1.png"
+              />
+            </div>
+            <div
+              class="image displayed"
+              data-testid="image-4"
+            >
+              <img
+                alt="product-1"
+                src="/image/product-1.png"
+              />
+            </div>
+          </div>
+          <div
+            class="right-arrow"
+          >
+            <svg
+              class="lucide lucide-chevron-right"
+              fill="none"
+              height="16"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="m9 18 6-6-6-6"
+              />
+            </svg>
+          </div>
+        </div>
+      </section>
+      <section
+        class="detail"
+      >
+        <div
+          class="top-detail"
+        >
+          <h2
+            class="product-title"
+          >
+            product-1
+          </h2>
+          <div
+            class="product-price"
+          >
+            110
+          </div>
+        </div>
+        <div
+          class="main-detail"
+        >
+          <div
+            class="detail-option"
+          >
+            <div
+              class="detail-button"
+              data-testid="detail-button"
+            >
+              Detail
+            </div>
+            <div
+              class="info-button"
+              data-testid="info-button"
+            >
+              Important Information
+            </div>
+          </div>
+          <div
+            class="detail-content"
+          >
+            <div
+              class="product-detail"
+            >
+              <div
+                class="min-order"
+              >
+                Min Order: 1 Pcs
+              </div>
+              <div
+                class="product-category"
+              >
+                Category: 
+                category-2
+              </div>
+              <div
+                class="product-description"
+              >
+                product bla bla bla number - 1
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <aside>
+        <div
+          class="option-container"
+        >
+          <div>
+            Order Option
+          </div>
+          <div
+            class="product-image"
+          >
+            <img
+              alt="product-1"
+              src="/image/product-1.png"
+            />
+          </div>
+          <div
+            class="order-amount"
+          >
+            <button
+              class="reduce-amount"
+              data-testid="reduce-amount"
+              disabled=""
+            >
+              <svg
+                class="lucide lucide-minus"
+                fill="none"
+                height="16"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M5 12h14"
+                />
+              </svg>
+            </button>
+            <div
+              class="amount"
+              data-testid="amount"
+            >
+              1
+            </div>
+            <button
+              class="add-amount"
+              data-testid="add-amount"
+            >
+              <svg
+                class="lucide lucide-plus"
+                fill="none"
+                height="16"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M5 12h14"
+                />
+                <path
+                  d="M12 5v14"
+                />
+              </svg>
+            </button>
+          </div>
+          <div
+            class="sub-total"
+          >
+            <p>
+              Subtotal
+            </p>
+            <p
+              data-testid="subtotal"
+            >
+              $ 110
+            </p>
           </div>
           <button
-            class="add-amount"
-            data-testid="add-amount"
+            class="add-to-cart"
+            data-testid="add-to-cart"
           >
             <svg
               class="lucide lucide-plus"
@@ -294,103 +332,67 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
                 d="M12 5v14"
               />
             </svg>
+            Add to Cart
           </button>
-        </div>
-        <div
-          class="sub-total"
-        >
-          <p>
-            Subtotal
-          </p>
-          <p
-            data-testid="subtotal"
-          >
-            $ 110
-          </p>
-        </div>
-        <button
-          class="add-to-cart"
-          data-testid="add-to-cart"
-        >
-          <svg
-            class="lucide lucide-plus"
-            fill="none"
-            height="16"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M5 12h14"
-            />
-            <path
-              d="M12 5v14"
-            />
-          </svg>
-          Add to Cart
-        </button>
-        <div
-          class="actions"
-        >
           <div
-            class="wishlist inactive"
-            data-testid="wishlist-button"
+            class="actions"
           >
-            <svg
-              class="lucide lucide-heart"
-              fill="none"
-              height="16"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-              width="16"
-              xmlns="http://www.w3.org/2000/svg"
+            <div
+              class="wishlist inactive"
+              data-testid="wishlist-button"
             >
-              <path
-                d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
-              />
-            </svg>
-            Wishlist
-          </div>
-          <div
-            class="share"
-          >
-            <svg
-              class="lucide lucide-share"
-              fill="none"
-              height="16"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-              width="16"
-              xmlns="http://www.w3.org/2000/svg"
+              <svg
+                class="lucide lucide-heart"
+                fill="none"
+                height="16"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+                />
+              </svg>
+              Wishlist
+            </div>
+            <div
+              class="share"
             >
-              <path
-                d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"
-              />
-              <polyline
-                points="16 6 12 2 8 6"
-              />
-              <line
-                x1="12"
-                x2="12"
-                y1="2"
-                y2="15"
-              />
-            </svg>
-            Share
+              <svg
+                class="lucide lucide-share"
+                fill="none"
+                height="16"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"
+                />
+                <polyline
+                  points="16 6 12 2 8 6"
+                />
+                <line
+                  x1="12"
+                  x2="12"
+                  y1="2"
+                  y2="15"
+                />
+              </svg>
+              Share
+            </div>
           </div>
         </div>
-      </div>
-    </aside>
+      </aside>
+    </main>
   </main>
 </div>
 `;

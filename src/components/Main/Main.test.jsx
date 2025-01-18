@@ -2,7 +2,6 @@ import { act, render, screen } from "@testing-library/react";
 import HomeMain from "./HomeMain";
 import { MemoryRouter, Outlet, Route, Routes } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
 import ShopMain from "./ShopMain";
 import Shop from "../../pages/Shop/Shop";
 import Product from "../../pages/Product/Product";
@@ -10,6 +9,8 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import Home from "../../pages/Home/Home";
 import ProductMain from "./ProductMain";
+import CartMain from "./CartMain";
+import Cart from "../../pages/Cart/Cart";
 
 const mockCategories = ["category-1", "category-2", "category-3", "category-4"];
 
@@ -844,5 +845,310 @@ describe("Test Main component of Product", () => {
     category: "category-1",
    },
   ]);
+ });
+});
+
+const generateMockCartItem = (num) => {
+ const products = [];
+ for (let i = 1; i <= num; i++) {
+  products.push({
+   id: i,
+   title: `product-${i}`,
+   image: `/image/product-${i}.png`,
+   price: 100 + (i % 10) * 10,
+   category: `category-${(i % 5) + 1}`,
+   amount: 1,
+  });
+ }
+ return products;
+};
+
+const Wrapper = () => {
+ const [cartItem, setCartItem] = useState([...generateMockCartItem(3)]);
+ const [wishlistItem, setWishlistItem] = useState([...generateMockCartItem(2)]);
+
+ return (
+  <MemoryRouter>
+   <CartMain
+    cartItem={cartItem}
+    setCartItem={setCartItem}
+    wishlistItem={wishlistItem}
+    setWishlistItem={setWishlistItem}
+   />
+  </MemoryRouter>
+ );
+};
+
+describe("Test Main component of Cart", () => {
+ it("Should Render Cart Contents", () => {
+  const setCartItem = vi.fn();
+  const setWishlistItem = vi.fn();
+
+  const mockCartItem = [...generateMockCartItem(3)];
+
+  render(
+   <MemoryRouter>
+    <CartMain
+     cartItem={mockCartItem}
+     setCartItem={setCartItem}
+     wishlistItem={generateMockProducts(2)}
+     setWishlistItem={setWishlistItem}
+    />
+   </MemoryRouter>
+  );
+
+  const itemList = screen.getByTestId("item-list");
+
+  expect(itemList.children).toHaveLength(3);
+
+  mockCartItem.map((item) => {
+   expect(screen.getByTestId(`wishlist-button-${item.id}`)).toBeInTheDocument();
+   expect(screen.getByTestId(`remove-button-${item.id}`)).toBeInTheDocument();
+   expect(screen.getByTestId(`reduce-button-${item.id}`)).toBeInTheDocument();
+   expect(screen.getByTestId(`add-button-${item.id}`)).toBeInTheDocument();
+  });
+ });
+
+ it("Should toggle wishlist status when button is clicked on a product", async () => {
+  const user = userEvent.setup();
+
+  render(<Wrapper />);
+
+  const wishlistButtonOne = screen.getByTestId("wishlist-button-1");
+
+  expect(wishlistButtonOne).toBeInTheDocument();
+  expect(wishlistButtonOne).toHaveClass("wishlist-button active");
+
+  await user.click(wishlistButtonOne);
+
+  expect(wishlistButtonOne).toHaveClass("wishlist-button inactive");
+
+  const wishlistButtonThree = screen.getByTestId("wishlist-button-3");
+
+  await user.click(wishlistButtonThree);
+
+  expect(screen.getByTestId("wishlist-button-3")).toHaveClass(
+   "wishlist-button active"
+  );
+ });
+
+ it("Should remove item from cart when remove button is clicked", async () => {
+  const user = userEvent.setup();
+
+  render(<Wrapper />);
+
+  const removeButtonOne = screen.getByTestId("remove-button-1");
+  expect(removeButtonOne).toBeInTheDocument();
+  // Remove item 1
+  await user.click(removeButtonOne);
+  // remove button for item 1 not exists anymore
+  expect(screen.queryByTestId("remove-button-1")).not.toBeInTheDocument();
+ });
+
+ it("Should update item amount when reduce or add button is clicked", async () => {
+  const user = userEvent.setup();
+
+  render(<Wrapper />);
+
+  const reduceButtonProductOne = screen.getByTestId("reduce-button-1");
+  expect(reduceButtonProductOne).toBeInTheDocument();
+  const addButtonProductOne = screen.getByTestId("add-button-1");
+  expect(addButtonProductOne).toBeInTheDocument();
+  const amountProductOne = screen.getByTestId("amount-1");
+  expect(amountProductOne).toBeInTheDocument();
+  expect(amountProductOne).toHaveTextContent(1);
+
+  // Reduce Button disabled
+  expect(reduceButtonProductOne).toHaveAttribute("disabled");
+
+  // Try Click Reduce button but not reduce amount
+  await user.click(reduceButtonProductOne);
+  expect(amountProductOne).toHaveTextContent(1);
+
+  // Click Add Button to add amount of product
+  await user.click(addButtonProductOne);
+  expect(amountProductOne).toHaveTextContent(2);
+  expect(reduceButtonProductOne).not.toHaveAttribute("disabled");
+
+  // Reduce amount of product by clicking reduce button
+  await user.click(reduceButtonProductOne);
+  expect(amountProductOne).toHaveTextContent(1);
+  expect(reduceButtonProductOne).toHaveAttribute("disabled");
+ });
+
+ it("Should navigate to the product page when the image or title is clicked", async () => {
+  const user = userEvent.setup();
+
+  const MockRoute = () => {
+   const [cartItem, setCartItem] = useState(generateMockCartItem(3));
+   const [products, setProducts] = useState(generateMockProducts(4));
+   const [wishlist, setWishlistItem] = useState([]);
+   return (
+    <MemoryRouter initialEntries={["/cart"]}>
+     <Routes>
+      <Route
+       path="/"
+       element={
+        <Outlet
+         context={{
+          products: products,
+          setProducts: setProducts,
+          cartItem: cartItem,
+          setCartItem: setCartItem,
+          wishlistItem: wishlist,
+          setWishlistItem: setWishlistItem,
+         }}
+        />
+       }
+      >
+       <Route path="/product/:id" element={<Product />} />
+       <Route path="/cart" element={<Cart />} />
+      </Route>
+     </Routes>
+    </MemoryRouter>
+   );
+  };
+
+  render(<MockRoute />);
+
+  const productImageOne = screen.getByAltText("product-1");
+  expect(productImageOne).toBeInTheDocument();
+
+  await user.click(productImageOne);
+
+  expect(
+   screen.getByRole("heading", { name: "product-1" })
+  ).toBeInTheDocument();
+ });
+
+ it("Should Render Summary Section", () => {
+  render(<Wrapper />);
+
+  expect(screen.getByText("Shopping Summary")).toBeInTheDocument();
+
+  expect(screen.getByTestId("total-price")).toBeInTheDocument();
+
+  const buyButton = screen.getByTestId("buy-button");
+  expect(buyButton).toBeInTheDocument();
+  expect(buyButton).toHaveTextContent("Buy (3)");
+ });
+
+ it("Should update the total price when the product amount changes or a product is removed", async () => {
+  const user = userEvent.setup();
+  render(<Wrapper />);
+
+  // Total Price
+  const totalPrice = screen.getByTestId("total-price");
+  expect(totalPrice).toBeInTheDocument();
+  expect(totalPrice).toHaveTextContent("360");
+
+  // Add Button
+  const addButtonProductOne = screen.getByTestId("add-button-1");
+  expect(addButtonProductOne).toBeInTheDocument();
+
+  await user.click(addButtonProductOne);
+
+  // Total Price Change
+  expect(totalPrice).toHaveTextContent("470");
+
+  // Remove Button
+  const removeButtonProductTwo = screen.getByTestId("remove-button-2");
+  expect(removeButtonProductTwo).toBeInTheDocument();
+
+  await user.click(removeButtonProductTwo);
+
+  expect(totalPrice).toHaveTextContent("350");
+ });
+
+ it("Should update buy button text content when the product amount changes", async () => {
+  const user = userEvent.setup();
+  render(<Wrapper />);
+
+  const buyButton = screen.getByTestId("buy-button");
+  expect(buyButton).toBeInTheDocument();
+  expect(buyButton).toHaveTextContent("Buy (3)");
+
+  // Add Button
+  const addButtonProductOne = screen.getByTestId("add-button-1");
+  expect(addButtonProductOne).toBeInTheDocument();
+
+  await user.click(addButtonProductOne);
+
+  // Buy Button text Change
+  expect(buyButton).toHaveTextContent("Buy (4)");
+
+  // Remove Button
+  const removeButtonProductTwo = screen.getByTestId("remove-button-2");
+  expect(removeButtonProductTwo).toBeInTheDocument();
+
+  await user.click(removeButtonProductTwo);
+
+  expect(buyButton).toHaveTextContent("Buy (3)");
+ });
+
+ it("Should display modal when buy button is clicked", async () => {
+  const user = userEvent.setup();
+  render(<Wrapper />);
+
+  const buyButton = screen.getByTestId("buy-button");
+  expect(buyButton).toBeInTheDocument();
+
+  await user.click(buyButton);
+
+  expect(
+   screen.queryByRole("heading", { name: /complete/i })
+  ).toBeInTheDocument();
+
+  expect(screen.getByRole("button", { name: "Shop" })).toBeInTheDocument();
+ });
+
+ it("Should navigate to shop when shop button is clicked in modal", async () => {
+  const user = userEvent.setup();
+
+  const MockRoute = () => {
+   const [cartItem, setCartItem] = useState(generateMockCartItem(3));
+   const [products, setProducts] = useState(generateMockProducts(4));
+   const [wishlist, setWishlistItem] = useState([]);
+   return (
+    <MemoryRouter initialEntries={["/cart"]}>
+     <Routes>
+      <Route
+       path="/"
+       element={
+        <Outlet
+         context={{
+          products: products,
+          setProducts: setProducts,
+          cartItem: cartItem,
+          setCartItem: setCartItem,
+          wishlistItem: wishlist,
+          setWishlistItem: setWishlistItem,
+         }}
+        />
+       }
+      >
+       <Route path="/shop" element={<Shop />} />
+       <Route path="/cart" element={<Cart />} />
+      </Route>
+     </Routes>
+    </MemoryRouter>
+   );
+  };
+
+  render(<MockRoute />);
+
+  const buyButton = screen.getByTestId("buy-button");
+  expect(buyButton).toBeInTheDocument();
+
+  await user.click(buyButton);
+
+  const shopButton = screen.getByRole("button", { name: "Shop" });
+  expect(shopButton).toBeInTheDocument();
+
+  await user.click(shopButton);
+
+  expect(
+   screen.getByRole("heading", { name: "All Products" })
+  ).toBeInTheDocument();
  });
 });

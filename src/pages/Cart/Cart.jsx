@@ -1,10 +1,17 @@
-import Main from "../../components/Main/CartMain";
+import { useOutletContext } from "react-router-dom";
+import CartMain from "../../components/Main/CartMain";
 
 function Cart() {
+ const { cartItem, setCartItem, wishlistItem, setWishlistItem } =
+  useOutletContext();
  return (
   <>
-   <h1>Cart</h1>
-   <Main />
+   <CartMain
+    cartItem={cartItem}
+    setCartItem={setCartItem}
+    wishlistItem={wishlistItem}
+    setWishlistItem={setWishlistItem}
+   />
   </>
  );
 }
