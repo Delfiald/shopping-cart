@@ -4,32 +4,29 @@ exports[`Test Home Page > Should Render Home Page 1`] = `
 <div>
   <aside>
     <div
-      class="categories"
+      class="_categories_1c2789"
     >
       <div>
         Categories
       </div>
       <div
-        class="category-lists"
+        class="_category-lists_1c2789"
         data-testid="category-lists"
       >
         <button
-          class="category"
+          class="_category_1c2789"
           data-testid="category-button-0"
         >
           category-1
         </button>
         <button
-          class="category"
+          class="_category_1c2789"
           data-testid="category-button-1"
         >
           category-2
         </button>
       </div>
     </div>
-    <div
-      class="filter"
-    />
   </aside>
   <main>
     <h2>

@@ -1,7 +1,6 @@
 import { MemoryRouter, Outlet, Route, Routes } from "react-router-dom";
 import Shop from "./Shop";
-import { render, screen } from "@testing-library/react";
-import { expect } from "vitest";
+import { render } from "@testing-library/react";
 
 const mockCategories = ["category-1", "category-2"];
 
@@ -25,16 +24,5 @@ describe("Test Home Page", () => {
   const { container } = render(<MockRouter />);
 
   expect(container).toMatchSnapshot();
- });
-
- it("Should Render Aside and Category Lists", () => {
-  render(<MockRouter />);
-  const asideCategoriesHeader = screen.getByText("Categories");
-  const categoryLists = screen.getByTestId("category-lists");
-  expect(asideCategoriesHeader).toBeInTheDocument();
-  expect(categoryLists).toBeInTheDocument();
-  expect(categoryLists.children).toHaveLength(2);
-  expect(screen.getByText("category-1")).toBeInTheDocument();
-  expect(screen.getByText("category-2")).toBeInTheDocument();
  });
 });
