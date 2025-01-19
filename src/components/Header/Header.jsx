@@ -1,6 +1,6 @@
 import styles from "./header.module.css";
 
-import { Bell, Search, ShoppingCart, X } from "lucide-react";
+import { Bell, Heart, Search, ShoppingCart, X } from "lucide-react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 
@@ -8,6 +8,7 @@ function Header({
  products,
  cartItem,
  notificationItem,
+ wishlistItem,
  hoverButton,
  setHoverButton,
  searchInput,
@@ -17,6 +18,10 @@ function Header({
 
  const handleCartClick = () => {
   navigate("/cart");
+ };
+
+ const handleWishlistClick = () => {
+  navigate("/wishlist");
  };
 
  const handleHoverButton = (isCartOpen) => {
@@ -37,6 +42,15 @@ function Header({
    return {
     ...product,
     amount: cart.amount,
+   };
+  });
+ };
+
+ const getWishlistDetails = () => {
+  return wishlistItem.map((wishlist) => {
+   const product = products.find((p) => p.id === wishlist.id);
+   return {
+    product,
    };
   });
  };
@@ -135,6 +149,48 @@ function Header({
       </div>
      )}
     </div>
+    <div
+     onMouseEnter={() => handleHoverButton("wishlist")}
+     onMouseLeave={() => handleHoverButton(null)}
+     data-testid="wishlist-button-wrapper"
+     className={styles["wishlist-button-wrapper"]}
+    >
+     <button
+      onClick={handleWishlistClick}
+      data-testid="wishlist-button"
+      className={styles["wishlist-button"]}
+     >
+      <Heart size={16} />
+      {wishlistItem && wishlistItem.length > 0 && (
+       <div data-testid="wishlist-count" className={styles["wishlist-count"]}>
+        {wishlistItem.length}
+       </div>
+      )}
+     </button>
+     {hoverButton === "wishlist" && (
+      <div>
+       <div className="wishlist-information">
+        <div>Wishlist ({wishlistItem.length})</div>
+        <div role="button" onClick={handleWishlistClick}>
+         See All
+        </div>
+       </div>
+       {getWishlistDetails().map((item) => (
+        <div
+         data-testid={`product-${item.id}`}
+         key={item.id}
+         onClick={() => navigate(`/product/${item.id}`)}
+        >
+         <div className="image">
+          <img src={item.image} alt={item.title} />
+         </div>
+         <div className="title">{item.title}</div>
+         <div className="price">{item.price}</div>
+        </div>
+       ))}
+      </div>
+     )}
+    </div>
    </nav>
   </header>
  );
@@ -144,6 +200,7 @@ Header.propTypes = {
  products: PropTypes.array.isRequired,
  cartItem: PropTypes.array,
  notificationItem: PropTypes.array,
+ wishlistItem: PropTypes.array,
  hoverButton: PropTypes.string,
  setHoverButton: PropTypes.func,
  searchInput: PropTypes.string,

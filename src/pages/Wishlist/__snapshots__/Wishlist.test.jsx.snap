@@ -1,0 +1,11 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Test Wishlist Page > Should Render Wishlist Page 1`] = `
+<div>
+  <main>
+    <h2>
+      Wishlist
+    </h2>
+  </main>
+</div>
+`;

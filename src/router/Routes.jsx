@@ -3,6 +3,7 @@ import Cart from "../pages/Cart/Cart";
 import Home from "../pages/Home/Home";
 import Product from "../pages/Product/Product";
 import Shop from "../pages/Shop/Shop";
+import Wishlist from "../pages/Wishlist/Wishlist";
 import ErrorPage from "./ErrorPage";
 
 const Routes = [
@@ -15,6 +16,7 @@ const Routes = [
    { path: "cart", element: <Cart /> },
    { path: "shop", element: <Shop /> },
    { path: "product/:id", element: <Product /> },
+   { path: "wishlist", element: <Wishlist /> },
   ],
  },
 ];
