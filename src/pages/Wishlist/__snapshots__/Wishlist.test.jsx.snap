@@ -6,6 +6,261 @@ exports[`Test Wishlist Page > Should Render Wishlist Page 1`] = `
     <h2>
       Wishlist
     </h2>
+    <div
+      class="_product-list-header_716e15"
+    >
+      <div
+        data-testid="list-header"
+      >
+        <div
+          class="_item-information_716e15"
+        >
+          Showing 1 - 2 products
+        </div>
+        <div
+          class="_sort-wrapper_716e15"
+        >
+          <p>
+            Sort:
+          </p>
+          <div
+            class="_sort-button_716e15"
+            data-testid="sort-button"
+          >
+            <div
+              data-testid="sort-value"
+            >
+              <p>
+                Name Asc
+              </p>
+              <svg
+                class="lucide lucide-chevron-down"
+                fill="none"
+                height="16"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m6 9 6 6 6-6"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div
+          class="_item-per-page_716e15"
+          data-testid="item-per-page"
+        >
+          <div
+            class="_item-per-page-value_716e15"
+            data-testid="item-per-page-value"
+          >
+            <p>
+              10
+            </p>
+            <svg
+              class="lucide lucide-chevron-down"
+              fill="none"
+              height="16"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="m6 9 6 6 6-6"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <section
+      class="_product-list-wrapper_716e15"
+      data-testid="product-card"
+    >
+      <div
+        class="_card_716e15"
+      >
+        <a
+          data-discover="true"
+          data-testid="product-card-1"
+          href="/product/1"
+        >
+          <img
+            alt="product-1"
+            src="/image/product-1.png"
+          />
+          <div
+            class="_product-name_716e15"
+          >
+            product-1
+          </div>
+          <div
+            class="_product-price_716e15"
+          >
+            110
+          </div>
+        </a>
+        <div
+          class="card-action"
+        >
+          <button
+            class="wishlist-button active"
+            data-testid="wishlist-button-1"
+          >
+            <svg
+              class="lucide lucide-heart"
+              fill="none"
+              height="16"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+              />
+            </svg>
+          </button>
+          <button
+            class="add-to-cart"
+            data-testid="add-to-cart-button-1"
+          >
+            <svg
+              class="lucide lucide-plus"
+              fill="none"
+              height="16"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M5 12h14"
+              />
+              <path
+                d="M12 5v14"
+              />
+            </svg>
+            <p>
+              Cart
+            </p>
+          </button>
+        </div>
+      </div>
+      <div
+        class="_card_716e15"
+      >
+        <a
+          data-discover="true"
+          data-testid="product-card-2"
+          href="/product/2"
+        >
+          <img
+            alt="product-2"
+            src="/image/product-2.png"
+          />
+          <div
+            class="_product-name_716e15"
+          >
+            product-2
+          </div>
+          <div
+            class="_product-price_716e15"
+          >
+            120
+          </div>
+        </a>
+        <div
+          class="card-action"
+        >
+          <button
+            class="wishlist-button active"
+            data-testid="wishlist-button-2"
+          >
+            <svg
+              class="lucide lucide-heart"
+              fill="none"
+              height="16"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+              />
+            </svg>
+          </button>
+          <button
+            class="add-to-cart"
+            data-testid="add-to-cart-button-2"
+          >
+            <svg
+              class="lucide lucide-plus"
+              fill="none"
+              height="16"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M5 12h14"
+              />
+              <path
+                d="M12 5v14"
+              />
+            </svg>
+            <p>
+              Cart
+            </p>
+          </button>
+        </div>
+      </div>
+    </section>
+    <div
+      class="_product-list-bottom_716e15"
+    >
+      <div
+        class="_pagination_716e15"
+      >
+        <div
+          class="_arrow-button_716e15"
+        />
+        <div
+          class="_number-button_716e15"
+        >
+          <div
+            class="_active_716e15"
+            data-testid="current-page-button"
+          >
+            1
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
 </div>
 `;

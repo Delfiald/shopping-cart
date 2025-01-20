@@ -50,7 +50,7 @@ function Header({
   return wishlistItem.map((wishlist) => {
    const product = products.find((p) => p.id === wishlist.id);
    return {
-    product,
+    ...product,
    };
   });
  };

@@ -54,17 +54,30 @@ function Shop() {
  };
 
  useEffect(() => {
+  const validCategory = categories.includes(category) ? category : "all";
+  const validSort = [
+   "name-asc",
+   "name-desc",
+   "price-asc",
+   "price-desc",
+  ].includes(sort)
+   ? sort
+   : "name-asc";
+  const totalItems = displayedProducts.length;
+  const maxPage = Math.ceil(totalItems / (itemPerPage || 10));
+  const validPage = Math.max(1, Math.min(parseInt(page) || 1, maxPage));
+  const validItemsPerPage = [5, 10, null].includes(parseInt(itemPerPage))
+   ? itemPerPage
+   : 10;
+
   const defaultParams = {
-   category: "all",
-   sort: "name-asc",
-   page: 1,
-   itemsPerPage: 10,
+   category: validCategory,
+   sort: validSort,
+   page: validPage,
+   itemsPerPage: validItemsPerPage,
   };
 
   const updatedParams = { ...defaultParams };
-  for (const [key, value] of searchParams.entries()) {
-   updatedParams[key] = value;
-  }
 
   if (
    JSON.stringify(updatedParams) !==
@@ -72,7 +85,18 @@ function Shop() {
   ) {
    setSearchParams(updatedParams);
   }
- }, [searchParams, setSearchParams]);
+ }, [
+  categories,
+  category,
+  displayedProducts.length,
+  itemPerPage,
+  page,
+  products,
+  products.length,
+  searchParams,
+  setSearchParams,
+  sort,
+ ]);
 
  return (
   <>

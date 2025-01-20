@@ -9,7 +9,53 @@ exports[`Home Page Test > Renders Home Page 1`] = `
       <div
         class="_carousel_716e15"
         data-testid="products-carousel-section"
-      />
+      >
+        <div>
+          <img
+            alt="product-1"
+            src="/image/product-1.png"
+          />
+          <h2>
+            product-1
+          </h2>
+        </div>
+        <div>
+          <img
+            alt="product-2"
+            src="/image/product-2.png"
+          />
+          <h2>
+            product-2
+          </h2>
+        </div>
+        <div>
+          <img
+            alt="product-3"
+            src="/image/product-3.png"
+          />
+          <h2>
+            product-3
+          </h2>
+        </div>
+        <div>
+          <img
+            alt="product-4"
+            src="/image/product-4.png"
+          />
+          <h2>
+            product-4
+          </h2>
+        </div>
+        <div>
+          <img
+            alt="product-5"
+            src="/image/product-5.png"
+          />
+          <h2>
+            product-5
+          </h2>
+        </div>
+      </div>
     </div>
     <div
       class="_categories_716e15"
@@ -18,6 +64,42 @@ exports[`Home Page Test > Renders Home Page 1`] = `
       <h2>
         Categories
       </h2>
+      <div>
+        <img
+          alt="category-1"
+          src=""
+        />
+        <h3>
+          category-1
+        </h3>
+      </div>
+      <div>
+        <img
+          alt="category-2"
+          src=""
+        />
+        <h3>
+          category-2
+        </h3>
+      </div>
+      <div>
+        <img
+          alt="category-3"
+          src=""
+        />
+        <h3>
+          category-3
+        </h3>
+      </div>
+      <div>
+        <img
+          alt="category-4"
+          src=""
+        />
+        <h3>
+          category-4
+        </h3>
+      </div>
     </div>
     <div
       class="_call-to-action_716e15"

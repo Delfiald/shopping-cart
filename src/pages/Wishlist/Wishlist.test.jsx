@@ -14,6 +14,7 @@ const generateMockProducts = (num) => {
    category: `category-${(i % 5) + 1}`,
   });
  }
+ return mockProducts;
 };
 
 const generateMockWishlist = (num) => {

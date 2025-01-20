@@ -11,6 +11,10 @@ import Home from "../../pages/Home/Home";
 import ProductMain from "./ProductMain";
 import CartMain from "./CartMain";
 import Cart from "../../pages/Cart/Cart";
+import WishlistMain from "./WishlistMain";
+import Wishlist from "../../pages/Wishlist/Wishlist";
+import { expect, it, vi } from "vitest";
+import Header from "../Header/Header";
 
 const mockCategories = ["category-1", "category-2", "category-3", "category-4"];
 
@@ -209,6 +213,7 @@ const generateMockProducts = (num) => {
    image: `/image/product-${i}.png`,
    price: 100 + (i % 10) * 10,
    category: `category-${(i % 5) + 1}`,
+   description: `lorem lorem lorem lorem lorem lorem`,
   });
  }
  return products;
@@ -248,7 +253,14 @@ describe("Test Main component of Shop", () => {
   render(
    <MemoryRouter initialEntries={["/shop"]}>
     <Routes>
-     <Route path="/" element={<Outlet context={{ products: mockProducts }} />}>
+     <Route
+      path="/"
+      element={
+       <Outlet
+        context={{ products: mockProducts, categories: mockCategories }}
+       />
+      }
+     >
       <Route path="/shop" element={<Shop />} />
       <Route path="/product/:id" element={<Product />} />
      </Route>
@@ -1067,6 +1079,7 @@ describe("Test Main component of Cart", () => {
         <Outlet
          context={{
           products: products,
+          categories: mockCategories,
           setProducts: setProducts,
           cartItem: cartItem,
           setCartItem: setCartItem,
@@ -1099,5 +1112,225 @@ describe("Test Main component of Cart", () => {
   expect(
    screen.getByRole("heading", { name: "All Products" })
   ).toBeInTheDocument();
+ });
+});
+
+describe("Test Main Component of Wishlist", () => {
+ it("Should Render Wishlist Main Product", () => {
+  render(
+   <MemoryRouter>
+    <WishlistMain
+     products={mockProducts}
+     wishlistItem={generateMockWishlist(2)}
+     page={1}
+     setPage={() => vi.fn()}
+     itemPerPage={1}
+     setItemPerPage={() => vi.fn()}
+    />
+   </MemoryRouter>
+  );
+
+  expect(screen.getByRole("heading", { name: "Wishlist" })).toBeInTheDocument();
+
+  expect(
+   screen.getByTestId(`product-card-${mockProducts[0].id}`)
+  ).toBeInTheDocument();
+  expect(screen.getByAltText(mockProducts[0].title)).toBeInTheDocument();
+  expect(screen.getByText(mockProducts[0].title)).toBeInTheDocument();
+  expect(screen.getByText(mockProducts[0].price)).toBeInTheDocument();
+ });
+
+ it("Should Route to Product Page when clicked Product on Wishlist Page", async () => {
+  const user = userEvent.setup();
+
+  render(
+   <MemoryRouter initialEntries={["/wishlist"]}>
+    <Routes>
+     <Route
+      path="/"
+      element={
+       <Outlet
+        context={{
+         products: generateMockProducts(4),
+         wishlistItem: generateMockWishlist(3),
+        }}
+       />
+      }
+     >
+      <Route path="/wishlist" element={<Wishlist />} />
+      <Route path="/product/:id" element={<Product />} />
+     </Route>
+    </Routes>
+   </MemoryRouter>
+  );
+
+  const productLink = screen.getByTestId("product-card-1");
+  expect(productLink).toBeInTheDocument();
+  await user.click(productLink);
+
+  expect(
+   screen.getByRole("heading", { name: "product-1" })
+  ).toBeInTheDocument();
+ });
+
+ it("Should remove Product from wishlist when clicked wishlist button", async () => {
+  const user = userEvent.setup();
+
+  const MockRoute = () => {
+   const [cartItem, setCartItem] = useState([]);
+   const [wishlist, setWishlistItem] = useState(generateMockWishlist(2));
+   return (
+    <MemoryRouter initialEntries={["/wishlist"]}>
+     <Routes>
+      <Route
+       path="/"
+       element={
+        <Outlet
+         context={{
+          products: generateMockProducts(4),
+          setCartItem: setCartItem,
+          wishlistItem: wishlist,
+          setWishlistItem: setWishlistItem,
+         }}
+        />
+       }
+      >
+       <Route path="/wishlist" element={<Wishlist />} />
+       <Route path="/cart" element={<Cart cartItem={cartItem} />} />
+      </Route>
+     </Routes>
+    </MemoryRouter>
+   );
+  };
+
+  render(<MockRoute />);
+
+  let wishlistButtonProductOne = screen.getByTestId("wishlist-button-1");
+  expect(wishlistButtonProductOne).toBeInTheDocument();
+  expect(wishlistButtonProductOne).toHaveClass("active");
+
+  await user.click(wishlistButtonProductOne);
+
+  wishlistButtonProductOne = screen.queryByTestId("wishlist-button-1");
+  expect(wishlistButtonProductOne).not.toBeInTheDocument();
+ });
+
+ it("Should Render No Wishlist when no Wishlist Item", () => {
+  render(
+   <MemoryRouter>
+    <WishlistMain
+     products={[]}
+     wishlistItem={[]}
+     page={1}
+     setPage={() => vi.fn()}
+     itemPerPage={1}
+     setItemPerPage={() => vi.fn()}
+    />
+   </MemoryRouter>
+  );
+
+  const noWishlist = screen.getByTestId("no-wishlist");
+
+  expect(noWishlist).toBeInTheDocument();
+ });
+
+ it("Should Add product to cart when click cart button on card in wishlist Page", async () => {
+  const user = userEvent.setup();
+
+  const MockRoute = () => {
+   const [cartItem, setCartItem] = useState([]);
+   const [wishlist, setWishlistItem] = useState(generateMockWishlist(5));
+
+   const mockProducts = generateMockProducts(6);
+   return (
+    <MemoryRouter initialEntries={["/wishlist"]}>
+     <Header
+      products={mockProducts}
+      cartItem={cartItem}
+      setHoverButton={vi.fn()}
+     />
+     <Routes>
+      <Route
+       path="/"
+       element={
+        <Outlet
+         context={{
+          products: mockProducts,
+          cartItem: cartItem,
+          setCartItem: setCartItem,
+          wishlistItem: wishlist,
+          setWishlistItem: setWishlistItem,
+         }}
+        />
+       }
+      >
+       <Route path="/wishlist" element={<Wishlist />} />
+       <Route path="/cart" element={<Cart />} />
+      </Route>
+     </Routes>
+    </MemoryRouter>
+   );
+  };
+
+  render(<MockRoute />);
+
+  const productOne = screen.getByTestId("product-card-1");
+  expect(productOne).toBeInTheDocument();
+  const productOneCartButton = screen.getByTestId("add-to-cart-button-1");
+  expect(productOneCartButton).toBeInTheDocument();
+
+  await user.click(productOneCartButton);
+
+  const cartButton = screen.getByTestId("cart-button");
+  expect(cartButton).toBeInTheDocument();
+
+  await user.click(cartButton);
+
+  const buyButton = screen.getByTestId("buy-button");
+  expect(buyButton).toBeInTheDocument();
+  expect(buyButton).toHaveTextContent("Buy (1)");
+ });
+
+ it("Should Route to valid Query Path", async () => {
+  const user = userEvent.setup();
+  const MockRoute = () => {
+   const [cartItem, setCartItem] = useState([]);
+   const [wishlist, setWishlistItem] = useState(generateMockWishlist(50));
+   return (
+    <MemoryRouter
+     initialEntries={["/wishlist?sort=name-asc&page=-1&itemsPerPage=99"]}
+    >
+     <Routes>
+      <Route
+       path="/"
+       element={
+        <Outlet
+         context={{
+          products: generateMockProducts(60),
+          setCartItem: setCartItem,
+          wishlistItem: wishlist,
+          setWishlistItem: setWishlistItem,
+         }}
+        />
+       }
+      >
+       <Route path="/wishlist" element={<Wishlist />} />
+       <Route path="/cart" element={<Cart cartItem={cartItem} />} />
+      </Route>
+     </Routes>
+    </MemoryRouter>
+   );
+  };
+
+  render(<MockRoute />);
+
+  expect(screen.getByTestId("current-page-button")).toHaveTextContent("1");
+
+  const lastPageButton = screen.getByTestId("last-page-button");
+  expect(lastPageButton).toHaveTextContent("5");
+
+  await user.click(lastPageButton);
+
+  expect(screen.getByTestId("current-page-button")).toHaveTextContent("5");
  });
 });
