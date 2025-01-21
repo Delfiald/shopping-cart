@@ -13,8 +13,9 @@ import CartMain from "./CartMain";
 import Cart from "../../pages/Cart/Cart";
 import WishlistMain from "./WishlistMain";
 import Wishlist from "../../pages/Wishlist/Wishlist";
-import { expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import Header from "../Header/Header";
+import NotificationMain from "./NotificationMain";
 
 const mockCategories = ["category-1", "category-2", "category-3", "category-4"];
 
@@ -1409,5 +1410,213 @@ describe("Test Main Component of Wishlist", () => {
   await user.click(lastPageButton);
 
   expect(screen.getByTestId("current-page-button")).toHaveTextContent("5");
+ });
+});
+
+const generateMockNotification = (num) => {
+ const mockNotification = [];
+
+ for (let i = 1; i <= num; i++) {
+  mockNotification.push({
+   id: i,
+   message: `Purchase complete - Order ${i}`,
+   products: [...generateMockCartItem(2)],
+   timeStamp: new Date().toLocaleString(),
+   isRead: false,
+  });
+ }
+ return mockNotification;
+};
+
+describe("Test Main Component of Notification Page", () => {
+ it("Should render Main Component of Notification", () => {
+  render(
+   <MemoryRouter>
+    <NotificationMain
+     products={generateMockProducts(30)}
+     notificationItem={generateMockNotification(3)}
+     setNotificationItem={vi.fn()}
+    />
+   </MemoryRouter>
+  );
+
+  expect(
+   screen.getByRole("heading", { name: "Notifications" })
+  ).toBeInTheDocument();
+
+  expect(screen.getByTestId("notification-item-1")).toBeInTheDocument();
+ });
+
+ it("Renders notification list properly", () => {
+  const mockNotification = generateMockNotification(3);
+  render(
+   <MemoryRouter>
+    <NotificationMain
+     products={generateMockProducts(30)}
+     notificationItem={mockNotification}
+     setNotificationItem={vi.fn()}
+    />
+   </MemoryRouter>
+  );
+
+  mockNotification.map((notification) => {
+   expect(
+    screen.getByTestId(`notification-item-${notification.id}`)
+   ).toBeInTheDocument();
+   expect(
+    screen.queryByTestId(`detail-button-${notification.id}`)
+   ).toBeInTheDocument();
+  });
+ });
+
+ it("Marks all Notifications as read when click Marks all Read Button", async () => {
+  const user = userEvent.setup();
+
+  const MockNotificationList = () => {
+   const [notificationItem, setNotificationItem] = useState(
+    generateMockNotification(3)
+   );
+   return (
+    <MemoryRouter>
+     <NotificationMain
+      products={generateMockProducts(30)}
+      notificationItem={notificationItem}
+      setNotificationItem={setNotificationItem}
+     />
+    </MemoryRouter>
+   );
+  };
+  render(<MockNotificationList />);
+
+  const marksAllReadButton = screen.getByTestId("marks-all-read");
+  expect(marksAllReadButton).toBeInTheDocument();
+  expect(marksAllReadButton).toHaveTextContent("Marks All Read (3)");
+  await user.click(marksAllReadButton);
+
+  expect(marksAllReadButton).toHaveTextContent("Marks All Read (0)");
+ });
+
+ it("Marks notification as read on hover", async () => {
+  const user = userEvent.setup();
+
+  const MockNotificationList = () => {
+   const [notificationItem, setNotificationItem] = useState(
+    generateMockNotification(3)
+   );
+   return (
+    <MemoryRouter>
+     <NotificationMain
+      products={generateMockProducts(30)}
+      notificationItem={notificationItem}
+      setNotificationItem={setNotificationItem}
+     />
+    </MemoryRouter>
+   );
+  };
+  render(<MockNotificationList />);
+
+  const notificationItemOne = screen.getByTestId("notification-item-1");
+  const notificationItemTwo = screen.getByTestId("notification-item-2");
+  expect(notificationItemOne).toBeInTheDocument();
+  expect(notificationItemTwo).toBeInTheDocument();
+  expect(notificationItemOne).toHaveClass("notification-item unread");
+  expect(notificationItemTwo).toHaveClass("notification-item unread");
+
+  // Hover on notification item 1
+  await user.hover(notificationItemOne);
+
+  // notification item 1 class set to read
+  expect(notificationItemOne).toHaveClass("notification-item read");
+  // notification item 2 class still unread
+  expect(notificationItemTwo).toHaveClass("notification-item unread");
+ });
+
+ it("Opens notification details when clicking the detail button", async () => {
+  const user = userEvent.setup();
+
+  const MockNotificationList = () => {
+   const [notificationItem, setNotificationItem] = useState(
+    generateMockNotification(3)
+   );
+   return (
+    <MemoryRouter>
+     <NotificationMain
+      products={generateMockProducts(30)}
+      notificationItem={notificationItem}
+      setNotificationItem={setNotificationItem}
+     />
+    </MemoryRouter>
+   );
+  };
+  render(<MockNotificationList />);
+
+  const detailButtonOne = screen.getByTestId("detail-button-1");
+  const detailButtonTwo = screen.getByTestId("detail-button-2");
+  expect(detailButtonOne).toBeInTheDocument();
+  expect(detailButtonOne).toHaveClass("closed");
+  expect(detailButtonTwo).toBeInTheDocument();
+  expect(detailButtonTwo).toHaveClass("closed");
+
+  await user.click(detailButtonOne);
+
+  expect(detailButtonOne).toHaveClass("open");
+  expect(detailButtonTwo).toHaveClass("closed");
+
+  const notificationDetailOne = screen.getByTestId("notification-1");
+  expect(notificationDetailOne).toBeInTheDocument();
+  expect(screen.queryByTestId("notification-2")).not.toBeInTheDocument();
+
+  expect(screen.getByTestId("total-1")).toBeInTheDocument();
+
+  // Click other details
+  await user.click(detailButtonTwo);
+
+  expect(detailButtonOne).toHaveClass("closed");
+  expect(detailButtonTwo).toHaveClass("open");
+
+  expect(screen.queryByTestId("notification-1")).not.toBeInTheDocument();
+  const notificationDetailTwo = screen.getByTestId("notification-2");
+  expect(notificationDetailTwo).toBeInTheDocument();
+
+  expect(screen.getByTestId("total-2")).toBeInTheDocument();
+
+  // Click Again the same detail to close
+  await user.click(detailButtonTwo);
+
+  expect(detailButtonOne).toHaveClass("closed");
+  expect(detailButtonTwo).toHaveClass("closed");
+
+  expect(screen.queryByTestId("notification-1")).not.toBeInTheDocument();
+  expect(screen.queryByTestId("notification-2")).not.toBeInTheDocument();
+ });
+
+ it("Removes notifications when click remove button", async () => {
+  const user = userEvent.setup();
+
+  const MockNotificationList = () => {
+   const [notificationItem, setNotificationItem] = useState(
+    generateMockNotification(3)
+   );
+   return (
+    <MemoryRouter>
+     <NotificationMain
+      products={generateMockProducts(30)}
+      notificationItem={notificationItem}
+      setNotificationItem={setNotificationItem}
+     />
+    </MemoryRouter>
+   );
+  };
+  render(<MockNotificationList />);
+
+  const notificationItemOne = screen.getByTestId("notification-item-1");
+  expect(notificationItemOne).toBeInTheDocument();
+
+  const clearButton = screen.getByTestId("clear-notification-button");
+  expect(clearButton).toBeInTheDocument();
+
+  await user.click(clearButton);
+
+  expect(screen.queryByTestId("notification-item-1")).not.toBeInTheDocument();
  });
 });

@@ -77,7 +77,7 @@ function Header({
  return (
   <header>
    <nav>
-    <div className={styles.hero}>
+    <div className={styles.hero} onClick={() => navigate("/")}>
      <h1>Shoppers</h1>
     </div>
     <div className={styles["search-container"]}>
