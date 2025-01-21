@@ -8,6 +8,7 @@ import Product from "../../pages/Product/Product";
 import Home from "../../pages/Home/Home";
 import Cart from "../../pages/Cart/Cart";
 import Wishlist from "../../pages/Wishlist/Wishlist";
+import Notification from "../../pages/Notification/Notification";
 
 const generateMockProducts = (num) => {
  const products = [];
@@ -22,6 +23,21 @@ const generateMockProducts = (num) => {
   });
  }
  return products;
+};
+
+const generateMockNotification = (num) => {
+ const mockNotification = [];
+
+ for (let i = 1; i <= num; i++) {
+  mockNotification.push({
+   id: i,
+   message: `Purchase complete - Order ${i}`,
+   products: [],
+   timeStamp: new Date().toLocaleString(),
+   isRead: false,
+  });
+ }
+ return mockNotification;
 };
 
 const MockNavigate = () => {
@@ -363,5 +379,264 @@ describe("Test Header", () => {
   });
 
   expect(screen.getByTestId("display-image")).toBeInTheDocument();
+ });
+
+ it("Should Route to Notification Page when clicked notification Button", async () => {
+  const user = userEvent.setup();
+
+  const MockRoute = () => {
+   const [hoverButton, setHoverButton] = useState(null);
+   const [searchInput, setSearchInput] = useState("");
+   const [notificationItem, setNotificationItem] = useState(
+    generateMockNotification(3)
+   );
+
+   return (
+    <MemoryRouter initialEntries={["/"]}>
+     <Header
+      products={generateMockProducts(3)}
+      cartItem={mockCartItem}
+      notificationItem={notificationItem}
+      setNotificationItem={setNotificationItem}
+      wishlistItem={mockWishlistItem}
+      hoverButton={hoverButton}
+      setHoverButton={setHoverButton}
+      searchInput={searchInput}
+      setSearchInput={setSearchInput}
+     />
+     <Routes>
+      <Route
+       path="/"
+       element={
+        <Outlet
+         context={{
+          products: generateMockProducts(3),
+          wishlistItem: [...mockWishlistItem],
+          hoverButton,
+          setHoverButton,
+          cartItem: mockCartItem,
+         }}
+        />
+       }
+      >
+       <Route index element={<Home />} />
+       <Route path="/notification" element={<Notification />} />
+      </Route>
+     </Routes>
+    </MemoryRouter>
+   );
+  };
+
+  render(<MockRoute />);
+
+  const notificationButton = screen.getByTestId("notification-button");
+  expect(notificationButton).toBeInTheDocument();
+
+  await user.click(notificationButton);
+
+  expect(
+   screen.getByRole("heading", { name: "Notifications" })
+  ).toBeInTheDocument();
+ });
+
+ it("Should marks notification read when hover on notification item", async () => {
+  const user = userEvent.setup();
+
+  const MockRoute = () => {
+   const [hoverButton, setHoverButton] = useState(null);
+   const [searchInput, setSearchInput] = useState("");
+   const [notificationItem, setNotificationItem] = useState(
+    generateMockNotification(3)
+   );
+
+   return (
+    <MemoryRouter initialEntries={["/"]}>
+     <Header
+      products={generateMockProducts(3)}
+      cartItem={mockCartItem}
+      notificationItem={notificationItem}
+      setNotificationItem={setNotificationItem}
+      wishlistItem={mockWishlistItem}
+      hoverButton={hoverButton}
+      setHoverButton={setHoverButton}
+      searchInput={searchInput}
+      setSearchInput={setSearchInput}
+     />
+     <Routes>
+      <Route
+       path="/"
+       element={
+        <Outlet
+         context={{
+          products: generateMockProducts(3),
+          wishlistItem: [...mockWishlistItem],
+          hoverButton,
+          setHoverButton,
+          cartItem: mockCartItem,
+         }}
+        />
+       }
+      >
+       <Route index element={<Home />} />
+       <Route path="/notification" element={<Notification />} />
+      </Route>
+     </Routes>
+    </MemoryRouter>
+   );
+  };
+
+  render(<MockRoute />);
+
+  const notificationButtonWrapper = screen.getByTestId(
+   "notification-button-wrapper"
+  );
+  expect(notificationButtonWrapper).toBeInTheDocument();
+
+  await user.hover(notificationButtonWrapper);
+
+  const notificationItemOne = screen.getByTestId("notification-item-1");
+  expect(notificationItemOne).toBeInTheDocument();
+  expect(notificationItemOne).toHaveClass("notification-item unread");
+
+  await act(async () => {
+   await user.hover(notificationButtonWrapper);
+   await user.hover(notificationItemOne);
+  });
+
+  expect(notificationItemOne).toHaveClass("notification-item read");
+ });
+
+ it("Should Clear notification when click clear button", async () => {
+  const user = userEvent.setup();
+
+  const MockRoute = () => {
+   const [hoverButton, setHoverButton] = useState(null);
+   const [searchInput, setSearchInput] = useState("");
+   const [notificationItem, setNotificationItem] = useState(
+    generateMockNotification(3)
+   );
+
+   return (
+    <MemoryRouter initialEntries={["/"]}>
+     <Header
+      products={generateMockProducts(3)}
+      cartItem={mockCartItem}
+      notificationItem={notificationItem}
+      setNotificationItem={setNotificationItem}
+      wishlistItem={mockWishlistItem}
+      hoverButton={hoverButton}
+      setHoverButton={setHoverButton}
+      searchInput={searchInput}
+      setSearchInput={setSearchInput}
+     />
+     <Routes>
+      <Route
+       path="/"
+       element={
+        <Outlet
+         context={{
+          products: generateMockProducts(3),
+          wishlistItem: [...mockWishlistItem],
+          hoverButton,
+          setHoverButton,
+          cartItem: mockCartItem,
+         }}
+        />
+       }
+      >
+       <Route index element={<Home />} />
+       <Route path="/notification" element={<Notification />} />
+      </Route>
+     </Routes>
+    </MemoryRouter>
+   );
+  };
+
+  render(<MockRoute />);
+
+  const notificationButtonWrapper = screen.getByTestId(
+   "notification-button-wrapper"
+  );
+  await user.hover(notificationButtonWrapper);
+
+  const notificationItemOne = screen.getByTestId("notification-item-1");
+  expect(notificationItemOne).toBeInTheDocument();
+  const clearButton = screen.getByTestId("clear-notification-button");
+  expect(clearButton).toBeInTheDocument();
+
+  await act(async () => {
+   await user.hover(notificationButtonWrapper);
+   await user.click(clearButton);
+  });
+
+  expect(screen.queryByTestId("notification-item-1")).not.toBeInTheDocument();
+ });
+
+ it("Should Navigate to Notification Page when click see all button", async () => {
+  const user = userEvent.setup();
+
+  const MockRoute = () => {
+   const [hoverButton, setHoverButton] = useState(null);
+   const [searchInput, setSearchInput] = useState("");
+   const [notificationItem, setNotificationItem] = useState(
+    generateMockNotification(3)
+   );
+
+   return (
+    <MemoryRouter initialEntries={["/"]}>
+     <Header
+      products={generateMockProducts(3)}
+      cartItem={mockCartItem}
+      notificationItem={notificationItem}
+      setNotificationItem={setNotificationItem}
+      wishlistItem={mockWishlistItem}
+      hoverButton={hoverButton}
+      setHoverButton={setHoverButton}
+      searchInput={searchInput}
+      setSearchInput={setSearchInput}
+     />
+     <Routes>
+      <Route
+       path="/"
+       element={
+        <Outlet
+         context={{
+          products: generateMockProducts(3),
+          wishlistItem: [...mockWishlistItem],
+          hoverButton,
+          setHoverButton,
+          cartItem: mockCartItem,
+         }}
+        />
+       }
+      >
+       <Route index element={<Home />} />
+       <Route path="/notification" element={<Notification />} />
+      </Route>
+     </Routes>
+    </MemoryRouter>
+   );
+  };
+
+  render(<MockRoute />);
+
+  const notificationButtonWrapper = screen.getByTestId(
+   "notification-button-wrapper"
+  );
+  await user.hover(notificationButtonWrapper);
+
+  const notificationItemOne = screen.getByTestId("notification-item-1");
+  expect(notificationItemOne).toBeInTheDocument();
+  const seeAllButton = screen.getByRole("button", { name: "See All" });
+  expect(seeAllButton).toBeInTheDocument();
+
+  await act(async () => {
+   await user.hover(notificationButtonWrapper);
+   await user.click(seeAllButton);
+  });
+
+  expect(
+   screen.getByRole("heading", { name: "Notifications" })
+  ).toBeInTheDocument();
  });
 });
