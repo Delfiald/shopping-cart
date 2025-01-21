@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BuyModal } from "../Modal/Modal";
+import { format } from "date-fns";
 
 function CartContents({
  wishlistItem = [],
@@ -116,7 +117,7 @@ function CartContents({
  );
 }
 
-function Summary({ totalPrice, orderAmount, setModal }) {
+function Summary({ totalPrice, orderAmount, handleBuy }) {
  return (
   <section className="summary">
    <div>Shopping Summary</div>
@@ -124,11 +125,7 @@ function Summary({ totalPrice, orderAmount, setModal }) {
     <p>Total</p>
     <div data-testid="total-price">{totalPrice()}</div>
    </div>
-   <button
-    data-testid="buy-button"
-    className="buy-button"
-    onClick={() => setModal("buy-modal")}
-   >
+   <button data-testid="buy-button" className="buy-button" onClick={handleBuy}>
     Buy ({orderAmount()})
    </button>
   </section>
@@ -141,6 +138,7 @@ function CartMain({
  setCartItem,
  wishlistItem = [],
  setWishlistItem,
+ setNotificationItem,
 }) {
  const [modal, setModal] = useState("");
 
@@ -165,6 +163,23 @@ function CartMain({
   return cartItem.reduce((prevItem, item) => prevItem + item.amount, 0);
  };
 
+ const handleBuy = () => {
+  const timeStamp = Date.now();
+  const formattedDate = format(timeStamp, "dd/MM/yyyy HH:mm");
+  setModal("buy-modal");
+  setNotificationItem((prevNotification) => [
+   ...prevNotification,
+   {
+    id: prevNotification.length + 1,
+    message: `Purchase Complete, total Price: ${totalPrice()}`,
+    products: [...cartItem],
+    timeStamp: formattedDate,
+    isRead: false,
+   },
+  ]);
+  setCartItem([]);
+ };
+
  return (
   <>
    <main>
@@ -179,7 +194,7 @@ function CartMain({
     <Summary
      totalPrice={totalPrice}
      orderAmount={orderAmount}
-     setModal={setModal}
+     handleBuy={handleBuy}
     />
    </main>
    {modal === "buy-modal" ? <BuyModal setModal={setModal} /> : null}
@@ -193,6 +208,7 @@ CartMain.propTypes = {
  setCartItem: PropTypes.func,
  wishlistItem: PropTypes.array,
  setWishlistItem: PropTypes.func,
+ setNotificationItem: PropTypes.func,
 };
 
 CartContents.propTypes = {
@@ -206,7 +222,7 @@ CartContents.propTypes = {
 Summary.propTypes = {
  totalPrice: PropTypes.func,
  orderAmount: PropTypes.func,
- setModal: PropTypes.func,
+ handleBuy: PropTypes.func,
 };
 
 export default CartMain;

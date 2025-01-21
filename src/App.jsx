@@ -58,6 +58,7 @@ function App() {
      setCartItem,
      wishlistItem,
      setWishlistItem,
+     setNotificationItem,
     }}
    />
    <Footer />

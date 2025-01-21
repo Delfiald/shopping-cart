@@ -1,6 +1,6 @@
 import styles from "./header.module.css";
 
-import { Bell, Heart, Search, ShoppingCart, X } from "lucide-react";
+import { Bell, Heart, Search, ShoppingCart, Trash, X } from "lucide-react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 
@@ -8,6 +8,7 @@ function Header({
  products,
  cartItem,
  notificationItem,
+ setNotificationItem,
  wishlistItem,
  hoverButton,
  setHoverButton,
@@ -24,6 +25,10 @@ function Header({
   navigate("/wishlist");
  };
 
+ const handleNotificationClick = () => {
+  navigate("/notification");
+ };
+
  const handleHoverButton = (isCartOpen) => {
   setHoverButton(isCartOpen);
  };
@@ -34,6 +39,12 @@ function Header({
 
  const orderAmount = () => {
   return cartItem.reduce((prevItem, item) => prevItem + item.amount, 0);
+ };
+
+ const unreadNotificationAmount = () => {
+  return notificationItem.filter(
+   (notification) => notification.isRead === false
+  ).length;
  };
 
  const getCartDetails = () => {
@@ -53,6 +64,14 @@ function Header({
     ...product,
    };
   });
+ };
+
+ const handleReadNotification = (notificationId) => {
+  setNotificationItem((prevNotification) =>
+   prevNotification.map((item) =>
+    item.id === notificationId ? { ...item, isRead: true } : item
+   )
+  );
  };
 
  return (
@@ -128,24 +147,52 @@ function Header({
      <button
       data-testid="notification-button"
       className={styles["notification-button"]}
+      onClick={handleNotificationClick}
      >
       <Bell size={16} />
-      {notificationItem && notificationItem.length > 0 && (
+      {notificationItem && unreadNotificationAmount() > 0 && (
        <div
         data-testid="notification-count"
         className={styles["notification-count"]}
        >
-        {notificationItem.length}
+        {unreadNotificationAmount()}
        </div>
       )}
      </button>
      {hoverButton === "notification" && (
       <div>
-       <ul>
-        {notificationItem.map((item) => (
-         <li key={item.id}>{item.description}</li>
-        ))}
-       </ul>
+       <div className="notification-information">
+        <div>Notifications ({notificationItem.length})</div>
+        <div role="button" onClick={handleNotificationClick}>
+         See All
+        </div>
+       </div>
+       {notificationItem.map((item) => (
+        <div
+         key={item.id}
+         data-testid={`notification-item-${item.id}`}
+         className={`notification-item ${item.isRead ? "read" : "unread"}`}
+         onMouseEnter={() => handleReadNotification(item.id)}
+        >
+         <div data-testid={`notification-time-${item.id}`} className="time">
+          {item.timeStamp}
+         </div>
+         <div
+          data-testid={`notification-message-${item.id}`}
+          className="message"
+         >
+          {item.message}
+         </div>
+        </div>
+       ))}
+       <div
+        data-testid="clear-notification-button"
+        className="clear-button"
+        onClick={() => setNotificationItem([])}
+       >
+        <Trash />
+        Clear Notifications
+       </div>
       </div>
      )}
     </div>
@@ -200,6 +247,7 @@ Header.propTypes = {
  products: PropTypes.array.isRequired,
  cartItem: PropTypes.array,
  notificationItem: PropTypes.array,
+ setNotificationItem: PropTypes.func,
  wishlistItem: PropTypes.array,
  hoverButton: PropTypes.string,
  setHoverButton: PropTypes.func,

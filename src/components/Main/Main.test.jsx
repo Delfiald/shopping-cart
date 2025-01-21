@@ -837,6 +837,7 @@ const MockCartMain = () => {
  const [products, setProducts] = useState([...generateMockProducts(5)]);
  const [cartItem, setCartItem] = useState([...generateMockCartItem(3)]);
  const [wishlistItem, setWishlistItem] = useState([...generateMockWishlist(2)]);
+ const [notificationItem, setNotificationItem] = useState([]);
 
  return (
   <MemoryRouter>
@@ -847,6 +848,8 @@ const MockCartMain = () => {
     setCartItem={setCartItem}
     wishlistItem={wishlistItem}
     setWishlistItem={setWishlistItem}
+    notificationItem={notificationItem}
+    setNotificationItem={setNotificationItem}
    />
   </MemoryRouter>
  );
@@ -1047,18 +1050,21 @@ describe("Test Main component of Cart", () => {
   expect(buyButton).toHaveTextContent("Buy (3)");
  });
 
- it("Should display modal when buy button is clicked", async () => {
+ it("Should display modal when buy button is clicked and clear products from cart page", async () => {
   const user = userEvent.setup();
   render(<MockCartMain />);
 
   const buyButton = screen.getByTestId("buy-button");
   expect(buyButton).toBeInTheDocument();
+  expect(buyButton).toHaveTextContent("Buy (3)");
 
   await user.click(buyButton);
 
   expect(
    screen.queryByRole("heading", { name: /complete/i })
   ).toBeInTheDocument();
+
+  expect(screen.getByTestId("buy-button")).toHaveTextContent("Buy (0)");
 
   expect(screen.getByRole("button", { name: "Shop" })).toBeInTheDocument();
  });
@@ -1070,6 +1076,7 @@ describe("Test Main component of Cart", () => {
    const [cartItem, setCartItem] = useState(generateMockCartItem(3));
    const [products, setProducts] = useState(generateMockProducts(4));
    const [wishlist, setWishlistItem] = useState([]);
+   const [notificationItem, setNotificationItem] = useState([]);
    return (
     <MemoryRouter initialEntries={["/cart"]}>
      <Routes>
@@ -1085,6 +1092,8 @@ describe("Test Main component of Cart", () => {
           setCartItem: setCartItem,
           wishlistItem: wishlist,
           setWishlistItem: setWishlistItem,
+          notificationItem: notificationItem,
+          setNotificationItem: setNotificationItem,
          }}
         />
        }
@@ -1112,6 +1121,74 @@ describe("Test Main component of Cart", () => {
   expect(
    screen.getByRole("heading", { name: "All Products" })
   ).toBeInTheDocument();
+ });
+
+ it("Should Add notification Item After Buying Product", async () => {
+  const user = userEvent.setup();
+
+  const MockRoute = () => {
+   const [cartItem, setCartItem] = useState(generateMockCartItem(3));
+   const [products, setProducts] = useState(generateMockProducts(4));
+   const [wishlist, setWishlistItem] = useState([]);
+   const [notificationItem, setNotificationItem] = useState([]);
+   const [hoverButton, setHoverButton] = useState(null);
+   return (
+    <MemoryRouter initialEntries={["/cart"]}>
+     <Header
+      products={mockProducts}
+      cartItem={cartItem}
+      notificationItem={notificationItem}
+      hoverButton={hoverButton}
+      setHoverButton={setHoverButton}
+     />
+     <Routes>
+      <Route
+       path="/"
+       element={
+        <Outlet
+         context={{
+          products: products,
+          categories: mockCategories,
+          setProducts: setProducts,
+          cartItem: cartItem,
+          setCartItem: setCartItem,
+          wishlistItem: wishlist,
+          setWishlistItem: setWishlistItem,
+          setNotificationItem: setNotificationItem,
+         }}
+        />
+       }
+      >
+       <Route path="/shop" element={<Shop />} />
+       <Route path="/cart" element={<Cart />} />
+      </Route>
+     </Routes>
+    </MemoryRouter>
+   );
+  };
+
+  render(<MockRoute />);
+
+  const buyButton = screen.getByTestId("buy-button");
+  expect(buyButton).toBeInTheDocument();
+
+  await user.click(buyButton);
+
+  const notificationButtonWrapper = screen.getByTestId(
+   "notification-button-wrapper"
+  );
+  expect(notificationButtonWrapper).toBeInTheDocument();
+
+  await user.hover(notificationButtonWrapper);
+
+  const notificationItem = screen.getByTestId("notification-item-1");
+
+  expect(notificationItem).toBeInTheDocument();
+  expect(notificationItem.children).toHaveLength(2);
+
+  expect(screen.getByTestId("notification-message-1")).toHaveTextContent(
+   /360/i
+  );
  });
 });
 

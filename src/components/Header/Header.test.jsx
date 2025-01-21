@@ -132,8 +132,8 @@ const mockCartItem = [
 ];
 
 const mockNotificationItem = [
- { id: 1, description: "message1" },
- { id: 2, description: "message2" },
+ { id: 1, message: "message1", timeStamp: "20/01/2025 15:45", isRead: false },
+ { id: 2, message: "message2", timeStamp: "22/01/2025 12:45", isRead: false },
 ];
 
 const mockWishlistItem = [{ id: 1 }, { id: 2 }];
