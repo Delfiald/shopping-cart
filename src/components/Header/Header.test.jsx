@@ -7,6 +7,7 @@ import { expect, it } from "vitest";
 import Product from "../../pages/Product/Product";
 import Home from "../../pages/Home/Home";
 import Cart from "../../pages/Cart/Cart";
+import Wishlist from "../../pages/Wishlist/Wishlist";
 
 const generateMockProducts = (num) => {
  const products = [];
@@ -33,6 +34,7 @@ const MockNavigate = () => {
     products={generateMockProducts(3)}
     cartItem={mockCartItem}
     notificationItem={mockNotificationItem}
+    wishlistItem={mockWishlistItem}
     hoverButton={hoverButton}
     setHoverButton={setHoverButton}
     searchInput={searchInput}
@@ -45,6 +47,7 @@ const MockNavigate = () => {
       <Outlet
        context={{
         products: generateMockProducts(3),
+        wishlistItem: [...mockWishlistItem],
         hoverButton,
         setHoverButton,
         cartItem: mockCartItem,
@@ -55,6 +58,7 @@ const MockNavigate = () => {
      <Route index element={<Home />} />
      <Route path="/cart" element={<Cart />} />
      <Route path="/product/:id" element={<Product />} />
+     <Route path="/wishlist" element={<Wishlist />} />
     </Route>
    </Routes>
   </MemoryRouter>
@@ -128,9 +132,11 @@ const mockCartItem = [
 ];
 
 const mockNotificationItem = [
- { id: 1, description: "message1" },
- { id: 2, description: "message2" },
+ { id: 1, message: "message1", timeStamp: "20/01/2025 15:45", isRead: false },
+ { id: 2, message: "message2", timeStamp: "22/01/2025 12:45", isRead: false },
 ];
+
+const mockWishlistItem = [{ id: 1 }, { id: 2 }];
 
 describe("Test Header", () => {
  it("Should Render Header", () => {
@@ -266,7 +272,7 @@ describe("Test Header", () => {
   expect(searchInput).toHaveValue("Hello World");
  });
 
- it("Should Navigate to Product Page When Click the Product on Hover", async () => {
+ it("Should Navigate to Cart Page When Click See All Button when Hover on Cart Button", async () => {
   const user = userEvent.setup();
 
   render(<MockNavigate />);
@@ -302,6 +308,58 @@ describe("Test Header", () => {
   await act(async () => {
    await user.click(productOne);
    await user.unhover(cartButtonWrapper);
+  });
+
+  expect(screen.getByTestId("display-image")).toBeInTheDocument();
+ });
+
+ it("Should Navigate to Wishlist Page when Click Wishlist Icon", async () => {
+  const user = userEvent.setup();
+
+  render(<MockNavigate />);
+
+  const wishlistButton = screen.getByTestId("wishlist-button");
+  await user.click(wishlistButton);
+
+  expect(screen.getByRole("heading", { name: "Wishlist" })).toBeInTheDocument();
+ });
+
+ it("Should Navigate to Wishlist Page When Click See All Button when Hover on Wishlist Button", async () => {
+  const user = userEvent.setup();
+
+  render(<MockNavigate />);
+
+  const wishlistButtonWrapper = screen.getByTestId("wishlist-button-wrapper");
+  await user.hover(wishlistButtonWrapper);
+
+  const seeAllButton = screen.getByRole("button", { name: "See All" });
+  expect(seeAllButton).toBeInTheDocument();
+  const productOne = screen.getByTestId("product-1");
+  expect(productOne).toBeInTheDocument();
+
+  await act(async () => {
+   await user.hover(wishlistButtonWrapper);
+   await user.click(seeAllButton);
+   await user.unhover(wishlistButtonWrapper);
+  });
+
+  expect(screen.getByRole("heading", { name: "Wishlist" })).toBeInTheDocument();
+ });
+
+ it("Should Navigate to Wishlist Page when Click on Wishlist Button", async () => {
+  const user = userEvent.setup();
+
+  render(<MockNavigate />);
+
+  const wishlistButtonWrapper = screen.getByTestId("wishlist-button-wrapper");
+  await user.hover(wishlistButtonWrapper);
+
+  const productOne = screen.getByTestId("product-1");
+  expect(productOne).toBeInTheDocument();
+
+  await act(async () => {
+   await user.click(productOne);
+   await user.unhover(wishlistButtonWrapper);
   });
 
   expect(screen.getByTestId("display-image")).toBeInTheDocument();

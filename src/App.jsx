@@ -41,6 +41,7 @@ function App() {
    <Header
     products={products}
     cartItem={cartItem}
+    wishlistItem={wishlistItem}
     notificationItem={notificationItem}
     hoverButton={hoverButton}
     setHoverButton={setHoverButton}
@@ -57,6 +58,7 @@ function App() {
      setCartItem,
      wishlistItem,
      setWishlistItem,
+     setNotificationItem,
     }}
    />
    <Footer />

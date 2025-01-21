@@ -1,31 +1,21 @@
-import ShopMain from "../../components/Main/ShopMain";
-import Aside from "../../components/Aside/Aside";
 import { useOutletContext, useSearchParams } from "react-router-dom";
+import WishlistMain from "../../components/Main/WishlistMain";
 import { useEffect } from "react";
 
-function Shop() {
+function Wishlist() {
  const [searchParams, setSearchParams] = useSearchParams();
- const category = searchParams.get("category");
- const { categories, products, hoverButton, setHoverButton } =
-  useOutletContext();
+ const {
+  products,
+  setCartItem,
+  wishlistItem,
+  setWishlistItem,
+  hoverButton,
+  setHoverButton,
+ } = useOutletContext();
 
  const page = searchParams.get("page");
  const itemPerPage = searchParams.get("itemsPerPage");
  const sort = searchParams.get("sort");
-
- const displayedProducts =
-  category && category !== "all"
-   ? products.filter((product) => product.category === category)
-   : products;
-
- const handleFilterChange = (newCategory) => {
-  setSearchParams((prevParams) => {
-   const params = new URLSearchParams(prevParams);
-   params.set("category", newCategory);
-   params.set("page", 1);
-   return params;
-  });
- };
 
  const handlePageChange = (page) => {
   setSearchParams((prevParams) => {
@@ -53,8 +43,16 @@ function Shop() {
   });
  };
 
+ const getWishlistDetails = () => {
+  return wishlistItem.map((wishlist) => {
+   const product = products.find((p) => p.id === wishlist.id);
+   return {
+    ...product,
+   };
+  });
+ };
+
  useEffect(() => {
-  const validCategory = categories.includes(category) ? category : "all";
   const validSort = [
    "name-asc",
    "name-desc",
@@ -63,7 +61,7 @@ function Shop() {
   ].includes(sort)
    ? sort
    : "name-asc";
-  const totalItems = displayedProducts.length;
+  const totalItems = wishlistItem.length;
   const maxPage = Math.ceil(totalItems / (itemPerPage || 10));
   const validPage = Math.max(1, Math.min(parseInt(page) || 1, maxPage));
   const validItemsPerPage = [5, 10, null].includes(parseInt(itemPerPage))
@@ -71,7 +69,6 @@ function Shop() {
    : 10;
 
   const defaultParams = {
-   category: validCategory,
    sort: validSort,
    page: validPage,
    itemsPerPage: validItemsPerPage,
@@ -86,28 +83,21 @@ function Shop() {
    setSearchParams(updatedParams);
   }
  }, [
-  categories,
-  category,
-  displayedProducts.length,
-  itemPerPage,
   page,
-  products,
-  products.length,
+  itemPerPage,
   searchParams,
   setSearchParams,
+  wishlistItem.length,
   sort,
  ]);
 
  return (
   <>
-   <Aside
-    categories={categories}
-    category={category}
-    handleFilterChange={handleFilterChange}
-   />
-   <ShopMain
-    category={category}
-    products={displayedProducts}
+   <WishlistMain
+    products={getWishlistDetails()}
+    setCartItem={setCartItem}
+    wishlistItem={wishlistItem}
+    setWishlistItem={setWishlistItem}
     page={parseInt(page)}
     setPage={handlePageChange}
     itemPerPage={parseInt(itemPerPage)}
@@ -121,4 +111,4 @@ function Shop() {
  );
 }
 
-export default Shop;
+export default Wishlist;

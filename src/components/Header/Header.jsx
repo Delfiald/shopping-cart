@@ -1,6 +1,6 @@
 import styles from "./header.module.css";
 
-import { Bell, Search, ShoppingCart, X } from "lucide-react";
+import { Bell, Heart, Search, ShoppingCart, Trash, X } from "lucide-react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 
@@ -8,6 +8,8 @@ function Header({
  products,
  cartItem,
  notificationItem,
+ setNotificationItem,
+ wishlistItem,
  hoverButton,
  setHoverButton,
  searchInput,
@@ -17,6 +19,14 @@ function Header({
 
  const handleCartClick = () => {
   navigate("/cart");
+ };
+
+ const handleWishlistClick = () => {
+  navigate("/wishlist");
+ };
+
+ const handleNotificationClick = () => {
+  navigate("/notification");
  };
 
  const handleHoverButton = (isCartOpen) => {
@@ -31,6 +41,12 @@ function Header({
   return cartItem.reduce((prevItem, item) => prevItem + item.amount, 0);
  };
 
+ const unreadNotificationAmount = () => {
+  return notificationItem.filter(
+   (notification) => notification.isRead === false
+  ).length;
+ };
+
  const getCartDetails = () => {
   return cartItem.map((cart) => {
    const product = products.find((p) => p.id === cart.id);
@@ -39,6 +55,23 @@ function Header({
     amount: cart.amount,
    };
   });
+ };
+
+ const getWishlistDetails = () => {
+  return wishlistItem.map((wishlist) => {
+   const product = products.find((p) => p.id === wishlist.id);
+   return {
+    ...product,
+   };
+  });
+ };
+
+ const handleReadNotification = (notificationId) => {
+  setNotificationItem((prevNotification) =>
+   prevNotification.map((item) =>
+    item.id === notificationId ? { ...item, isRead: true } : item
+   )
+  );
  };
 
  return (
@@ -114,24 +147,94 @@ function Header({
      <button
       data-testid="notification-button"
       className={styles["notification-button"]}
+      onClick={handleNotificationClick}
      >
       <Bell size={16} />
-      {notificationItem && notificationItem.length > 0 && (
+      {notificationItem && unreadNotificationAmount() > 0 && (
        <div
         data-testid="notification-count"
         className={styles["notification-count"]}
        >
-        {notificationItem.length}
+        {unreadNotificationAmount()}
        </div>
       )}
      </button>
      {hoverButton === "notification" && (
       <div>
-       <ul>
-        {notificationItem.map((item) => (
-         <li key={item.id}>{item.description}</li>
-        ))}
-       </ul>
+       <div className="notification-information">
+        <div>Notifications ({notificationItem.length})</div>
+        <div role="button" onClick={handleNotificationClick}>
+         See All
+        </div>
+       </div>
+       {notificationItem.map((item) => (
+        <div
+         key={item.id}
+         data-testid={`notification-item-${item.id}`}
+         className={`notification-item ${item.isRead ? "read" : "unread"}`}
+         onMouseEnter={() => handleReadNotification(item.id)}
+        >
+         <div data-testid={`notification-time-${item.id}`} className="time">
+          {item.timeStamp}
+         </div>
+         <div
+          data-testid={`notification-message-${item.id}`}
+          className="message"
+         >
+          {item.message}
+         </div>
+        </div>
+       ))}
+       <div
+        data-testid="clear-notification-button"
+        className="clear-button"
+        onClick={() => setNotificationItem([])}
+       >
+        <Trash />
+        Clear Notifications
+       </div>
+      </div>
+     )}
+    </div>
+    <div
+     onMouseEnter={() => handleHoverButton("wishlist")}
+     onMouseLeave={() => handleHoverButton(null)}
+     data-testid="wishlist-button-wrapper"
+     className={styles["wishlist-button-wrapper"]}
+    >
+     <button
+      onClick={handleWishlistClick}
+      data-testid="wishlist-button"
+      className={styles["wishlist-button"]}
+     >
+      <Heart size={16} />
+      {wishlistItem && wishlistItem.length > 0 && (
+       <div data-testid="wishlist-count" className={styles["wishlist-count"]}>
+        {wishlistItem.length}
+       </div>
+      )}
+     </button>
+     {hoverButton === "wishlist" && (
+      <div>
+       <div className="wishlist-information">
+        <div>Wishlist ({wishlistItem.length})</div>
+        <div role="button" onClick={handleWishlistClick}>
+         See All
+        </div>
+       </div>
+       {getWishlistDetails().map((item) => (
+        <div
+         data-testid={`product-${item.id}`}
+         key={item.id}
+         onClick={() => navigate(`/product/${item.id}`)}
+        >
+         <div className="image">
+          <img src={item.image} alt={item.title} />
+         </div>
+         <div className="title">{item.title}</div>
+         <div className="price">{item.price}</div>
+        </div>
+       ))}
       </div>
      )}
     </div>
@@ -144,6 +247,8 @@ Header.propTypes = {
  products: PropTypes.array.isRequired,
  cartItem: PropTypes.array,
  notificationItem: PropTypes.array,
+ setNotificationItem: PropTypes.func,
+ wishlistItem: PropTypes.array,
  hoverButton: PropTypes.string,
  setHoverButton: PropTypes.func,
  searchInput: PropTypes.string,
