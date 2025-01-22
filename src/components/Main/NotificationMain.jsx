@@ -1,22 +1,32 @@
 import { Check, ChevronRight, Trash, X } from "lucide-react";
 import PropTypes from "prop-types";
 import { useState } from "react";
+import { removeItem, setItem } from "../../utils/localStorage";
 
 function NotificationList({ notificationItem, products, setNotificationItem }) {
  const [detail, setDetail] = useState("");
 
  const handleReadNotification = (notificationId) => {
   setNotificationItem((prevNotification) =>
-   prevNotification.map((item) =>
-    item.id === notificationId ? { ...item, isRead: true } : item
-   )
+   prevNotification.map((item) => {
+    const updatedNotification =
+     item.id === notificationId ? { ...item, isRead: true } : item;
+
+    setItem("notification", updatedNotification);
+
+    return updatedNotification;
+   })
   );
  };
 
  const handleNotificationRemove = (notificationId) => {
-  setNotificationItem((prevNotification) =>
-   prevNotification.filter((notification) => notification.id !== notificationId)
-  );
+  setNotificationItem((prevNotification) => {
+   const updatedNotification = prevNotification.filter(
+    (notification) => notification.id !== notificationId
+   );
+   setItem("notification", updatedNotification);
+   return updatedNotification;
+  });
  };
 
  const handleDetails = (notificationId) => {
@@ -108,9 +118,20 @@ function NotificationMain({
  };
 
  const handleMarksAllRead = () => {
-  setNotificationItem((prevNotification) =>
-   prevNotification.map((item) => ({ ...item, isRead: true }))
-  );
+  setNotificationItem((prevNotification) => {
+   const updatedNotification = prevNotification.map((item) => ({
+    ...item,
+    isRead: true,
+   }));
+
+   setItem("notification", updatedNotification);
+   return updatedNotification;
+  });
+ };
+
+ const handleRemoveAllNotification = () => {
+  setNotificationItem([]);
+  removeItem("notification");
  };
 
  return (
@@ -132,7 +153,7 @@ function NotificationMain({
    <div
     data-testid="clear-notification-button"
     className="clear-notification-button"
-    onClick={() => setNotificationItem([])}
+    onClick={handleRemoveAllNotification}
    >
     <Trash size={16} />
     <p>Clear Notification</p>

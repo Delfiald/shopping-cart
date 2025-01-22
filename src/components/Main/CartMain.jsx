@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BuyModal } from "../Modal/Modal";
 import { format } from "date-fns";
+import { removeItem, setItem } from "../../utils/localStorage";
 
 function CartContents({
  wishlistItem = [],
@@ -14,16 +15,27 @@ function CartContents({
  const navigate = useNavigate();
 
  const handleRemoveCart = (productId) => {
-  setCartItem((prevItem) => prevItem.filter((item) => item.id !== productId));
+  setCartItem((prevItem) => {
+   const updatedCart = prevItem.filter((item) => item.id !== productId);
+
+   setItem("cart", updatedCart);
+
+   return updatedCart;
+  });
  };
 
  const handleAmount = (change, productId) => {
   setCartItem((prevItem) =>
-   prevItem.map((item) =>
-    item.id === productId
-     ? { ...item, amount: Math.max(1, item.amount + change) }
-     : item
-   )
+   prevItem.map((item) => {
+    const updatedCart =
+     item.id === productId
+      ? { ...item, amount: Math.max(1, item.amount + change) }
+      : item;
+
+    setItem("cart", updatedCart);
+
+    return updatedCart;
+   })
   );
  };
 
@@ -31,11 +43,17 @@ function CartContents({
   setWishlistItem((prevWishlistItem) => {
    const exists = prevWishlistItem.find((item) => item.id === product.id);
 
+   let updatedWishlist;
+
    if (exists) {
-    return prevWishlistItem.filter((item) => item.id !== product.id);
+    updatedWishlist = prevWishlistItem.filter((item) => item.id !== product.id);
    } else {
-    return [...prevWishlistItem, { id: product.id }];
+    updatedWishlist = [...prevWishlistItem, { id: product.id }];
    }
+
+   setItem("wishlist", updatedWishlist);
+
+   return updatedWishlist;
   });
  };
 
@@ -167,17 +185,25 @@ function CartMain({
   const timeStamp = Date.now();
   const formattedDate = format(timeStamp, "dd/MM/yyyy HH:mm");
   setModal("buy-modal");
-  setNotificationItem((prevNotification) => [
-   ...prevNotification,
-   {
-    id: prevNotification.length + 1,
-    message: `Purchase Complete, total Price: ${totalPrice()}`,
-    products: [...cartItem],
-    timeStamp: formattedDate,
-    isRead: false,
-   },
-  ]);
+  setNotificationItem((prevNotification) => {
+   const updatedNotification = [
+    ...prevNotification,
+    {
+     id: prevNotification.length + 1,
+     message: `Purchase Complete, total Price: ${totalPrice()}`,
+     products: [...cartItem],
+     timeStamp: formattedDate,
+     isRead: false,
+    },
+   ];
+
+   setItem("notification", updatedNotification);
+
+   return updatedNotification;
+  });
+
   setCartItem([]);
+  removeItem("cart");
  };
 
  return (

@@ -42,6 +42,7 @@ exports[`Test Home Page > Should Render Home Page 1`] = `
           class="_item-information_716e15"
         >
           Showing 1 - 5 products
+           
         </div>
         <div
           class="_sort-wrapper_716e15"

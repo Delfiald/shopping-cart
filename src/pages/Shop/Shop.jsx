@@ -12,11 +12,24 @@ function Shop() {
  const page = searchParams.get("page");
  const itemPerPage = searchParams.get("itemsPerPage");
  const sort = searchParams.get("sort");
+ const search = searchParams.get("search") || "";
 
- const displayedProducts =
-  category && category !== "all"
-   ? products.filter((product) => product.category === category)
-   : products;
+ const displayedProducts = products
+  .filter((product) => {
+   if (category && category !== "all") {
+    return product.category === category;
+   }
+   return true;
+  })
+  .filter((product) => {
+   if (search) {
+    return product.title
+     .toLowerCase()
+     .replace(/\s+/g, "")
+     .includes(search.toLowerCase());
+   }
+   return true;
+  });
 
  const handleFilterChange = (newCategory) => {
   setSearchParams((prevParams) => {
@@ -75,6 +88,7 @@ function Shop() {
    sort: validSort,
    page: validPage,
    itemsPerPage: validItemsPerPage,
+   search: search,
   };
 
   const updatedParams = { ...defaultParams };
@@ -93,6 +107,7 @@ function Shop() {
   page,
   products,
   products.length,
+  search,
   searchParams,
   setSearchParams,
   sort,
@@ -116,6 +131,7 @@ function Shop() {
     setSort={handleSortChange}
     hoverButton={hoverButton}
     setHoverButton={setHoverButton}
+    search={search}
    />
   </>
  );

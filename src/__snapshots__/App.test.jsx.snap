@@ -46,6 +46,12 @@ exports[`It Render App > render app 1`] = `
           type="text"
           value=""
         />
+        <button
+          class="search-button"
+          data-testid="search-button"
+        >
+          Search
+        </button>
       </div>
       <div
         class="_cart-button-wrapper_d33141"

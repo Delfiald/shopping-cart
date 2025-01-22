@@ -9,6 +9,7 @@ import {
  Heart,
  Plus,
 } from "lucide-react";
+import { setItem } from "../../utils/localStorage";
 
 const ITEM_PER_PAGE = {
  FIVE: 5,
@@ -21,13 +22,19 @@ function Card({ product, setCartItem, wishlistItem, setWishlistItem }) {
   setCartItem((prevCartItem) => {
    const exists = prevCartItem.find((item) => item.id === product.id);
 
+   let updatedCart;
+
    if (exists) {
-    return prevCartItem.map((item) =>
+    updatedCart = prevCartItem.map((item) =>
      item.id === product.id ? { ...item, amount: item.amount + 1 } : item
     );
+   } else {
+    updatedCart = [...prevCartItem, { id: product.id, amount: 1 }];
    }
 
-   return [...prevCartItem, { id: product.id, amount: 1 }];
+   setItem("cart", updatedCart);
+
+   return updatedCart;
   });
  };
 
@@ -40,6 +47,8 @@ function Card({ product, setCartItem, wishlistItem, setWishlistItem }) {
    const updatedWishlist = exists
     ? prevWishlistItem.filter((item) => item.id !== product.id)
     : [...prevWishlistItem, { id: product.id }];
+
+   setItem("wishlist", updatedWishlist);
    return updatedWishlist;
   });
  };
