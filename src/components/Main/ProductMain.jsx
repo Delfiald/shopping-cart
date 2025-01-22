@@ -9,6 +9,7 @@ import {
 import PropTypes from "prop-types";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { setItem } from "../../utils/localStorage";
 
 function Media(props) {
  const trackRef = useRef(null);
@@ -214,13 +215,19 @@ function ProductMain({ product, setCartItem, wishlistItem, setWishlistItem }) {
   setCartItem((prevCartItem) => {
    const exists = prevCartItem.find((item) => item.id == product.id);
 
+   let updatedCart;
+
    if (exists) {
-    return prevCartItem.map((item) =>
+    updatedCart = prevCartItem.map((item) =>
      item.id === product.id ? { ...item, amount: item.amount + amount } : item
     );
+   } else {
+    updatedCart = [...prevCartItem, { id: product.id, amount: amount }];
    }
 
-   return [...prevCartItem, { id: product.id, amount: amount }];
+   setItem("cart", updatedCart);
+
+   return updatedCart;
   });
  };
 
@@ -233,6 +240,9 @@ function ProductMain({ product, setCartItem, wishlistItem, setWishlistItem }) {
    const updatedWishlist = exists
     ? prevWishlistItem.filter((item) => item.id !== product.id)
     : [...prevWishlistItem, { id: product.id }];
+
+   setItem("wishlist", updatedWishlist);
+
    return updatedWishlist;
   });
  };

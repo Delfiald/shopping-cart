@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import Footer from "./components/Footer/Footer";
 import { fetchData } from "./services/fakeStoreAPI";
 import Header from "./components/Header/Header";
+import { getItem } from "./utils/localStorage";
 
 function App() {
  const [cartItem, setCartItem] = useState([]);
@@ -36,6 +37,24 @@ function App() {
  //   fetchDataFromAPI()
  //  }, [])
 
+ useEffect(() => {
+  const savedCart = getItem("cart");
+  const savedWishlist = getItem("wishlist");
+  const savedNotification = getItem("notification");
+
+  if (savedCart && Array.isArray(savedCart)) {
+   setCartItem(savedCart);
+  }
+
+  if (savedWishlist && Array.isArray(savedWishlist)) {
+   setWishlistItem(savedWishlist);
+  }
+
+  if (savedNotification && Array.isArray(savedNotification)) {
+   setNotificationItem(savedNotification);
+  }
+ }, []);
+
  return (
   <>
    <Header
@@ -43,6 +62,7 @@ function App() {
     cartItem={cartItem}
     wishlistItem={wishlistItem}
     notificationItem={notificationItem}
+    setNotificationItem={setNotificationItem}
     hoverButton={hoverButton}
     setHoverButton={setHoverButton}
     searchInput={searchInput}
@@ -59,6 +79,7 @@ function App() {
      wishlistItem,
      setWishlistItem,
      setNotificationItem,
+     searchInput,
     }}
    />
    <Footer />

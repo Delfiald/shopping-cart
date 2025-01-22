@@ -3,6 +3,7 @@ import styles from "./header.module.css";
 import { Bell, Heart, Search, ShoppingCart, Trash, X } from "lucide-react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+import { removeItem, setItem } from "../../utils/localStorage";
 
 function Header({
  products,
@@ -68,10 +69,27 @@ function Header({
 
  const handleReadNotification = (notificationId) => {
   setNotificationItem((prevNotification) =>
-   prevNotification.map((item) =>
-    item.id === notificationId ? { ...item, isRead: true } : item
-   )
+   prevNotification.map((item) => {
+    const updatedNotification =
+     item.id === notificationId ? { ...item, isRead: true } : item;
+
+    setItem("notification", updatedNotification);
+    return updatedNotification;
+   })
   );
+ };
+
+ const handleRemoveAllNotification = () => {
+  setNotificationItem([]);
+  removeItem("notification");
+ };
+
+ const handleSearch = () => {
+  if (searchInput.trim() !== "") {
+   navigate(`/shop?search=${searchInput}`);
+  } else {
+   navigate(`/shop`);
+  }
  };
 
  return (
@@ -90,7 +108,19 @@ function Header({
       id="search"
       placeholder="Search Here..."
       value={searchInput}
+      onKeyDown={(e) => {
+       if (e.key === "Enter") {
+        handleSearch();
+       }
+      }}
      />
+     <button
+      data-testid="search-button"
+      className="search-button"
+      onClick={handleSearch}
+     >
+      Search
+     </button>
     </div>
     <div
      onMouseEnter={() => handleHoverButton("cart")}
@@ -188,7 +218,7 @@ function Header({
        <div
         data-testid="clear-notification-button"
         className="clear-button"
-        onClick={() => setNotificationItem([])}
+        onClick={handleRemoveAllNotification}
        >
         <Trash />
         Clear Notifications

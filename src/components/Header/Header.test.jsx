@@ -9,6 +9,7 @@ import Home from "../../pages/Home/Home";
 import Cart from "../../pages/Cart/Cart";
 import Wishlist from "../../pages/Wishlist/Wishlist";
 import Notification from "../../pages/Notification/Notification";
+import Shop from "../../pages/Shop/Shop";
 
 const generateMockProducts = (num) => {
  const products = [];
@@ -38,6 +39,15 @@ const generateMockNotification = (num) => {
   });
  }
  return mockNotification;
+};
+
+const generateMockCategories = (num) => {
+ const mockCategories = [];
+ for (let i = 1; i <= num; i++) {
+  mockCategories.push([`category-${i}`]);
+ }
+
+ return mockCategories;
 };
 
 const MockNavigate = () => {
@@ -638,5 +648,90 @@ describe("Test Header", () => {
   expect(
    screen.getByRole("heading", { name: "Notifications" })
   ).toBeInTheDocument();
+ });
+
+ it("Navigates to /shop on Enter with search input", async () => {
+  const user = userEvent.setup();
+
+  const MockRoute = () => {
+   const [hoverButton, setHoverButton] = useState(null);
+   const [searchInput, setSearchInput] = useState("");
+   const [notificationItem, setNotificationItem] = useState(
+    generateMockNotification(3)
+   );
+
+   return (
+    <MemoryRouter initialEntries={["/"]}>
+     <Header
+      products={generateMockProducts(3)}
+      cartItem={mockCartItem}
+      notificationItem={notificationItem}
+      setNotificationItem={setNotificationItem}
+      wishlistItem={mockWishlistItem}
+      hoverButton={hoverButton}
+      setHoverButton={setHoverButton}
+      searchInput={searchInput}
+      setSearchInput={setSearchInput}
+     />
+     <Routes>
+      <Route
+       path="/"
+       element={
+        <Outlet
+         context={{
+          products: generateMockProducts(3),
+          wishlistItem: [...mockWishlistItem],
+          hoverButton,
+          setHoverButton,
+          cartItem: mockCartItem,
+          categories: generateMockCategories(3),
+         }}
+        />
+       }
+      >
+       <Route index element={<Home />} />
+       <Route path="/shop" element={<Shop />} />
+      </Route>
+     </Routes>
+    </MemoryRouter>
+   );
+  };
+
+  render(<MockRoute />);
+
+  const searchInput = screen.getByRole("textbox");
+  expect(searchInput).toBeInTheDocument();
+  await user.type(searchInput, "product-1");
+  expect(searchInput).toHaveValue("product-1");
+
+  await user.type(searchInput, "{enter}");
+
+  expect(
+   screen.getByText("Showing 1 - 1 products of product-1")
+  ).toBeInTheDocument();
+
+  expect(
+   screen.getByRole("heading", { name: "All Products" })
+  ).toBeInTheDocument();
+
+  await userEvent.clear(searchInput);
+  await user.type(searchInput, "puma palermo");
+  expect(searchInput).toHaveValue("puma palermo");
+
+  const searchButton = screen.getByTestId("search-button");
+  expect(searchButton).toBeInTheDocument();
+
+  await user.click(searchButton);
+
+  expect(
+   screen.getByText("Showing 1 - 0 products of puma palermo")
+  ).toBeInTheDocument();
+
+  await userEvent.clear(searchInput);
+  expect(searchInput.value).toBe("");
+
+  await user.click(searchButton);
+
+  expect(screen.getByText("Showing 1 - 3 products")).toBeInTheDocument();
  });
 });

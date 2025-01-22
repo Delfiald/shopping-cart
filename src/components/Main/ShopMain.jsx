@@ -57,7 +57,8 @@ function ProductListHeader(props) {
      {`Showing ${props.page && (props.page - 1) * props.itemPerPage + 1} - ${
       props.totalProducts &&
       Math.min(props.page * props.itemPerPage, props.totalProducts)
-     } products`}
+     } products`}{" "}
+     {props.search && props.search !== "" && `of ${props.search}`}
     </div>
     <div className={styles["sort-wrapper"]}>
      <p>Sort:</p>
@@ -324,6 +325,7 @@ function ShopMain(props) {
      setSort={props.setSort}
      hoverButton={props.hoverButton}
      setHoverButton={props.setHoverButton}
+     search={props.search}
     />
    )}
    <ProductListWrapper
@@ -354,6 +356,7 @@ ShopMain.propTypes = {
  setSort: PropTypes.func,
  hoverButton: PropTypes.string,
  setHoverButton: PropTypes.func,
+ search: PropTypes.string,
 };
 
 Card.propTypes = {
@@ -369,6 +372,7 @@ ProductListHeader.propTypes = {
  setSort: PropTypes.func,
  hoverButton: PropTypes.string,
  setHoverButton: PropTypes.func,
+ search: PropTypes.string,
 };
 
 ProductListWrapper.propTypes = {
