@@ -4,7 +4,7 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
 <div>
   <main>
     <div
-      class="breadcrumb"
+      class="_breadcrumb_716e15"
       data-testid="breadcrumb"
     >
       <div>
@@ -68,10 +68,10 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
     </div>
     <main>
       <section
-        class="media"
+        class="_media_716e15"
       >
         <div
-          class="display-image"
+          class="_display-image_716e15"
         >
           <img
             alt="product-1"
@@ -80,10 +80,10 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
           />
         </div>
         <div
-          class="image-carousel"
+          class="_image-carousel_716e15"
         >
           <div
-            class="left-arrow"
+            class="_left-arrow_716e15"
           >
             <svg
               class="lucide lucide-chevron-left"
@@ -103,10 +103,10 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
             </svg>
           </div>
           <div
-            class="carousel-track"
+            class="_carousel-track_716e15"
           >
             <div
-              class="image displayed"
+              class="_image_716e15 _displayed_716e15"
               data-testid="image-1"
             >
               <img
@@ -115,7 +115,7 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
               />
             </div>
             <div
-              class="image displayed"
+              class="_image_716e15 _displayed_716e15"
               data-testid="image-2"
             >
               <img
@@ -124,7 +124,7 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
               />
             </div>
             <div
-              class="image displayed"
+              class="_image_716e15 _displayed_716e15"
               data-testid="image-3"
             >
               <img
@@ -133,7 +133,7 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
               />
             </div>
             <div
-              class="image displayed"
+              class="_image_716e15 _displayed_716e15"
               data-testid="image-4"
             >
               <img
@@ -143,7 +143,7 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
             </div>
           </div>
           <div
-            class="right-arrow"
+            class="_right-arrow_716e15"
           >
             <svg
               class="lucide lucide-chevron-right"
@@ -165,60 +165,60 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
         </div>
       </section>
       <section
-        class="detail"
+        class="_detail_716e15"
       >
         <div
-          class="top-detail"
+          class="_top-detail_716e15"
         >
           <h2
-            class="product-title"
+            class="_product-title_716e15"
           >
             product-1
           </h2>
           <div
-            class="product-price"
+            class="_product-price_716e15"
           >
             110
           </div>
         </div>
         <div
-          class="main-detail"
+          class="_main-detail_716e15"
         >
           <div
-            class="detail-option"
+            class="_detail-option_716e15"
           >
             <div
-              class="detail-button"
+              class="_detail-button_716e15"
               data-testid="detail-button"
             >
               Detail
             </div>
             <div
-              class="info-button"
+              class="_info-button_716e15"
               data-testid="info-button"
             >
               Important Information
             </div>
           </div>
           <div
-            class="detail-content"
+            class="_detail-content_716e15"
           >
             <div
-              class="product-detail"
+              class="_product-detail_716e15"
             >
               <div
-                class="min-order"
+                class="_min-order_716e15"
               >
                 Min Order: 1 Pcs
               </div>
               <div
-                class="product-category"
+                class="_product-category_716e15"
               >
                 Category: 
                 category-2
               </div>
               <div
-                class="product-description"
+                class="_product-description_716e15"
               >
                 product bla bla bla number - 1
               </div>
@@ -228,13 +228,13 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
       </section>
       <aside>
         <div
-          class="option-container"
+          class="_option-container_716e15"
         >
           <div>
             Order Option
           </div>
           <div
-            class="product-image"
+            class="_product-image_716e15"
           >
             <img
               alt="product-1"
@@ -242,10 +242,10 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
             />
           </div>
           <div
-            class="order-amount"
+            class="_order-amount_716e15"
           >
             <button
-              class="reduce-amount"
+              class="_reduce-amount_716e15"
               data-testid="reduce-amount"
               disabled=""
             >
@@ -267,13 +267,13 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
               </svg>
             </button>
             <div
-              class="amount"
+              class="_amount_716e15"
               data-testid="amount"
             >
               1
             </div>
             <button
-              class="add-amount"
+              class="_add-amount_716e15"
               data-testid="add-amount"
             >
               <svg
@@ -298,7 +298,7 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
             </button>
           </div>
           <div
-            class="sub-total"
+            class="_sub-total_716e15"
           >
             <p>
               Subtotal
@@ -310,7 +310,7 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
             </p>
           </div>
           <button
-            class="add-to-cart"
+            class="_add-to-cart_716e15"
             data-testid="add-to-cart"
           >
             <svg
@@ -335,10 +335,10 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
             Add to Cart
           </button>
           <div
-            class="actions"
+            class="_actions_716e15"
           >
             <div
-              class="wishlist inactive"
+              class="_wishlist_716e15 _inactive_716e15"
               data-testid="wishlist-button"
             >
               <svg
@@ -360,7 +360,7 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
               Wishlist
             </div>
             <div
-              class="share"
+              class="_share_716e15"
             >
               <svg
                 class="lucide lucide-share"

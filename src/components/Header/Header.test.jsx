@@ -3,13 +3,14 @@ import Header from "./Header";
 import { MemoryRouter, Outlet, Route, Routes } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
-import { expect, it } from "vitest";
 import Product from "../../pages/Product/Product";
 import Home from "../../pages/Home/Home";
 import Cart from "../../pages/Cart/Cart";
 import Wishlist from "../../pages/Wishlist/Wishlist";
 import Notification from "../../pages/Notification/Notification";
 import Shop from "../../pages/Shop/Shop";
+
+import styles from "./header.module.css";
 
 const generateMockProducts = (num) => {
  const products = [];
@@ -506,14 +507,18 @@ describe("Test Header", () => {
 
   const notificationItemOne = screen.getByTestId("notification-item-1");
   expect(notificationItemOne).toBeInTheDocument();
-  expect(notificationItemOne).toHaveClass("notification-item unread");
+  expect(notificationItemOne).toHaveClass(
+   `${styles["notification-item"]} ${styles.unread}`
+  );
 
   await act(async () => {
    await user.hover(notificationButtonWrapper);
    await user.hover(notificationItemOne);
   });
 
-  expect(notificationItemOne).toHaveClass("notification-item read");
+  expect(notificationItemOne).toHaveClass(
+   `${styles["notification-item"]} ${styles.read}`
+  );
  });
 
  it("Should Clear notification when click clear button", async () => {

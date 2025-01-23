@@ -1,3 +1,5 @@
+import styles from "./main.module.css";
+
 import { Heart, Minus, Plus, Trash } from "lucide-react";
 import PropTypes from "prop-types";
 import { useState } from "react";
@@ -58,17 +60,17 @@ function CartContents({
  };
 
  return (
-  <section className="cart-contents">
-   <div data-testid="item-list" className="item-list">
+  <section className={styles["cart-contents"]}>
+   <div data-testid="item-list" className={styles["item-list"]}>
     {getCartDetails().map((cartItemProduct) => {
      const isWishlist = wishlistItem.some(
       (wishlist) => wishlist.id === cartItemProduct.id
      );
      return (
-      <div className="item" key={cartItemProduct.id}>
+      <div className={styles.item} key={cartItemProduct.id}>
        {/* Product Image */}
        <div
-        className="product-image"
+        className={styles["product-image"]}
         onClick={() => navigate(`/product/${cartItemProduct.id}`)}
        >
         <img src={cartItemProduct.image} alt={cartItemProduct.title} />
@@ -76,21 +78,23 @@ function CartContents({
 
        {/* Product Title */}
        <div
-        className="product-title"
+        className={styles["product-title"]}
         onClick={() => navigate(`/product/${cartItemProduct.id}`)}
        >
         {cartItemProduct.title}
        </div>
 
        {/* Product Price */}
-       <div className="product-price">${cartItemProduct.price}</div>
+       <div className={styles["product-price"]}>${cartItemProduct.price}</div>
 
        {/* Product Options */}
-       <div className="product-option">
+       <div className={styles["product-option"]}>
         {/* Wishlist Button */}
         <div
          data-testid={`wishlist-button-${cartItemProduct.id}`}
-         className={`wishlist-button ${isWishlist ? "active" : "inactive"}`}
+         className={`${styles["wishlist-button"]} ${
+          styles[isWishlist ? "active" : "inactive"]
+         }`}
          onClick={() => handleWishlistItem(cartItemProduct)}
         >
          <Heart size={16} />
@@ -99,28 +103,31 @@ function CartContents({
         {/* Remove Button */}
         <div
          data-testid={`remove-button-${cartItemProduct.id}`}
-         className="remove-button"
+         className={styles["remove-button"]}
          onClick={() => handleRemoveCart(cartItemProduct.id)}
         >
          <Trash size={16} />
         </div>
 
         {/* Amount Control */}
-        <div className="product-amount">
+        <div className={styles["product-amount"]}>
          <button
           data-testid={`reduce-button-${cartItemProduct.id}`}
-          className="reduce-button"
+          className={styles["reduce-button"]}
           disabled={cartItemProduct.amount <= 1}
           onClick={() => handleAmount(-1, cartItemProduct.id)}
          >
           <Minus size={16} />
          </button>
-         <div data-testid={`amount-${cartItemProduct.id}`} className="amount">
+         <div
+          data-testid={`amount-${cartItemProduct.id}`}
+          className={styles.amount}
+         >
           {cartItemProduct.amount}
          </div>
          <button
           data-testid={`add-button-${cartItemProduct.id}`}
-          className="add-button"
+          className={styles["add-button"]}
           onClick={() => handleAmount(1, cartItemProduct.id)}
          >
           <Plus size={16} />
@@ -137,13 +144,17 @@ function CartContents({
 
 function Summary({ totalPrice, orderAmount, handleBuy }) {
  return (
-  <section className="summary">
+  <section className={styles.summary}>
    <div>Shopping Summary</div>
-   <div className="total">
+   <div className={styles.total}>
     <p>Total</p>
     <div data-testid="total-price">{totalPrice()}</div>
    </div>
-   <button data-testid="buy-button" className="buy-button" onClick={handleBuy}>
+   <button
+    data-testid="buy-button"
+    className={styles["buy-button"]}
+    onClick={handleBuy}
+   >
     Buy ({orderAmount()})
    </button>
   </section>

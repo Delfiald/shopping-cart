@@ -1,3 +1,5 @@
+import styles from "./main.module.css";
+
 import { Check, ChevronRight, Trash, X } from "lucide-react";
 import PropTypes from "prop-types";
 import { useState } from "react";
@@ -54,27 +56,29 @@ function NotificationList({ notificationItem, products, setNotificationItem }) {
 
  return (
   <>
-   <section className="notification-list">
+   <section className={styles["notification-list"]}>
     {notificationItem.map((notification) => (
      <div
       key={notification.id}
       data-testid={`notification-item-${notification.id}`}
-      className={`notification-item ${notification.isRead ? "read" : "unread"}`}
+      className={`${styles["notification-item"]} ${
+       styles[notification.isRead ? "read" : "unread"]
+      }`}
       onMouseEnter={() => handleReadNotification(notification.id)}
      >
-      <p className="time">{notification.timeStamp}</p>
+      <p className={styles.time}>{notification.timeStamp}</p>
       <div
        data-testid={`remove-button-${notification.id}`}
-       className="remove-button"
+       className={styles["remove-button"]}
        onClick={() => handleNotificationRemove(notification.id)}
       >
        <Trash size={16} />
       </div>
-      <div className="message">{notification.message}</div>
+      <div className={styles.message}>{notification.message}</div>
       <div
        data-testid={`detail-button-${notification.id}`}
-       className={`detail-button ${
-        detail === notification.id ? "open" : "closed"
+       className={`${styles["detail-button"]} ${
+        styles[detail === notification.id ? "open" : "closed"]
        }`}
        onClick={() => handleDetails(notification.id)}
       >
@@ -82,19 +86,24 @@ function NotificationList({ notificationItem, products, setNotificationItem }) {
        <p>Details</p>
       </div>
       {detail === notification.id && (
-       <div data-testid={`notification-${notification.id}`} className="detail">
+       <div
+        data-testid={`notification-${notification.id}`}
+        className={styles.detail}
+       >
         {getNotificationItemDetails(notification.products).map((item) => (
-         <div key={item.id} className="item">
-          <div className="product-title">{item.title}</div>
-          <div className="product-subtotal">
+         <div key={item.id} className={styles.item}>
+          <div className={styles["product-title"]}>{item.title}</div>
+          <div className={styles["product-subtotal"]}>
            {item.amount}
            <X size={16} />
            {item.price}
-           <div className="subtotal">Subtotal: {item.amount * item.price}</div>
+           <div className={styles.subtotal}>
+            Subtotal: {item.amount * item.price}
+           </div>
           </div>
          </div>
         ))}
-        <div data-testid={`total-${notification.id}`} className="total">
+        <div data-testid={`total-${notification.id}`} className={styles.total}>
          Total: {handlePurchaseTotal(notification.products)}
         </div>
        </div>
@@ -139,7 +148,7 @@ function NotificationMain({
    <h2>Notifications</h2>
    <div
     data-testid="marks-all-read"
-    className="marks-all-read"
+    className={styles["marks-all-read"]}
     onClick={handleMarksAllRead}
    >
     <Check size={16} />
@@ -152,7 +161,7 @@ function NotificationMain({
    />
    <div
     data-testid="clear-notification-button"
-    className="clear-notification-button"
+    className={styles["clear-notification-button"]}
     onClick={handleRemoveAllNotification}
    >
     <Trash size={16} />

@@ -116,7 +116,7 @@ function Header({
      />
      <button
       data-testid="search-button"
-      className="search-button"
+      className={styles["search-button"]}
       onClick={handleSearch}
      >
       Search
@@ -142,7 +142,7 @@ function Header({
      </button>
      {hoverButton === "cart" && (
       <div>
-       <div className="cart-information">
+       <div className={styles["cart-information"]}>
         <div>Cart ({orderAmount()})</div>
         <div role="button" onClick={handleCartClick}>
          See All
@@ -154,14 +154,14 @@ function Header({
          key={item.id}
          onClick={() => navigate(`/product/${item.id}`)}
         >
-         <div className="image">
+         <div className={styles.image}>
           <img src={item.image} alt={item.title} />
          </div>
-         <div className="title">{item.title}</div>
-         <div className="subtotal">
-          <p className="amount">{item.amount}</p>
+         <div className={styles.title}>{item.title}</div>
+         <div className={styles.subtotal}>
+          <p className={styles.amount}>{item.amount}</p>
           <X size={16} />
-          <p className="price">{item.price}</p>
+          <p className={styles.price}>{item.price}</p>
          </div>
         </div>
        ))}
@@ -191,7 +191,7 @@ function Header({
      </button>
      {hoverButton === "notification" && (
       <div>
-       <div className="notification-information">
+       <div className={styles["notification-information"]}>
         <div>Notifications ({notificationItem.length})</div>
         <div role="button" onClick={handleNotificationClick}>
          See All
@@ -201,15 +201,20 @@ function Header({
         <div
          key={item.id}
          data-testid={`notification-item-${item.id}`}
-         className={`notification-item ${item.isRead ? "read" : "unread"}`}
+         className={`${styles["notification-item"]} ${
+          styles[item.isRead ? "read" : "unread"]
+         }`}
          onMouseEnter={() => handleReadNotification(item.id)}
         >
-         <div data-testid={`notification-time-${item.id}`} className="time">
+         <div
+          data-testid={`notification-time-${item.id}`}
+          className={styles.time}
+         >
           {item.timeStamp}
          </div>
          <div
           data-testid={`notification-message-${item.id}`}
-          className="message"
+          className={styles.message}
          >
           {item.message}
          </div>
@@ -217,7 +222,7 @@ function Header({
        ))}
        <div
         data-testid="clear-notification-button"
-        className="clear-button"
+        className={styles["clear-button"]}
         onClick={handleRemoveAllNotification}
        >
         <Trash />
@@ -246,7 +251,7 @@ function Header({
      </button>
      {hoverButton === "wishlist" && (
       <div>
-       <div className="wishlist-information">
+       <div className={styles["wishlist-information"]}>
         <div>Wishlist ({wishlistItem.length})</div>
         <div role="button" onClick={handleWishlistClick}>
          See All
@@ -258,11 +263,11 @@ function Header({
          key={item.id}
          onClick={() => navigate(`/product/${item.id}`)}
         >
-         <div className="image">
+         <div className={styles.image}>
           <img src={item.image} alt={item.title} />
          </div>
-         <div className="title">{item.title}</div>
-         <div className="price">{item.price}</div>
+         <div className={styles.title}>{item.title}</div>
+         <div className={styles.price}>{item.price}</div>
         </div>
        ))}
       </div>

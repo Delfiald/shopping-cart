@@ -1,6 +1,8 @@
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 
+import styles from "./modal.module.css";
+
 export function BuyModal({ setModal }) {
  const navigate = useNavigate();
  const handleRouteToShop = () => {
@@ -8,7 +10,7 @@ export function BuyModal({ setModal }) {
   navigate("/shop");
  };
  return (
-  <div className="buy-modal">
+  <div className={styles["buy-modal"]}>
    <h3>Your purchase is complete! Would you like to continue shopping?</h3>
    <button onClick={handleRouteToShop}>Shop</button>
   </div>

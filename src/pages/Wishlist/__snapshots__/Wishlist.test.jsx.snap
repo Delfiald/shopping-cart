@@ -111,10 +111,10 @@ exports[`Test Wishlist Page > Should Render Wishlist Page 1`] = `
           </div>
         </a>
         <div
-          class="card-action"
+          class="_card-action_716e15"
         >
           <button
-            class="wishlist-button active"
+            class="_wishlist-button_716e15 _active_716e15"
             data-testid="wishlist-button-1"
           >
             <svg
@@ -135,7 +135,7 @@ exports[`Test Wishlist Page > Should Render Wishlist Page 1`] = `
             </svg>
           </button>
           <button
-            class="add-to-cart"
+            class="_add-to-cart_716e15"
             data-testid="add-to-cart-button-1"
           >
             <svg
@@ -187,10 +187,10 @@ exports[`Test Wishlist Page > Should Render Wishlist Page 1`] = `
           </div>
         </a>
         <div
-          class="card-action"
+          class="_card-action_716e15"
         >
           <button
-            class="wishlist-button active"
+            class="_wishlist-button_716e15 _active_716e15"
             data-testid="wishlist-button-2"
           >
             <svg
@@ -211,7 +211,7 @@ exports[`Test Wishlist Page > Should Render Wishlist Page 1`] = `
             </svg>
           </button>
           <button
-            class="add-to-cart"
+            class="_add-to-cart_716e15"
             data-testid="add-to-cart-button-2"
           >
             <svg

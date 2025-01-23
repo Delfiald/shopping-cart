@@ -47,7 +47,7 @@ exports[`It Render App > render app 1`] = `
           value=""
         />
         <button
-          class="search-button"
+          class="_search-button_d33141"
           data-testid="search-button"
         >
           Search
@@ -181,71 +181,71 @@ exports[`It Render App > render app 1`] = `
       class="_top-footer_1a5889"
     >
       <div
-        class="content"
+        class="_content_1a5889"
         data-testid="about"
       >
         <div
-          class="title"
+          class="_title_1a5889"
         >
           Shoppers
         </div>
         <div
-          class="about"
+          class="_about_1a5889"
         >
           About
         </div>
         <div
-          class="career"
+          class="_career_1a5889"
         >
           Career
         </div>
         <div
-          class="blog"
+          class="_blog_1a5889"
         >
           Blog
         </div>
         <div
-          class="sale"
+          class="_sale_1a5889"
         >
           Sale
         </div>
       </div>
       <div
-        class="content"
+        class="_content_1a5889"
         data-testid="help"
       >
         <div
-          class="title"
+          class="_title_1a5889"
         >
           Guide and Help
         </div>
         <div
-          class="about"
+          class="_about_1a5889"
         >
           Help
         </div>
         <div
-          class="career"
+          class="_career_1a5889"
         >
           Terms and Condition
         </div>
         <div
-          class="blog"
+          class="_blog_1a5889"
         >
           Privacy
         </div>
         <div
-          class="sale"
+          class="_sale_1a5889"
         >
           Contact Us
         </div>
       </div>
       <div
-        class="content"
+        class="_content_1a5889"
         data-testid="socials-media"
       >
         <div
-          class="title"
+          class="_title_1a5889"
         >
           Follow
         </div>
@@ -311,11 +311,11 @@ exports[`It Render App > render app 1`] = `
         </a>
       </div>
       <div
-        class="content"
+        class="_content_1a5889"
         data-testid="apps"
       >
         <div
-          class="title"
+          class="_title_1a5889"
         >
           Download Apps
         </div>

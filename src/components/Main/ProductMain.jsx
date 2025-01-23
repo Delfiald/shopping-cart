@@ -1,3 +1,5 @@
+import styles from "./main.module.css";
+
 import {
  ChevronLeft,
  ChevronRight,
@@ -26,24 +28,24 @@ function Media(props) {
  };
 
  return (
-  <section className="media">
-   <div className="display-image">
+  <section className={styles.media}>
+   <div className={styles["display-image"]}>
     <img
      data-testid="display-image"
      src={props.displayedImage}
      alt={props.title}
     />
    </div>
-   <div className="image-carousel">
-    <div className="left-arrow" onClick={handleScrollLeft}>
+   <div className={styles["image-carousel"]}>
+    <div className={styles["left-arrow"]} onClick={handleScrollLeft}>
      <ChevronLeft size={16} />
     </div>
     {/* Use Map if Image more than one (in an array) */}
-    <div className="carousel-track" ref={trackRef}>
+    <div className={styles["carousel-track"]} ref={trackRef}>
      <div
       data-testid="image-1"
-      className={`image ${
-       props.image === props.displayedImage ? "displayed" : ""
+      className={`${styles.image} ${
+       styles[props.image === props.displayedImage ? "displayed" : ""]
       }`}
       onClick={() => props.setDisplayedImage(props.image)}
      >
@@ -51,8 +53,8 @@ function Media(props) {
      </div>
      <div
       data-testid="image-2"
-      className={`image ${
-       props.image === props.displayedImage ? "displayed" : ""
+      className={`${styles.image} ${
+       styles[props.image === props.displayedImage ? "displayed" : ""]
       }`}
       onClick={() => props.setDisplayedImage(props.image)}
      >
@@ -60,8 +62,8 @@ function Media(props) {
      </div>
      <div
       data-testid="image-3"
-      className={`image ${
-       props.image === props.displayedImage ? "displayed" : ""
+      className={`${styles.image} ${
+       styles[props.image === props.displayedImage ? "displayed" : ""]
       }`}
       onClick={() => props.setDisplayedImage(props.image)}
      >
@@ -69,15 +71,15 @@ function Media(props) {
      </div>
      <div
       data-testid="image-4"
-      className={`image ${
-       props.image === props.displayedImage ? "displayed" : ""
+      className={`${styles.image} ${
+       styles[props.image === props.displayedImage ? "displayed" : ""]
       }`}
       onClick={() => props.setDisplayedImage(props.image)}
      >
       <img src={props.image} alt={props.title} />
      </div>
     </div>
-    <div className="right-arrow" onClick={handleScrollRight}>
+    <div className={styles["right-arrow"]} onClick={handleScrollRight}>
      <ChevronRight size={16} />
     </div>
    </div>
@@ -87,42 +89,42 @@ function Media(props) {
 
 function Detail(props) {
  return (
-  <section className="detail">
-   <div className="top-detail">
-    <h2 className="product-title">{props.title}</h2>
-    <div className="product-price">{props.price}</div>
+  <section className={styles.detail}>
+   <div className={styles["top-detail"]}>
+    <h2 className={styles["product-title"]}>{props.title}</h2>
+    <div className={styles["product-price"]}>{props.price}</div>
    </div>
-   <div className="main-detail">
-    <div className="detail-option">
+   <div className={styles["main-detail"]}>
+    <div className={styles["detail-option"]}>
      <div
       data-testid="detail-button"
-      className="detail-button"
+      className={styles["detail-button"]}
       onClick={() => props.setDetail("detail")}
      >
       Detail
      </div>
      <div
       data-testid="info-button"
-      className="info-button"
+      className={styles["info-button"]}
       onClick={() => props.setDetail("info")}
      >
       Important Information
      </div>
     </div>
-    <div className="detail-content">
+    <div className={styles["detail-content"]}>
      {props.detail === "detail" ? (
-      <div className="product-detail">
-       <div className="min-order">Min Order: 1 Pcs</div>
+      <div className={styles["product-detail"]}>
+       <div className={styles["min-order"]}>Min Order: 1 Pcs</div>
        <div
-        className="product-category"
+        className={styles["product-category"]}
         onClick={() => props.handleNavigate(`/shop?category=${props.category}`)}
        >
         Category: {props.category ? props.category : "-"}
        </div>
-       <div className="product-description">{props.description}</div>
+       <div className={styles["product-description"]}>{props.description}</div>
       </div>
      ) : (
-      <div className="important-information">
+      <div className={styles["important-information"]}>
        <div>
         Lorem ipsum, dolor sit amet consectetur adipisicing elit. Cumque
         mollitia doloribus quo consequatur nostrum quod.
@@ -145,53 +147,55 @@ function Option(props) {
 
  return (
   <aside>
-   <div className="option-container">
+   <div className={styles["option-container"]}>
     <div>Order Option</div>
-    <div className="product-image">
+    <div className={styles["product-image"]}>
      <img src={props.image} alt={props.title} />
     </div>
-    <div className="order-amount">
+    <div className={styles["order-amount"]}>
      <button
       data-testid="reduce-amount"
       disabled={props.amount <= 1}
-      className="reduce-amount"
+      className={styles["reduce-amount"]}
       onClick={() => handleAmount(-1)}
      >
       <Minus size={16} />
      </button>
-     <div data-testid="amount" className="amount">
+     <div data-testid="amount" className={styles.amount}>
       {props.amount}
      </div>
      <button
       data-testid="add-amount"
-      className="add-amount"
+      className={styles["add-amount"]}
       onClick={() => handleAmount(1)}
      >
       <Plus size={16} />
      </button>
     </div>
-    <div className="sub-total">
+    <div className={styles["sub-total"]}>
      <p>Subtotal</p>
      <p data-testid="subtotal">{`$ ${props.price * props.amount}`}</p>
     </div>
     <button
      data-testid="add-to-cart"
-     className="add-to-cart"
+     className={styles["add-to-cart"]}
      onClick={props.handleAddToCart}
     >
      <Plus size={16} />
      Add to Cart
     </button>
-    <div className="actions">
+    <div className={styles.actions}>
      <div
       data-testid="wishlist-button"
-      className={`wishlist ${props.isWishlistItem() ? "active" : "inactive"}`}
+      className={`${styles.wishlist} ${
+       styles[props.isWishlistItem() ? "active" : "inactive"]
+      }`}
       onClick={props.handleWishlistItem}
      >
       <Heart size={16} />
       Wishlist
      </div>
-     <div className="share">
+     <div className={styles.share}>
       <Share size={16} />
       Share
      </div>
@@ -249,7 +253,7 @@ function ProductMain({ product, setCartItem, wishlistItem, setWishlistItem }) {
 
  return (
   <main>
-   <div data-testid="breadcrumb" className="breadcrumb">
+   <div data-testid="breadcrumb" className={styles.breadcrumb}>
     <div onClick={handleNavigate}>Home</div>
     <ChevronRight size={16} />
     <div onClick={() => handleNavigate("/shop")}>Shop</div>

@@ -7,17 +7,17 @@ exports[`Test Cart Page > Should Render Cart Page 1`] = `
       Cart
     </h2>
     <section
-      class="cart-contents"
+      class="_cart-contents_716e15"
     >
       <div
-        class="item-list"
+        class="_item-list_716e15"
         data-testid="item-list"
       >
         <div
-          class="item"
+          class="_item_716e15"
         >
           <div
-            class="product-image"
+            class="_product-image_716e15"
           >
             <img
               alt="product-1"
@@ -25,21 +25,21 @@ exports[`Test Cart Page > Should Render Cart Page 1`] = `
             />
           </div>
           <div
-            class="product-title"
+            class="_product-title_716e15"
           >
             product-1
           </div>
           <div
-            class="product-price"
+            class="_product-price_716e15"
           >
             $
             110
           </div>
           <div
-            class="product-option"
+            class="_product-option_716e15"
           >
             <div
-              class="wishlist-button active"
+              class="_wishlist-button_716e15 _active_716e15"
               data-testid="wishlist-button-1"
             >
               <svg
@@ -60,7 +60,7 @@ exports[`Test Cart Page > Should Render Cart Page 1`] = `
               </svg>
             </div>
             <div
-              class="remove-button"
+              class="_remove-button_716e15"
               data-testid="remove-button-1"
             >
               <svg
@@ -87,10 +87,10 @@ exports[`Test Cart Page > Should Render Cart Page 1`] = `
               </svg>
             </div>
             <div
-              class="product-amount"
+              class="_product-amount_716e15"
             >
               <button
-                class="reduce-button"
+                class="_reduce-button_716e15"
                 data-testid="reduce-button-1"
                 disabled=""
               >
@@ -112,13 +112,13 @@ exports[`Test Cart Page > Should Render Cart Page 1`] = `
                 </svg>
               </button>
               <div
-                class="amount"
+                class="_amount_716e15"
                 data-testid="amount-1"
               >
                 1
               </div>
               <button
-                class="add-button"
+                class="_add-button_716e15"
                 data-testid="add-button-1"
               >
                 <svg
@@ -145,10 +145,10 @@ exports[`Test Cart Page > Should Render Cart Page 1`] = `
           </div>
         </div>
         <div
-          class="item"
+          class="_item_716e15"
         >
           <div
-            class="product-image"
+            class="_product-image_716e15"
           >
             <img
               alt="product-2"
@@ -156,21 +156,21 @@ exports[`Test Cart Page > Should Render Cart Page 1`] = `
             />
           </div>
           <div
-            class="product-title"
+            class="_product-title_716e15"
           >
             product-2
           </div>
           <div
-            class="product-price"
+            class="_product-price_716e15"
           >
             $
             120
           </div>
           <div
-            class="product-option"
+            class="_product-option_716e15"
           >
             <div
-              class="wishlist-button active"
+              class="_wishlist-button_716e15 _active_716e15"
               data-testid="wishlist-button-2"
             >
               <svg
@@ -191,7 +191,7 @@ exports[`Test Cart Page > Should Render Cart Page 1`] = `
               </svg>
             </div>
             <div
-              class="remove-button"
+              class="_remove-button_716e15"
               data-testid="remove-button-2"
             >
               <svg
@@ -218,10 +218,10 @@ exports[`Test Cart Page > Should Render Cart Page 1`] = `
               </svg>
             </div>
             <div
-              class="product-amount"
+              class="_product-amount_716e15"
             >
               <button
-                class="reduce-button"
+                class="_reduce-button_716e15"
                 data-testid="reduce-button-2"
                 disabled=""
               >
@@ -243,13 +243,13 @@ exports[`Test Cart Page > Should Render Cart Page 1`] = `
                 </svg>
               </button>
               <div
-                class="amount"
+                class="_amount_716e15"
                 data-testid="amount-2"
               >
                 1
               </div>
               <button
-                class="add-button"
+                class="_add-button_716e15"
                 data-testid="add-button-2"
               >
                 <svg
@@ -278,13 +278,13 @@ exports[`Test Cart Page > Should Render Cart Page 1`] = `
       </div>
     </section>
     <section
-      class="summary"
+      class="_summary_716e15"
     >
       <div>
         Shopping Summary
       </div>
       <div
-        class="total"
+        class="_total_716e15"
       >
         <p>
           Total
@@ -296,7 +296,7 @@ exports[`Test Cart Page > Should Render Cart Page 1`] = `
         </div>
       </div>
       <button
-        class="buy-button"
+        class="_buy-button_716e15"
         data-testid="buy-button"
       >
         Buy (

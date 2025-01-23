@@ -5,22 +5,22 @@ function Footer() {
  return (
   <footer>
    <div className={styles["top-footer"]}>
-    <div data-testid="about" className="content">
-     <div className="title">Shoppers</div>
-     <div className="about">About</div>
-     <div className="career">Career</div>
-     <div className="blog">Blog</div>
-     <div className="sale">Sale</div>
+    <div data-testid="about" className={styles.content}>
+     <div className={styles.title}>Shoppers</div>
+     <div className={styles.about}>About</div>
+     <div className={styles.career}>Career</div>
+     <div className={styles.blog}>Blog</div>
+     <div className={styles.sale}>Sale</div>
     </div>
-    <div data-testid="help" className="content">
-     <div className="title">Guide and Help</div>
-     <div className="about">Help</div>
-     <div className="career">Terms and Condition</div>
-     <div className="blog">Privacy</div>
-     <div className="sale">Contact Us</div>
+    <div data-testid="help" className={styles.content}>
+     <div className={styles.title}>Guide and Help</div>
+     <div className={styles.about}>Help</div>
+     <div className={styles.career}>Terms and Condition</div>
+     <div className={styles.blog}>Privacy</div>
+     <div className={styles.sale}>Contact Us</div>
     </div>
-    <div data-testid="socials-media" className="content">
-     <div className="title">Follow</div>
+    <div data-testid="socials-media" className={styles.content}>
+     <div className={styles.title}>Follow</div>
      <a
       href="https://github.com/Delfiald"
       target="_blank"
@@ -36,8 +36,8 @@ function Footer() {
       <LucideLinkedin size={16} title="Linkedin" />
      </a>
     </div>
-    <div data-testid="apps" className="content">
-     <div className="title">Download Apps</div>
+    <div data-testid="apps" className={styles.content}>
+     <div className={styles.title}>Download Apps</div>
      <div>
       <img src="/Stores/google-play.svg" alt="Google Play" />
       <p>GET IT ON</p>

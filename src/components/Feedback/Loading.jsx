@@ -1,6 +1,8 @@
+import styles from "./feedback.module.css";
+
 function Loading() {
  return (
-  <section className="loading">
+  <section className={styles.loading}>
    <p>Loading</p>
   </section>
  );

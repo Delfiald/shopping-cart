@@ -63,17 +63,19 @@ function Card({ product, setCartItem, wishlistItem, setWishlistItem }) {
     <div className={styles["product-name"]}>{product.title}</div>
     <div className={styles["product-price"]}>{product.price}</div>
    </Link>
-   <div className="card-action">
+   <div className={styles["card-action"]}>
     <button
      data-testid={`wishlist-button-${product.id}`}
-     className={`wishlist-button ${isWishlist() ? "active" : "inactive"}`}
+     className={`${styles["wishlist-button"]} ${
+      styles[isWishlist() ? "active" : "inactive"]
+     }`}
      onClick={handleWishlistItem}
     >
      <Heart size={16} />
     </button>
     <button
      data-testid={`add-to-cart-button-${product.id}`}
-     className="add-to-cart"
+     className={styles["add-to-cart"]}
      onClick={handleAddToCart}
     >
      <Plus size={16} />
@@ -216,7 +218,11 @@ function WishlistListWrapper(props) {
      You have no items in your wishlist. Browse products and add them to your
      favorites!
     </p>
-    <Link data-testid="shop-button" className="shop-button" to={"/shop"}>
+    <Link
+     data-testid="shop-button"
+     className={styles["shop-button"]}
+     to={"/shop"}
+    >
      Explore Products
     </Link>
    </div>

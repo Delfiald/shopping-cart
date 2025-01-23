@@ -13,9 +13,10 @@ import CartMain from "./CartMain";
 import Cart from "../../pages/Cart/Cart";
 import WishlistMain from "./WishlistMain";
 import Wishlist from "../../pages/Wishlist/Wishlist";
-import { describe, expect, it, vi } from "vitest";
 import Header from "../Header/Header";
 import NotificationMain from "./NotificationMain";
+
+import styles from "./main.module.css";
 
 const mockCategories = ["category-1", "category-2", "category-3", "category-4"];
 
@@ -802,14 +803,14 @@ describe("Test Main component of Product", () => {
 
   let wishlistButton = screen.getByTestId("wishlist-button");
   expect(wishlistButton).toBeInTheDocument();
-  expect(wishlistButton).toHaveClass("wishlist inactive");
+  expect(wishlistButton).toHaveClass(`${styles.wishlist} ${styles.inactive}`);
 
   await user.click(wishlistButton);
 
   wishlistButton = screen.getByTestId("wishlist-button");
   expect(wishlistButton).toBeInTheDocument();
 
-  expect(wishlistButton).toHaveClass("wishlist active");
+  expect(wishlistButton).toHaveClass(`${styles.wishlist} ${styles.active}`);
  });
 });
 
@@ -882,18 +883,22 @@ describe("Test Main component of Cart", () => {
   const wishlistButtonOne = screen.getByTestId("wishlist-button-1");
 
   expect(wishlistButtonOne).toBeInTheDocument();
-  expect(wishlistButtonOne).toHaveClass("wishlist-button active");
+  expect(wishlistButtonOne).toHaveClass(
+   `${styles["wishlist-button"]} ${styles.active}`
+  );
 
   await user.click(wishlistButtonOne);
 
-  expect(wishlistButtonOne).toHaveClass("wishlist-button inactive");
+  expect(wishlistButtonOne).toHaveClass(
+   `${styles["wishlist-button"]} ${styles.inactive}`
+  );
 
   const wishlistButtonThree = screen.getByTestId("wishlist-button-3");
 
   await user.click(wishlistButtonThree);
 
   expect(screen.getByTestId("wishlist-button-3")).toHaveClass(
-   "wishlist-button active"
+   `${styles["wishlist-button"]} ${styles.active}`
   );
  });
 
@@ -1285,7 +1290,7 @@ describe("Test Main Component of Wishlist", () => {
 
   let wishlistButtonProductOne = screen.getByTestId("wishlist-button-1");
   expect(wishlistButtonProductOne).toBeInTheDocument();
-  expect(wishlistButtonProductOne).toHaveClass("active");
+  expect(wishlistButtonProductOne).toHaveClass(styles.active);
 
   await user.click(wishlistButtonProductOne);
 
@@ -1519,16 +1524,24 @@ describe("Test Main Component of Notification Page", () => {
   const notificationItemTwo = screen.getByTestId("notification-item-2");
   expect(notificationItemOne).toBeInTheDocument();
   expect(notificationItemTwo).toBeInTheDocument();
-  expect(notificationItemOne).toHaveClass("notification-item unread");
-  expect(notificationItemTwo).toHaveClass("notification-item unread");
+  expect(notificationItemOne).toHaveClass(
+   `${styles["notification-item"]} ${styles["unread"]}`
+  );
+  expect(notificationItemTwo).toHaveClass(
+   `${styles["notification-item"]} ${styles["unread"]}`
+  );
 
   // Hover on notification item 1
   await user.hover(notificationItemOne);
 
   // notification item 1 class set to read
-  expect(notificationItemOne).toHaveClass("notification-item read");
+  expect(notificationItemOne).toHaveClass(
+   `${styles["notification-item"]} ${styles["read"]}`
+  );
   // notification item 2 class still unread
-  expect(notificationItemTwo).toHaveClass("notification-item unread");
+  expect(notificationItemTwo).toHaveClass(
+   `${styles["notification-item"]} ${styles["unread"]}`
+  );
  });
 
  it("Opens notification details when clicking the detail button", async () => {
@@ -1553,14 +1566,14 @@ describe("Test Main Component of Notification Page", () => {
   const detailButtonOne = screen.getByTestId("detail-button-1");
   const detailButtonTwo = screen.getByTestId("detail-button-2");
   expect(detailButtonOne).toBeInTheDocument();
-  expect(detailButtonOne).toHaveClass("closed");
+  expect(detailButtonOne).toHaveClass(styles.closed);
   expect(detailButtonTwo).toBeInTheDocument();
-  expect(detailButtonTwo).toHaveClass("closed");
+  expect(detailButtonTwo).toHaveClass(styles.closed);
 
   await user.click(detailButtonOne);
 
-  expect(detailButtonOne).toHaveClass("open");
-  expect(detailButtonTwo).toHaveClass("closed");
+  expect(detailButtonOne).toHaveClass(styles.open);
+  expect(detailButtonTwo).toHaveClass(styles.closed);
 
   const notificationDetailOne = screen.getByTestId("notification-1");
   expect(notificationDetailOne).toBeInTheDocument();
@@ -1571,8 +1584,8 @@ describe("Test Main Component of Notification Page", () => {
   // Click other details
   await user.click(detailButtonTwo);
 
-  expect(detailButtonOne).toHaveClass("closed");
-  expect(detailButtonTwo).toHaveClass("open");
+  expect(detailButtonOne).toHaveClass(styles.closed);
+  expect(detailButtonTwo).toHaveClass(styles.open);
 
   expect(screen.queryByTestId("notification-1")).not.toBeInTheDocument();
   const notificationDetailTwo = screen.getByTestId("notification-2");
@@ -1583,8 +1596,8 @@ describe("Test Main Component of Notification Page", () => {
   // Click Again the same detail to close
   await user.click(detailButtonTwo);
 
-  expect(detailButtonOne).toHaveClass("closed");
-  expect(detailButtonTwo).toHaveClass("closed");
+  expect(detailButtonOne).toHaveClass(styles.closed);
+  expect(detailButtonTwo).toHaveClass(styles.closed);
 
   expect(screen.queryByTestId("notification-1")).not.toBeInTheDocument();
   expect(screen.queryByTestId("notification-2")).not.toBeInTheDocument();
