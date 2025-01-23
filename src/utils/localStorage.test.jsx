@@ -1,4 +1,3 @@
-import { beforeEach, expect, it } from "vitest";
 import { getItem, removeItem, setItem } from "./localStorage";
 import { render, screen } from "@testing-library/react";
 import ProductMain from "../components/Main/ProductMain";

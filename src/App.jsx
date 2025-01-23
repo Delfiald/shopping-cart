@@ -4,6 +4,7 @@ import Footer from "./components/Footer/Footer";
 import { fetchData } from "./services/fakeStoreAPI";
 import Header from "./components/Header/Header";
 import { getItem } from "./utils/localStorage";
+import Feedback from "./components/Feedback/Feedback";
 
 function App() {
  const [cartItem, setCartItem] = useState([]);
@@ -82,6 +83,7 @@ function App() {
      searchInput,
     }}
    />
+   <Feedback error={error} setError={setError} loading={loading} />
    <Footer />
   </>
  );

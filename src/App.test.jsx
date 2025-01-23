@@ -8,6 +8,7 @@ import Home from "./pages/Home/Home";
 import PropTypes from "prop-types";
 import ErrorPage from "./router/ErrorPage";
 import userEvent from "@testing-library/user-event";
+import { expect } from "vitest";
 
 const MockRouter = ({ initialPath = "/" }) => {
  return (
@@ -53,6 +54,21 @@ describe("It Render App", () => {
 
   const errorPage = screen.getByText("Path Not Found 404");
   expect(errorPage).toBeInTheDocument();
+ });
+
+ it("Return to Home when click return button on ErrorPage when path not found", async () => {
+  const user = userEvent.setup();
+  render(<MockRouter initialPath={"/err"} />);
+
+  const errorPage = screen.getByText("Path Not Found 404");
+  expect(errorPage).toBeInTheDocument();
+
+  const returnButton = screen.getByTestId("return-button");
+  expect(returnButton).toBeInTheDocument();
+
+  await user.click(returnButton);
+
+  expect(screen.getByRole("heading", { name: "Shoppers" })).toBeInTheDocument();
  });
 
  it("Should Routes to Cart Page when Click Cart Button on Header", async () => {
