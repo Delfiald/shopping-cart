@@ -1,0 +1,5 @@
+main {
+ min-height: calc(100vh - 80px - 270px - 2.5rem);
+ width: 100vw;
+ padding: 1rem;
+}

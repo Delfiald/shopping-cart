@@ -19,24 +19,27 @@ function App() {
  const [categories, setCategories] = useState([]);
  const [products, setProducts] = useState([]);
 
- //  const handleProducts = (productsData) => {
- //   setProducts(productsData)
- //  }
+ const handleProducts = (productsData) => {
+  setProducts(productsData);
+ };
 
- //  const handleCategories = (categoriesData) => {
- //   setCategories(categoriesData)
- //  }
+ const handleCategories = (categoriesData) => {
+  setCategories(categoriesData);
+ };
 
- //  useEffect(() => {
- //   const fetchDataFromAPI = async() => {
- //     const productsData = await fetchData(setError, setLoading).getAllProducts();
- //     const categoriesData = await fetchData(setError, setLoading).getProductsCategory();
- //     handleProducts(productsData)
- //     handleCategories(categoriesData)
- //   }
+ useEffect(() => {
+  const fetchDataFromAPI = async () => {
+   const productsData = await fetchData(setError, setLoading).getAllProducts();
+   const categoriesData = await fetchData(
+    setError,
+    setLoading
+   ).getProductsCategory();
+   handleProducts(productsData);
+   handleCategories(categoriesData);
+  };
 
- //   fetchDataFromAPI()
- //  }, [])
+  fetchDataFromAPI();
+ }, []);
 
  useEffect(() => {
   const savedCart = getItem("cart");

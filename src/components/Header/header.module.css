@@ -1,0 +1,326 @@
+header {
+ position: sticky;
+ top: 0;
+ left: 0;
+ width: 100%;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ gap: 1rem;
+ padding: 1rem 3rem;
+ background: var(--light-color);
+ border-bottom: 1px solid var(--light-500-color);
+ overflow: hidden;
+}
+
+header nav {
+ flex: 1;
+ display: flex;
+ align-items: center;
+ gap: 1rem;
+}
+
+header nav .hero {
+ font-size: 1.5rem;
+ flex: 0.25;
+ cursor: pointer;
+}
+
+header nav .search-container {
+ flex: 1;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ position: relative;
+ gap: 0.5rem;
+ border: 1px solid var(--light-500-color);
+ border-radius: 8px;
+ padding: 0 0.5rem;
+ overflow: hidden;
+}
+
+header nav .search-container > label {
+ display: flex;
+ align-items: center;
+ justify-content: center;
+}
+
+header nav .search-container > input {
+ border: none;
+ outline: none;
+ width: 100%;
+ height: 100%;
+}
+
+header nav .search-container .search-button {
+ padding: 0;
+ border: none;
+ font-weight: 500;
+ border-left: 1px solid var(--light-500-color);
+ border-radius: 0;
+ padding: 0.75rem 0.5rem;
+ font-weight: bold;
+}
+
+.button-wrapper {
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ gap: 1rem;
+ flex: 0.35;
+}
+
+.cart-button-wrapper,
+.wishlist-button-wrapper,
+.notification-button-wrapper {
+ position: relative;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+}
+
+.cart-button,
+.wishlist-button,
+.notification-button {
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ width: 45px;
+ height: 45px;
+}
+
+.item-count,
+.notification-count,
+.wishlist-count {
+ position: absolute;
+ top: 5px;
+ right: 5px;
+ transform: translate(50%, -50%);
+ background: var(--light-color);
+ width: 1.25rem;
+ height: 1.25rem;
+ border: 1px solid var(--dark-500-color);
+ border-radius: 50%;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+}
+
+.cart-button-wrapper > div,
+.wishlist-button-wrapper > div,
+.notification-button-wrapper > div {
+ position: fixed;
+ top: 68px;
+ background: var(--light-color);
+ border-radius: 10px;
+ border-top-left-radius: 0px;
+ border-top-right-radius: 0px;
+ display: flex;
+ align-items: stretch;
+ justify-content: center;
+ flex-direction: column;
+ z-index: 2;
+ box-shadow: 1px 1px 5px var(--light-500-color);
+ transform-origin: top;
+ transform: translateX(0) scaleY(0);
+ animation: button-wrapper-down 0.25s ease forwards;
+ overflow: hidden;
+}
+
+.cart-button-wrapper > div,
+.wishlist-button-wrapper > div {
+ width: 100%;
+ max-width: 450px;
+}
+
+.wishlist-button-wrapper > div {
+ right: 10px;
+ transform: translateX(0) scaleY(0);
+}
+
+.cart-information,
+.wishlist-information,
+.notification-information {
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ gap: 1rem;
+ white-space: nowrap;
+ border-bottom: 1px solid var(--light-500-color);
+ width: 100%;
+ padding: 0.5rem 1rem;
+ box-shadow: inset 0 -3px 5px -5px var(--dark-500-color);
+}
+
+.see-all-button {
+ position: relative;
+ cursor: pointer;
+ font-weight: bold;
+}
+
+.see-all-button::before {
+ content: "";
+ position: absolute;
+ bottom: -1px;
+ left: 50%;
+ width: 100%;
+ height: 2px;
+ transform: translateX(-50%);
+ background: var(--dark-500-color);
+}
+
+.cart-items-wrapper,
+.notification-items-wrapper,
+.wishlist-items-wrapper {
+ display: flex;
+ align-items: center;
+ justify-content: start;
+ flex-direction: column;
+ gap: 0.5rem;
+ max-height: 500px;
+ overflow-y: auto;
+ overflow-x: hidden;
+ font-size: 0.9rem;
+}
+
+.cart-items-wrapper > div,
+.wishlist-items-wrapper > div {
+ position: relative;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ gap: 0.5rem;
+ width: 100%;
+ cursor: pointer;
+ transition: 0.3s all ease;
+ padding: 0.5rem;
+}
+
+.cart-items-wrapper > div:hover,
+.wishlist-items-wrapper > div:hover {
+ transform: translateY(-2px);
+}
+
+.cart-items-wrapper > div:not(:last-child)::before,
+.wishlist-items-wrapper > div:not(:last-child)::before {
+ content: "";
+ position: absolute;
+ bottom: -0.25rem;
+ left: 50%;
+ width: 100%;
+ height: 0.5px;
+ background: var(--light-500-color);
+ transform: translate(-50%, 0);
+}
+
+.cart-items-wrapper .image,
+.wishlist-items-wrapper .image {
+ width: 75px;
+ height: 50px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ border: 1px solid var(--light-500-color);
+ border-radius: 8px;
+ padding: 0.5rem;
+ overflow: hidden;
+}
+
+.cart-items-wrapper .image img,
+.wishlist-items-wrapper .image img {
+ width: 100%;
+ object-fit: contain;
+}
+
+.wishlist-items-wrapper .title,
+.cart-items-wrapper .title {
+ flex-basis: 100%;
+}
+
+.cart-items-wrapper .subtotal,
+.wishlist-items-wrapper .price {
+ display: flex;
+ align-items: center;
+ justify-content: start;
+ font-weight: bold;
+ width: 100%;
+ max-width: 75px;
+ flex-grow: 0;
+ border-left: 1px solid var(--light-500-color);
+ padding: 0 0.5rem;
+}
+
+.notification-items-wrapper .notification-item {
+ padding: 0.5rem;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ flex-direction: column;
+ gap: 0.25rem;
+ position: relative;
+ width: 100%;
+ cursor: pointer;
+}
+
+.notification-items-wrapper .notification-item.unread {
+ color: var(--light-color);
+}
+
+.notification-items-wrapper .notification-item.unread::before {
+ position: absolute;
+ content: "";
+ width: 100%;
+ height: 100%;
+ top: 0;
+ left: 0;
+ background: green;
+ opacity: 0.5;
+ z-index: -1;
+}
+
+.notification-items-wrapper .notification-item .time {
+ align-self: flex-end;
+ font-size: smaller;
+}
+
+.clear-button {
+ display: flex;
+ align-items: center;
+ justify-content: flex-end;
+ padding: 0.5rem;
+ cursor: pointer;
+ box-shadow: inset 0px 2px 3px 0px var(--light-500-color);
+ font-size: smaller;
+}
+
+.cart-button-wrapper .empty-cart,
+.notification-button-wrapper .empty-notification,
+.wishlist-button-wrapper .empty-wishlist {
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ flex-direction: column;
+ gap: 0.5rem;
+ padding: 0.5rem;
+ text-align: center;
+ white-space: nowrap;
+}
+
+.start-shopping-button {
+ transition: 0.3s all ease;
+}
+
+.start-shopping-button:hover {
+ transform: translateY(-2px);
+ box-shadow: 0px 2px 2px var(--dark-500-color);
+}
+
+@keyframes button-wrapper-down {
+ 0% {
+  transform: translateX(0) scaleY(0);
+ }
+
+ 100% {
+  transform: translateX(0) scaleY(1);
+ }
+}

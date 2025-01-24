@@ -12,7 +12,7 @@ import {
 const ITEM_PER_PAGE = {
  FIVE: 5,
  TEN: 10,
- SHOW_ALL: null,
+ SHOW_ALL: Infinity,
 };
 
 function Card({ product }) {
@@ -47,7 +47,7 @@ function ProductListHeader(props) {
  };
 
  const handleItemPerPageDropdown = (value) => {
-  props.setItemPerPage(value);
+  props.setItemPerPage(parseInt(value));
  };
 
  return (
@@ -116,7 +116,7 @@ function ProductListHeader(props) {
       data-testid="item-per-page-value"
       className={styles["item-per-page-value"]}
      >
-      <p>{props.itemPerPage ? props.itemPerPage : "Show All"}</p>
+      <p>{!Number.isNaN(props.itemPerPage) ? props.itemPerPage : "Show All"}</p>
       {props.hoverButton && props.hoverButton === "item-per-page" ? (
        <ChevronUp size={16} />
       ) : (
@@ -159,13 +159,12 @@ function ProductListWrapper(props) {
   return null;
  }
 
- const currentProducts =
-  props.itemPerPage === null
-   ? props.products
-   : props.products.slice(
-      (props.page - 1) * props.itemPerPage,
-      props.page * props.itemPerPage
-     );
+ const currentProducts = Number.isNaN(props.itemPerPage)
+  ? props.products
+  : props.products.slice(
+     (props.page - 1) * props.itemPerPage,
+     props.page * props.itemPerPage
+    );
 
  return (
   <section

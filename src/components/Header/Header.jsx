@@ -100,7 +100,7 @@ function Header({
     </div>
     <div className={styles["search-container"]}>
      <label htmlFor="search">
-      <Search size={16} title="Search Icon" />
+      <Search size={18} title="Search Icon" />
      </label>
      <input
       onChange={(e) => handleInputChange(e.target.value)}
@@ -122,156 +122,214 @@ function Header({
       Search
      </button>
     </div>
-    <div
-     onMouseEnter={() => handleHoverButton("cart")}
-     onMouseLeave={() => handleHoverButton(null)}
-     data-testid="cart-button-wrapper"
-     className={styles["cart-button-wrapper"]}
-    >
-     <button
-      onClick={handleCartClick}
-      data-testid="cart-button"
+    <div className={styles["button-wrapper"]}>
+     <div
+      onMouseEnter={() => handleHoverButton("cart")}
+      onMouseLeave={() => handleHoverButton(null)}
+      data-testid="cart-button-wrapper"
       className={styles["cart-button-wrapper"]}
      >
-      <ShoppingCart size={16} title="Cart Button" />
-      {cartItem && orderAmount() > 0 && (
-       <div data-testid="item-count" className={styles["item-count"]}>
-        {orderAmount()}
-       </div>
-      )}
-     </button>
-     {hoverButton === "cart" && (
-      <div>
-       <div className={styles["cart-information"]}>
-        <div>Cart ({orderAmount()})</div>
-        <div role="button" onClick={handleCartClick}>
-         See All
+      <button
+       onClick={handleCartClick}
+       data-testid="cart-button"
+       className={styles["cart-button"]}
+      >
+       <ShoppingCart size={18} title="Cart Button" />
+       {cartItem && orderAmount() > 0 && (
+        <div data-testid="item-count" className={styles["item-count"]}>
+         {orderAmount()}
         </div>
-       </div>
-       {getCartDetails().map((item) => (
-        <div
-         data-testid={`product-${item.id}`}
-         key={item.id}
-         onClick={() => navigate(`/product/${item.id}`)}
-        >
-         <div className={styles.image}>
-          <img src={item.image} alt={item.title} />
-         </div>
-         <div className={styles.title}>{item.title}</div>
-         <div className={styles.subtotal}>
-          <p className={styles.amount}>{item.amount}</p>
-          <X size={16} />
-          <p className={styles.price}>{item.price}</p>
-         </div>
-        </div>
-       ))}
-      </div>
-     )}
-    </div>
-    <div
-     onMouseEnter={() => handleHoverButton("notification")}
-     onMouseLeave={() => handleHoverButton(null)}
-     data-testid="notification-button-wrapper"
-     className={styles["notification-button-wrapper"]}
-    >
-     <button
-      data-testid="notification-button"
-      className={styles["notification-button"]}
-      onClick={handleNotificationClick}
-     >
-      <Bell size={16} />
-      {notificationItem && unreadNotificationAmount() > 0 && (
-       <div
-        data-testid="notification-count"
-        className={styles["notification-count"]}
-       >
-        {unreadNotificationAmount()}
-       </div>
-      )}
-     </button>
-     {hoverButton === "notification" && (
-      <div>
-       <div className={styles["notification-information"]}>
-        <div>Notifications ({notificationItem.length})</div>
-        <div role="button" onClick={handleNotificationClick}>
-         See All
-        </div>
-       </div>
-       {notificationItem.map((item) => (
-        <div
-         key={item.id}
-         data-testid={`notification-item-${item.id}`}
-         className={`${styles["notification-item"]} ${
-          styles[item.isRead ? "read" : "unread"]
-         }`}
-         onMouseEnter={() => handleReadNotification(item.id)}
-        >
+       )}
+      </button>
+      {hoverButton === "cart" && (
+       <div>
+        <div className={styles["cart-information"]}>
+         <div>Cart ({orderAmount()})</div>
          <div
-          data-testid={`notification-time-${item.id}`}
-          className={styles.time}
+          className={styles["see-all-button"]}
+          role="button"
+          onClick={handleCartClick}
          >
-          {item.timeStamp}
-         </div>
-         <div
-          data-testid={`notification-message-${item.id}`}
-          className={styles.message}
-         >
-          {item.message}
+          See All
          </div>
         </div>
-       ))}
-       <div
-        data-testid="clear-notification-button"
-        className={styles["clear-button"]}
-        onClick={handleRemoveAllNotification}
-       >
-        <Trash />
-        Clear Notifications
-       </div>
-      </div>
-     )}
-    </div>
-    <div
-     onMouseEnter={() => handleHoverButton("wishlist")}
-     onMouseLeave={() => handleHoverButton(null)}
-     data-testid="wishlist-button-wrapper"
-     className={styles["wishlist-button-wrapper"]}
-    >
-     <button
-      onClick={handleWishlistClick}
-      data-testid="wishlist-button"
-      className={styles["wishlist-button"]}
-     >
-      <Heart size={16} />
-      {wishlistItem && wishlistItem.length > 0 && (
-       <div data-testid="wishlist-count" className={styles["wishlist-count"]}>
-        {wishlistItem.length}
+        {getCartDetails().length > 0 ? (
+         <div className={styles["cart-items-wrapper"]}>
+          {getCartDetails().map((item) => (
+           <div
+            data-testid={`product-${item.id}`}
+            key={item.id}
+            onClick={() => navigate(`/product/${item.id}`)}
+           >
+            <div className={styles.image}>
+             <img src={item.image} alt={item.title} />
+            </div>
+            <div className={styles.title}>{item.title}</div>
+            <div className={styles.subtotal}>
+             <p className={styles.amount}>{item.amount}</p>
+             <X size={16} />
+             <p className={styles.price}>{item.price}</p>
+            </div>
+           </div>
+          ))}
+         </div>
+        ) : (
+         <div className={styles["empty-cart"]}>
+          <p>Your Cart is Empty</p>
+          <button
+           className={styles["start-shopping-button"]}
+           onClick={() => navigate("/shop")}
+          >
+           Start Shopping
+          </button>
+         </div>
+        )}
        </div>
       )}
-     </button>
-     {hoverButton === "wishlist" && (
-      <div>
-       <div className={styles["wishlist-information"]}>
-        <div>Wishlist ({wishlistItem.length})</div>
-        <div role="button" onClick={handleWishlistClick}>
-         See All
-        </div>
-       </div>
-       {getWishlistDetails().map((item) => (
+     </div>
+     <div
+      onMouseEnter={() => handleHoverButton("notification")}
+      onMouseLeave={() => handleHoverButton(null)}
+      data-testid="notification-button-wrapper"
+      className={styles["notification-button-wrapper"]}
+     >
+      <button
+       data-testid="notification-button"
+       className={styles["notification-button"]}
+       onClick={handleNotificationClick}
+      >
+       <Bell size={18} />
+       {notificationItem && unreadNotificationAmount() > 0 && (
         <div
-         data-testid={`product-${item.id}`}
-         key={item.id}
-         onClick={() => navigate(`/product/${item.id}`)}
+         data-testid="notification-count"
+         className={styles["notification-count"]}
         >
-         <div className={styles.image}>
-          <img src={item.image} alt={item.title} />
-         </div>
-         <div className={styles.title}>{item.title}</div>
-         <div className={styles.price}>{item.price}</div>
+         {unreadNotificationAmount()}
         </div>
-       ))}
-      </div>
-     )}
+       )}
+      </button>
+      {hoverButton === "notification" && (
+       <div>
+        <div className={styles["notification-information"]}>
+         <div>Notifications ({notificationItem.length})</div>
+         <div
+          className={styles["see-all-button"]}
+          role="button"
+          onClick={handleNotificationClick}
+         >
+          See All
+         </div>
+        </div>
+        {notificationItem.length > 0 ? (
+         <div className={styles["notification-items-wrapper"]}>
+          {notificationItem.map((item) => (
+           <div
+            key={item.id}
+            data-testid={`notification-item-${item.id}`}
+            className={`${styles["notification-item"]} ${
+             styles[item.isRead ? "read" : "unread"]
+            }`}
+            onMouseEnter={() => handleReadNotification(item.id)}
+           >
+            <div
+             data-testid={`notification-time-${item.id}`}
+             className={styles.time}
+            >
+             {item.timeStamp}
+            </div>
+            <div
+             data-testid={`notification-message-${item.id}`}
+             className={styles.message}
+            >
+             {item.message}
+            </div>
+           </div>
+          ))}
+         </div>
+        ) : (
+         <div className={styles["empty-notification"]}>
+          <p>You have no notifications right now.</p>
+          <p>Start Shopping</p>
+          <button
+           className={styles["start-shopping-button"]}
+           onClick={() => navigate("/shop")}
+          >
+           Start Shopping
+          </button>
+         </div>
+        )}
+        {notificationItem.length > 0 && (
+         <div
+          data-testid="clear-notification-button"
+          className={styles["clear-button"]}
+          onClick={handleRemoveAllNotification}
+         >
+          Clear Notifications
+         </div>
+        )}
+       </div>
+      )}
+     </div>
+     <div
+      onMouseEnter={() => handleHoverButton("wishlist")}
+      onMouseLeave={() => handleHoverButton(null)}
+      data-testid="wishlist-button-wrapper"
+      className={styles["wishlist-button-wrapper"]}
+     >
+      <button
+       onClick={handleWishlistClick}
+       data-testid="wishlist-button"
+       className={styles["wishlist-button"]}
+      >
+       <Heart size={18} />
+       {wishlistItem && wishlistItem.length > 0 && (
+        <div data-testid="wishlist-count" className={styles["wishlist-count"]}>
+         {wishlistItem.length}
+        </div>
+       )}
+      </button>
+      {hoverButton === "wishlist" && (
+       <div>
+        <div className={styles["wishlist-information"]}>
+         <div>Wishlist ({wishlistItem.length})</div>
+         <div
+          className={styles["see-all-button"]}
+          role="button"
+          onClick={handleWishlistClick}
+         >
+          See All
+         </div>
+        </div>
+        {getWishlistDetails().length > 0 ? (
+         <div className={styles["wishlist-items-wrapper"]}>
+          {getWishlistDetails().map((item) => (
+           <div
+            data-testid={`product-${item.id}`}
+            key={item.id}
+            onClick={() => navigate(`/product/${item.id}`)}
+           >
+            <div className={styles.image}>
+             <img src={item.image} alt={item.title} />
+            </div>
+            <div className={styles.title}>{item.title}</div>
+            <div className={styles.price}>{item.price}</div>
+           </div>
+          ))}
+         </div>
+        ) : (
+         <div className={styles["empty-wishlist"]}>
+          <p>Your wishlist is currently empty.</p>
+          <button
+           className={styles["start-shopping-button"]}
+           onClick={() => navigate("/shop")}
+          >
+           Start Shopping
+          </button>
+         </div>
+        )}
+       </div>
+      )}
+     </div>
     </div>
    </nav>
   </header>

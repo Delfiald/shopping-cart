@@ -26,14 +26,14 @@ function Footer() {
       target="_blank"
       rel="noopener noreferrer"
      >
-      <Github size={16} title="Github" />
+      <Github size={24} title="Github" />
      </a>
      <a
       href="https://linkedin.com/in/m-aldi-gunawan"
       target="_blank"
       rel="noopener noreferrer"
      >
-      <LucideLinkedin size={16} title="Linkedin" />
+      <LucideLinkedin size={24} title="Linkedin" />
      </a>
     </div>
     <div data-testid="apps" className={styles.content}>
