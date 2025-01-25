@@ -193,9 +193,9 @@ function CartMain({
  };
 
  const handleBuy = () => {
-  // if (!cartItem.length || cartItem.length < 1) {
-  //  return;
-  // }
+  if (!cartItem.length || cartItem.length < 1) {
+   return;
+  }
   const timeStamp = Date.now();
   const formattedDate = format(timeStamp, "dd/MM/yyyy HH:mm");
   setModal("buy-modal");
