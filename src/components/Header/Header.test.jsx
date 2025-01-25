@@ -169,8 +169,8 @@ describe("Test Header", () => {
  it("Should Render Header", () => {
   render(<MockHeader />);
 
-  const headerText = screen.getByRole("heading", { name: "Shoppers" });
-  expect(headerText).toBeInTheDocument();
+  const headerText = screen.getAllByText("Shoppers");
+  expect(headerText[0]).toBeInTheDocument();
  });
 
  it("Renders search bar", () => {

@@ -68,7 +68,7 @@ describe("It Render App", () => {
 
   await user.click(returnButton);
 
-  expect(screen.getByRole("heading", { name: "Shoppers" })).toBeInTheDocument();
+  expect(screen.getAllByText("Shoppers")[0]).toBeInTheDocument();
  });
 
  it("Should Routes to Cart Page when Click Cart Button on Header", async () => {

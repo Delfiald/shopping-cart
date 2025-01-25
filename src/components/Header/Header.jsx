@@ -1,9 +1,20 @@
 import styles from "./header.module.css";
 
-import { Bell, Heart, Search, ShoppingCart, Trash, X } from "lucide-react";
+import { Bell, Heart, Search, ShoppingCart, X } from "lucide-react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { removeItem, setItem } from "../../utils/localStorage";
+import styled from "styled-components";
+
+const SearchContainer = styled.div`
+ &:focus-within {
+  color: #000;
+ }
+
+ &:focus-within::before {
+  transform: translate(0, -50%) scaleX(1);
+ }
+`;
 
 function Header({
  products,
@@ -95,10 +106,13 @@ function Header({
  return (
   <header>
    <nav>
-    <div className={styles.hero} onClick={() => navigate("/")}>
-     <h1>Shoppers</h1>
+    <div className={styles.hero}>
+     <h1 onClick={() => navigate("/")}>
+      <div className={styles["displayed"]}>Shoppers</div>
+      <div className={styles["hovered"]}>Shoppers</div>
+     </h1>
     </div>
-    <div className={styles["search-container"]}>
+    <SearchContainer className={styles["search-container"]}>
      <label htmlFor="search">
       <Search size={18} title="Search Icon" />
      </label>
@@ -119,9 +133,10 @@ function Header({
       className={styles["search-button"]}
       onClick={handleSearch}
      >
-      Search
+      <div className={styles["displayed"]}>Search</div>
+      <div className={styles["hovered"]}>Search</div>
      </button>
-    </div>
+    </SearchContainer>
     <div className={styles["button-wrapper"]}>
      <div
       onMouseEnter={() => handleHoverButton("cart")}
@@ -134,7 +149,12 @@ function Header({
        data-testid="cart-button"
        className={styles["cart-button"]}
       >
-       <ShoppingCart size={18} title="Cart Button" />
+       <div className={styles["displayed"]}>
+        <ShoppingCart size={18} title="Cart Button" />
+       </div>
+       <div className={styles["hovered"]}>
+        <ShoppingCart size={18} title="Cart Button Hovered" />
+       </div>
        {cartItem && orderAmount() > 0 && (
         <div data-testid="item-count" className={styles["item-count"]}>
          {orderAmount()}
@@ -198,7 +218,12 @@ function Header({
        className={styles["notification-button"]}
        onClick={handleNotificationClick}
       >
-       <Bell size={18} />
+       <div className={styles["displayed"]}>
+        <Bell size={18} title="Notification Button" />
+       </div>
+       <div className={styles["hovered"]}>
+        <Bell size={18} title="Notification Button Hovered" />
+       </div>
        {notificationItem && unreadNotificationAmount() > 0 && (
         <div
          data-testid="notification-count"
@@ -281,13 +306,18 @@ function Header({
        data-testid="wishlist-button"
        className={styles["wishlist-button"]}
       >
-       <Heart size={18} />
-       {wishlistItem && wishlistItem.length > 0 && (
-        <div data-testid="wishlist-count" className={styles["wishlist-count"]}>
-         {wishlistItem.length}
-        </div>
-       )}
+       <div className={styles["displayed"]}>
+        <Heart size={18} title="Wishlist Button" />
+       </div>
+       <div className={styles["hovered"]}>
+        <Heart size={18} title="Wishlist Button Hovered" />
+       </div>
       </button>
+      {wishlistItem && wishlistItem.length > 0 && (
+       <div data-testid="wishlist-count" className={styles["wishlist-count"]}>
+        {wishlistItem.length}
+       </div>
+      )}
       {hoverButton === "wishlist" && (
        <div>
         <div className={styles["wishlist-information"]}>
