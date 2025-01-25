@@ -16,6 +16,17 @@ const SearchContainer = styled.div`
  }
 `;
 
+const HeaderOverlay = styled.div.withConfig({
+ shouldForwardProp: (prop) => prop !== "hoverButton",
+})`
+ visibility: ${(props) =>
+  ["cart", "wishlist", "notification"].includes(props.hoverButton)
+   ? "visible"
+   : "hidden"};
+ opacity: ${(props) =>
+  ["cart", "wishlist", "notification"].includes(props.hoverButton) ? 0.5 : 0};
+`;
+
 function Header({
  products,
  cartItem,
@@ -91,8 +102,28 @@ function Header({
  };
 
  const handleRemoveAllNotification = () => {
-  setNotificationItem([]);
-  removeItem("notification");
+  const removeWithAnimation = () => {
+   setTimeout(() => {
+    setNotificationItem([]);
+    removeItem("notification");
+    setHoverButton("");
+   }, notificationItem.length * 50 + 300);
+  };
+
+  const addExitAnimation = () => {
+   notificationItem.forEach((item, index) => {
+    setTimeout(() => {
+     setNotificationItem((prevItems) =>
+      prevItems.map((prevItem) =>
+       prevItem.id === item.id ? { ...prevItem, isExiting: true } : prevItem
+      )
+     );
+    }, index * 50);
+   });
+  };
+
+  addExitAnimation();
+  removeWithAnimation();
  };
 
  const handleSearch = () => {
@@ -155,12 +186,12 @@ function Header({
        <div className={styles["hovered"]}>
         <ShoppingCart size={18} title="Cart Button Hovered" />
        </div>
-       {cartItem && orderAmount() > 0 && (
-        <div data-testid="item-count" className={styles["item-count"]}>
-         {orderAmount()}
-        </div>
-       )}
       </button>
+      {cartItem && orderAmount() > 0 && (
+       <div data-testid="item-count" className={styles["item-count"]}>
+        {orderAmount()}
+       </div>
+      )}
       {hoverButton === "cart" && (
        <div>
         <div className={styles["cart-information"]}>
@@ -224,15 +255,15 @@ function Header({
        <div className={styles["hovered"]}>
         <Bell size={18} title="Notification Button Hovered" />
        </div>
-       {notificationItem && unreadNotificationAmount() > 0 && (
-        <div
-         data-testid="notification-count"
-         className={styles["notification-count"]}
-        >
-         {unreadNotificationAmount()}
-        </div>
-       )}
       </button>
+      {notificationItem && unreadNotificationAmount() > 0 && (
+       <div
+        data-testid="notification-count"
+        className={styles["notification-count"]}
+       >
+        {unreadNotificationAmount()}
+       </div>
+      )}
       {hoverButton === "notification" && (
        <div>
         <div className={styles["notification-information"]}>
@@ -253,7 +284,7 @@ function Header({
             data-testid={`notification-item-${item.id}`}
             className={`${styles["notification-item"]} ${
              styles[item.isRead ? "read" : "unread"]
-            }`}
+            } ${item.isExiting ? styles["exiting"] : ""}`}
             onMouseEnter={() => handleReadNotification(item.id)}
            >
             <div
@@ -284,12 +315,14 @@ function Header({
          </div>
         )}
         {notificationItem.length > 0 && (
-         <div
-          data-testid="clear-notification-button"
-          className={styles["clear-button"]}
-          onClick={handleRemoveAllNotification}
-         >
-          Clear Notifications
+         <div className={styles["clear-button-wrapper"]}>
+          <div
+           data-testid="clear-notification-button"
+           className={styles["clear-button"]}
+           onClick={handleRemoveAllNotification}
+          >
+           Clear Notifications
+          </div>
          </div>
         )}
        </div>
@@ -362,6 +395,10 @@ function Header({
      </div>
     </div>
    </nav>
+   <HeaderOverlay
+    className={styles["header-overlay"]}
+    hoverButton={hoverButton}
+   ></HeaderOverlay>
   </header>
  );
 }

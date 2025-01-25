@@ -1,4 +1,4 @@
-import { act, render, screen } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import Header from "./Header";
 import { MemoryRouter, Outlet, Route, Routes } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
@@ -579,12 +579,11 @@ describe("Test Header", () => {
   const clearButton = screen.getByTestId("clear-notification-button");
   expect(clearButton).toBeInTheDocument();
 
-  await act(async () => {
-   await user.hover(notificationButtonWrapper);
-   await user.click(clearButton);
-  });
+  await user.click(clearButton);
 
-  expect(screen.queryByTestId("notification-item-1")).not.toBeInTheDocument();
+  await waitFor(() => {
+   expect(screen.queryByTestId("notification-item-1")).not.toBeInTheDocument();
+  });
  });
 
  it("Should Navigate to Notification Page when click see all button", async () => {

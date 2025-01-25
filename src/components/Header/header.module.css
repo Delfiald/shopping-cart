@@ -13,6 +13,7 @@ header {
  overflow: hidden;
  border-end-end-radius: 10px;
  border-end-start-radius: 10px;
+ z-index: 2;
 }
 
 header nav {
@@ -42,10 +43,12 @@ header nav .hero h1 .hovered {
 header nav .hero h1:hover .displayed {
  position: relative;
  transform: scaleY(0);
+ opacity: 0;
 }
 
 header nav .hero h1:hover .hovered {
  transform: translate(-50%, -50%) scaleY(1);
+ opacity: 1;
 }
 
 header nav .search-container {
@@ -159,10 +162,12 @@ header nav .search-container .search-button:hover::before {
 
 .search-button:hover .displayed {
  transform: scaleY(0);
+ opacity: 0;
 }
 
 .search-button:hover .hovered {
  transform: translate(-50%, -50%) scaleY(1);
+ opacity: 1;
 }
 
 .button-wrapper {
@@ -221,12 +226,14 @@ header nav .search-container .search-button:hover::before {
 .wishlist-button-wrapper:hover .displayed,
 .notification-button-wrapper:hover .displayed {
  transform: scaleY(0);
+ opacity: 0;
 }
 
 .cart-button-wrapper:hover .hovered,
 .wishlist-button-wrapper:hover .hovered,
 .notification-button-wrapper:hover .hovered {
  transform: translate(-50%, -50%) scaleY(1);
+ opacity: 1;
 }
 
 .item-count,
@@ -235,8 +242,8 @@ header nav .search-container .search-button:hover::before {
  position: absolute;
  top: 5px !important;
  right: 5px !important;
- transform: translate(50%, -50%) !important;
- background: var(--dark-300-color);
+ transform: translate(50%, -50%) scale(1);
+ background: var(--dark-400-color);
  width: 1.25rem !important;
  height: 1.25rem !important;
  border: 1px solid var(--dark-500-color);
@@ -244,9 +251,11 @@ header nav .search-container .search-button:hover::before {
  display: flex;
  align-items: center;
  justify-content: center;
+ cursor: default;
+ animation: counter-show 0.3s ease forwards;
 }
 
-.cart-button-wrapper > div:not(.cart-count),
+.cart-button-wrapper > div:not(.item-count),
 .wishlist-button-wrapper > div:not(.wishlist-count),
 .notification-button-wrapper > div:not(.notification-count) {
  position: fixed;
@@ -264,7 +273,8 @@ header nav .search-container .search-button:hover::before {
  box-shadow: 1px 1px 5px var(--light-500-color);
  transform-origin: top;
  transform: translateX(0) scaleY(0);
- animation: button-wrapper-down 0.25s ease forwards;
+ animation: button-wrapper-down 0.3s ease forwards;
+ overflow: hidden;
 }
 
 .cart-button-wrapper > div,
@@ -301,19 +311,21 @@ header nav .search-container .search-button:hover::before {
 .see-all-button::before {
  content: "";
  position: absolute;
- bottom: -1px;
+ bottom: 0;
  left: 50%;
  width: 100%;
  height: 2px;
- transform: translateX(-50%) scaleX(0);
+ transform: translate(-50%, 0) scaleX(0);
  transform-origin: right;
- transition: 0.3s transform ease;
+ transition: transform 0.3s ease, opacity 0.3s ease;
  background: var(--dark-500-color);
+ opacity: 0;
 }
 
 .see-all-button:hover::before {
- transform: translateX(-50%) scaleX(1);
+ transform: translate(-50%, 0) scaleX(1);
  transform-origin: left;
+ opacity: 1;
 }
 
 .cart-items-wrapper,
@@ -345,7 +357,28 @@ header nav .search-container .search-button:hover::before {
 
 .cart-items-wrapper > div:hover,
 .wishlist-items-wrapper > div:hover {
- transform: translateY(-2px);
+ transform: translateX(6px);
+}
+
+.cart-items-wrapper > div::before,
+.wishlist-items-wrapper > div::before {
+ position: absolute;
+ content: "";
+ top: 50%;
+ left: 0;
+ transform: translate(-50%, -50%) scaleX(0);
+ width: 5px;
+ height: 80%;
+ background: var(--light-500-color);
+ transform-origin: left;
+ transition: var(--transition-medium);
+ opacity: 0;
+}
+
+.cart-items-wrapper > div:hover::before,
+.wishlist-items-wrapper > div:hover::before {
+ transform: translate(-50%, -50%) scaleX(1);
+ opacity: 1;
 }
 
 .cart-items-wrapper > div:not(:last-child)::before,
@@ -399,7 +432,7 @@ header nav .search-container .search-button:hover::before {
 }
 
 .notification-items-wrapper .notification-item {
- padding: 0.5rem;
+ padding: 0.5rem 1rem;
  display: flex;
  align-items: center;
  justify-content: center;
@@ -407,23 +440,37 @@ header nav .search-container .search-button:hover::before {
  gap: 0.25rem;
  position: relative;
  width: 100%;
- cursor: pointer;
+ cursor: default;
+ transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.notification-items-wrapper .notification-item.unread {
- color: var(--light-color);
+.notification-items-wrapper .notification-item.exiting {
+ transform: translateX(-100%);
+ opacity: 0;
 }
 
-.notification-items-wrapper .notification-item.unread::after {
+.notification-items-wrapper .notification-item::after {
  position: absolute;
  content: "";
- width: 100%;
+ width: 110%;
  height: 100%;
  top: 0;
  left: 0;
- background: green;
- opacity: 0.5;
+ background: var(--light-400-color);
+ opacity: 0.85;
  z-index: -1;
+ transform-origin: right;
+ transition: var(--transition-medium);
+}
+
+.notification-items-wrapper .notification-item.unread::after {
+ opacity: 0.75;
+ transform: scaleX(1);
+}
+
+.notification-items-wrapper .notification-item.read::after {
+ opacity: 0;
+ transform: scaleX(0);
 }
 
 .notification-items-wrapper .notification-item .time {
@@ -431,14 +478,43 @@ header nav .search-container .search-button:hover::before {
  font-size: smaller;
 }
 
-.clear-button {
+.clear-button-wrapper {
  display: flex;
  align-items: center;
  justify-content: flex-end;
  padding: 0.5rem;
- cursor: pointer;
  box-shadow: inset 0px 2px 3px 0px var(--light-500-color);
+ z-index: 1;
+}
+
+.clear-button {
+ position: relative;
+ display: flex;
+ align-items: center;
+ justify-content: flex-end;
+ cursor: pointer;
  font-size: smaller;
+}
+
+.clear-button::before {
+ content: "";
+ position: absolute;
+ bottom: 0;
+ left: 0;
+ width: 100%;
+ height: 2px;
+ background: var(--dark-200-color);
+ z-index: -1;
+ transform: scaleX(0);
+ transform-origin: right;
+ opacity: 0;
+ transition: 0.3s transform ease, 0.3s opacity ease;
+}
+
+.clear-button:hover::before {
+ transform: scaleX(1);
+ transform-origin: left;
+ opacity: 1;
 }
 
 .cart-button-wrapper .empty-cart,
@@ -463,6 +539,17 @@ header nav .search-container .search-button:hover::before {
  box-shadow: 0px 2px 2px var(--dark-500-color);
 }
 
+.header-overlay {
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ background: var(--dark-color);
+ z-index: -1;
+ transition: var(--transition-fast);
+}
+
 @keyframes button-wrapper-down {
  0% {
   transform: translateX(0) scaleY(0);
@@ -470,5 +557,15 @@ header nav .search-container .search-button:hover::before {
 
  100% {
   transform: translateX(0) scaleY(1);
+ }
+}
+
+@keyframes counter-show {
+ 0% {
+  transform: translate(50%, -50%) scale(0);
+ }
+
+ 100% {
+  transform: translate(50%, -50%) scale(1);
  }
 }

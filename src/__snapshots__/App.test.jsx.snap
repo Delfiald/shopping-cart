@@ -258,6 +258,9 @@ exports[`It Render App > render app 1`] = `
         </div>
       </div>
     </nav>
+    <div
+      class="sc-gyycJP fctqsH _header-overlay_d33141"
+    />
   </header>
   <main>
     <div

@@ -82,6 +82,7 @@ function App() {
      setCartItem,
      wishlistItem,
      setWishlistItem,
+     notificationItem,
      setNotificationItem,
      searchInput,
     }}

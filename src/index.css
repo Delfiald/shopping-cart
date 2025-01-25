@@ -23,7 +23,8 @@
  --light-400-color: #e0e0e0;
  --light-500-color: #d6d6d6;
 
- --transition-medium: 0.3s all ease;
+ --transition-fast: 0.25s all ease-in-out;
+ --transition-medium: 0.4s all ease-in-out;
  --transition-slow: 0.5s all ease-in-out;
 }
 
