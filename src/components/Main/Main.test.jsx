@@ -94,19 +94,13 @@ describe("Test Main component of Home", () => {
   );
 
   const carousel = screen.getByTestId("products-carousel-section");
-  expect(carousel.children).toHaveLength(4);
+  expect(carousel.children).toHaveLength(2);
 
-  mockProducts.forEach((product) => {
-   expect(
-    screen.getByRole("heading", { name: product.title })
-   ).toBeInTheDocument();
-  });
-
-  mockProducts.forEach((product) => {
-   const imgElement = screen.getByAltText(product.title);
+  for (let i = 0; i < 3; i++) {
+   const imgElement = screen.getByTitle(mockProducts[0].title);
    expect(imgElement).toBeInTheDocument();
-   expect(imgElement).toHaveAttribute("src", product.image);
-  });
+   expect(imgElement).toHaveAttribute("src", mockProducts[0].image);
+  }
  });
 
  it("Should not render carousel", () => {

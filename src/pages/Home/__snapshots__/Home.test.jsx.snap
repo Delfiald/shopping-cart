@@ -10,50 +10,66 @@ exports[`Home Page Test > Renders Home Page 1`] = `
         class="_carousel_716e15"
         data-testid="products-carousel-section"
       >
-        <div>
-          <img
-            alt="product-1"
-            src="/image/product-1.png"
-          />
+        <div
+          class="_item-display_716e15"
+        >
+          <div
+            class="_displayed-image_716e15"
+          >
+            <img
+              alt="product-1"
+              src="/image/product-1.png"
+            />
+          </div>
           <h2>
             product-1
           </h2>
         </div>
-        <div>
-          <img
-            alt="product-2"
-            src="/image/product-2.png"
+        <div
+          class="_carousel-item-wrapper_716e15"
+        >
+          <div
+            class="_loading-bar_716e15"
           />
-          <h2>
-            product-2
-          </h2>
-        </div>
-        <div>
-          <img
-            alt="product-3"
-            src="/image/product-3.png"
-          />
-          <h2>
-            product-3
-          </h2>
-        </div>
-        <div>
-          <img
-            alt="product-4"
-            src="/image/product-4.png"
-          />
-          <h2>
-            product-4
-          </h2>
-        </div>
-        <div>
-          <img
-            alt="product-5"
-            src="/image/product-5.png"
-          />
-          <h2>
-            product-5
-          </h2>
+          <div
+            class="_carousel-item_716e15 _active_716e15"
+          >
+            <div
+              class="_image-wrapper_716e15"
+            >
+              <img
+                alt="product-1"
+                src="/image/product-1.png"
+                title="product-1"
+              />
+            </div>
+          </div>
+          <div
+            class="_carousel-item_716e15 __716e15"
+          >
+            <div
+              class="_image-wrapper_716e15"
+            >
+              <img
+                alt="product-2"
+                src="/image/product-2.png"
+                title="product-2"
+              />
+            </div>
+          </div>
+          <div
+            class="_carousel-item_716e15 __716e15"
+          >
+            <div
+              class="_image-wrapper_716e15"
+            >
+              <img
+                alt="product-3"
+                src="/image/product-3.png"
+                title="product-3"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>
