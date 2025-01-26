@@ -1,5 +1,9 @@
 main {
  min-height: calc(100vh - 80px - 270px - 2.5rem);
- width: 100vw;
+ width: 100%;
  padding: 1rem;
+ overflow-x: hidden;
+}
+
+.hero {
 }

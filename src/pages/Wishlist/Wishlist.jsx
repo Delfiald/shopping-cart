@@ -62,11 +62,15 @@ function Wishlist() {
    ? sort
    : "name-asc";
   const totalItems = wishlistItem.length;
-  const maxPage = Math.ceil(totalItems / (itemPerPage || 10));
+  const maxPage =
+   itemPerPage === "Infinity" ? 1 : Math.ceil(totalItems / (itemPerPage || 10));
   const validPage = Math.max(1, Math.min(parseInt(page) || 1, maxPage));
-  const validItemsPerPage = [5, 10, null].includes(parseInt(itemPerPage))
-   ? itemPerPage
-   : 10;
+  const validItemsPerPage =
+   itemPerPage === "Infinity"
+    ? Infinity
+    : [5, 10].includes(parseInt(itemPerPage))
+    ? itemPerPage
+    : 10;
 
   const defaultParams = {
    sort: validSort,
