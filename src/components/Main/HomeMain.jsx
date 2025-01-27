@@ -3,6 +3,24 @@ import styles from "./main.module.css";
 
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import styled from "styled-components";
+
+const CarouselLoading = styled.div.withConfig({
+ shouldForwardProp: (prop) => prop !== "loadingDuration",
+})`
+ animation: ${(props) =>
+  `carousel-bar ${props.loadingDuration} ease-in-out infinite`};
+
+ @keyframes carousel-bar {
+  0% {
+   width: 0%;
+  }
+
+  100% {
+   width: 100%;
+  }
+ }
+`;
 
 function HomeMain({ categories, products }) {
  const navigate = useNavigate();
@@ -11,28 +29,60 @@ function HomeMain({ categories, products }) {
   image: "",
   title: "",
  });
+ const [loadingDuration, setLoadingDuration] = useState("7.5s");
+ const [fadeIn, setFadeIn] = useState(false);
 
  const handleDisplayedProduct = (
   displayedId,
   displayedImage,
   displayedTitle
  ) => {
-  setDisplayedProduct({
-   id: displayedId,
-   image: displayedImage,
-   title: displayedTitle,
-  });
+  setFadeIn(false);
+  setLoadingDuration("0s");
+  setTimeout(() => {
+   setDisplayedProduct({
+    id: displayedId,
+    image: displayedImage,
+    title: displayedTitle,
+   });
+   setLoadingDuration("7.5s");
+   setFadeIn(true);
+  }, 300);
  };
 
  useEffect(() => {
+  const startCarousel = () => {
+   let currentIndex = products.findIndex((p) => p.id === displayedProduct.id);
+   if (currentIndex === -1) {
+    currentIndex = 0;
+    handleDisplayedProduct(
+     products[currentIndex].id,
+     products[currentIndex].image,
+     products[currentIndex].title
+    );
+   }
+
+   const intervalId = setInterval(() => {
+    currentIndex = (currentIndex + 1) % Math.min(products.length, 3);
+
+    handleDisplayedProduct(
+     products[currentIndex].id,
+     products[currentIndex].image,
+     products[currentIndex].title
+    );
+   }, 7500);
+
+   return intervalId;
+  };
+
   if (products.length > 0) {
-   setDisplayedProduct({
-    id: products[0].id || -1,
-    image: products[0].image || "",
-    title: products[0].title || "",
-   });
+   const intervalId = startCarousel();
+
+   return () => {
+    clearInterval(intervalId);
+   };
   }
- }, [products]);
+ }, [displayedProduct.id, products]);
 
  return (
   <main>
@@ -41,7 +91,9 @@ function HomeMain({ categories, products }) {
      {products && products.length > 0 && (
       <>
        <div
-        className={styles["item-display"]}
+        className={`${styles["item-display"]} ${
+         fadeIn ? styles["fade-in"] : ""
+        }`}
         onClick={() => navigate(`/product/${displayedProduct.id}`)}
        >
         <div className={styles["displayed-image"]}>
@@ -50,7 +102,11 @@ function HomeMain({ categories, products }) {
         <h2>{displayedProduct.title}</h2>
        </div>
        <div className={styles["carousel-item-wrapper"]}>
-        <div className={styles["loading-bar"]}></div>
+        <CarouselLoading
+         key={displayedProduct.id}
+         loadingDuration={loadingDuration}
+         className={styles["loading-bar"]}
+        ></CarouselLoading>
         {products.slice(0, 3).map((product) => (
          <div
           key={product.id}

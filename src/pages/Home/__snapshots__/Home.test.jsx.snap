@@ -11,28 +11,26 @@ exports[`Home Page Test > Renders Home Page 1`] = `
         data-testid="products-carousel-section"
       >
         <div
-          class="_item-display_716e15"
+          class="_item-display_716e15 "
         >
           <div
             class="_displayed-image_716e15"
           >
             <img
-              alt="product-1"
-              src="/image/product-1.png"
+              alt=""
+              src=""
             />
           </div>
-          <h2>
-            product-1
-          </h2>
+          <h2 />
         </div>
         <div
           class="_carousel-item-wrapper_716e15"
         >
           <div
-            class="_loading-bar_716e15"
+            class="sc-KXCwU bGPffd _loading-bar_716e15"
           />
           <div
-            class="_carousel-item_716e15 _active_716e15"
+            class="_carousel-item_716e15 __716e15"
           >
             <div
               class="_image-wrapper_716e15"
@@ -162,7 +160,7 @@ exports[`Home Page Test > Renders Home Page 1`] = `
       >
         <img
           alt="Call to Action Background"
-          src="/image/product-5.png"
+          src="/image/product-3.png"
         />
       </div>
     </div>
