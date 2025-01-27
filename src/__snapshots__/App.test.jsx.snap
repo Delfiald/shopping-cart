@@ -282,13 +282,43 @@ exports[`It Render App > render app 1`] = `
     <div
       class="_call-to-action_716e15"
     >
-      <img
-        alt="Call to Action Background"
-        src=""
-      />
-      <button>
-        Shop Now
-      </button>
+      <div
+        class="_cta-wrapper_716e15"
+      >
+        <div
+          class="_premises-text_716e15"
+        >
+          <h2>
+            Don’t miss out on exclusive deals!
+          </h2>
+          <div>
+            Tap the button and start your shopping journey
+          </div>
+        </div>
+        <button
+          class="_cta-button_716e15"
+          data-testid="cta-button"
+        >
+          <div
+            class="_displayed_716e15"
+          >
+            Shop Now
+          </div>
+          <div
+            class="_hovered_716e15"
+          >
+            Shop Now
+          </div>
+        </button>
+      </div>
+      <div
+        class="_cta-background-wrapper_716e15"
+      >
+        <img
+          alt="Call to Action Background"
+          src=""
+        />
+      </div>
     </div>
   </main>
   <section

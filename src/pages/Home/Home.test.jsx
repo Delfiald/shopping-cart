@@ -61,7 +61,7 @@ describe("Home Page Test", () => {
   const event = userEvent.setup();
   render(<MockRouter />);
 
-  const ctaButton = screen.getByRole("button", { name: "Shop Now" });
+  const ctaButton = screen.getByTestId("cta-button");
   expect(ctaButton).toBeInTheDocument();
 
   await event.click(ctaButton);

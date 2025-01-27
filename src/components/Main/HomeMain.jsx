@@ -75,15 +75,41 @@ function HomeMain({ categories, products }) {
     <h2>Categories</h2>
     {categories &&
      categories.map((category, index) => (
-      <div key={index}>
-       <img src="" alt={category} />
+      <div
+       key={index}
+       className={styles.category}
+       onClick={() => navigate(`/shop?category=${category}`)}
+      >
+       <img src={`Categories/${category}.jpg`} alt={category} />
        <h3>{category}</h3>
       </div>
      ))}
    </div>
    <div className={styles["call-to-action"]}>
-    <img src="" alt="Call to Action Background" />
-    <button onClick={() => navigate("/shop")}>Shop Now</button>
+    <div className={styles["cta-wrapper"]}>
+     <div className={styles["premises-text"]}>
+      <h2>{`Don’t miss out on exclusive deals!`}</h2>
+      <div>Tap the button and start your shopping journey</div>
+     </div>
+     <button
+      data-testid="cta-button"
+      className={styles["cta-button"]}
+      onClick={() => navigate("/shop")}
+     >
+      <div className={styles["displayed"]}>Shop Now</div>
+      <div className={styles["hovered"]}>Shop Now</div>
+     </button>
+    </div>
+    <div className={styles["cta-background-wrapper"]}>
+     <img
+      src={
+       products.length > 0
+        ? products[Math.floor(Math.random() * products.length)].image
+        : ""
+      }
+      alt="Call to Action Background"
+     />
+    </div>
    </div>
   </main>
  );

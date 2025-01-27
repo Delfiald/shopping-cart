@@ -80,37 +80,45 @@ exports[`Home Page Test > Renders Home Page 1`] = `
       <h2>
         Categories
       </h2>
-      <div>
+      <div
+        class="_category_716e15"
+      >
         <img
           alt="category-1"
-          src=""
+          src="Categories/category-1.jpg"
         />
         <h3>
           category-1
         </h3>
       </div>
-      <div>
+      <div
+        class="_category_716e15"
+      >
         <img
           alt="category-2"
-          src=""
+          src="Categories/category-2.jpg"
         />
         <h3>
           category-2
         </h3>
       </div>
-      <div>
+      <div
+        class="_category_716e15"
+      >
         <img
           alt="category-3"
-          src=""
+          src="Categories/category-3.jpg"
         />
         <h3>
           category-3
         </h3>
       </div>
-      <div>
+      <div
+        class="_category_716e15"
+      >
         <img
           alt="category-4"
-          src=""
+          src="Categories/category-4.jpg"
         />
         <h3>
           category-4
@@ -120,13 +128,43 @@ exports[`Home Page Test > Renders Home Page 1`] = `
     <div
       class="_call-to-action_716e15"
     >
-      <img
-        alt="Call to Action Background"
-        src=""
-      />
-      <button>
-        Shop Now
-      </button>
+      <div
+        class="_cta-wrapper_716e15"
+      >
+        <div
+          class="_premises-text_716e15"
+        >
+          <h2>
+            Don’t miss out on exclusive deals!
+          </h2>
+          <div>
+            Tap the button and start your shopping journey
+          </div>
+        </div>
+        <button
+          class="_cta-button_716e15"
+          data-testid="cta-button"
+        >
+          <div
+            class="_displayed_716e15"
+          >
+            Shop Now
+          </div>
+          <div
+            class="_hovered_716e15"
+          >
+            Shop Now
+          </div>
+        </button>
+      </div>
+      <div
+        class="_cta-background-wrapper_716e15"
+      >
+        <img
+          alt="Call to Action Background"
+          src="/image/product-5.png"
+        />
+      </div>
     </div>
   </main>
 </div>
