@@ -13,6 +13,7 @@ main {
 /* Home */
 .home {
  grid-column: 1 / -1;
+ gap: 2rem;
 }
 
 .hero {
@@ -483,7 +484,7 @@ main {
 }
 
 .card {
- height: 500px;
+ height: 450px;
  display: grid;
  grid-template-columns: 1fr;
  grid-template-rows: 1fr 100px min-content;
@@ -492,8 +493,10 @@ main {
  gap: 0.5rem;
  flex-direction: column;
  border: 1px solid var(--light-500-color);
- padding: 1rem;
+ padding: 0.5rem;
  border-radius: 10px;
+ background: var(--light-100-color);
+ box-shadow: 0px 2px 8px var(--light-500-color);
 }
 
 .card .image-wrapper {
@@ -502,6 +505,18 @@ main {
  align-items: center;
  justify-content: center;
  overflow: hidden;
+ border: 1px solid var(--light-500-color);
+ border-radius: 10px;
+ padding: 1rem;
+ align-self: stretch;
+ background: var(--light-color);
+ box-shadow: 0px 1px 3px var(--light-500-color);
+ transition: var(--transition-medium);
+ transform-origin: top center;
+}
+
+.card:hover .image-wrapper {
+ transform: perspective(1500px) rotateX(10deg);
 }
 
 .card .image-wrapper img {
@@ -511,6 +526,10 @@ main {
 
 .card .product-name {
  font-size: 0.9rem;
+}
+
+.card .product-price {
+ font-weight: bold;
 }
 
 .product-list-bottom,
@@ -542,6 +561,13 @@ main {
  display: flex;
  align-items: center;
  justify-content: center;
+ transition: var(--transition-medium);
+}
+
+.pagination .prev-button:hover,
+.pagination .next-button:hover {
+ background: var(--dark-color);
+ color: var(--light-color);
 }
 
 .pagination .prev-button {
@@ -568,6 +594,32 @@ main {
  border: 1px solid var(--light-500-color);
  border-radius: 10px;
  cursor: pointer;
+ position: relative;
+ transition: var(--transition-medium);
+ z-index: 1;
+ overflow: hidden;
+}
+
+.pagination .number-button > div:hover {
+ color: var(--light-color);
+}
+
+.pagination .number-button > div::before {
+ content: "";
+ position: absolute;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ background: var(--dark-color);
+ transform-origin: bottom;
+ transform: scaleY(0);
+ transition: var(--transition-medium);
+ z-index: -1;
+}
+
+.pagination .number-button > div:hover::before {
+ transform: scaleY(1);
 }
 
 .pagination .active {

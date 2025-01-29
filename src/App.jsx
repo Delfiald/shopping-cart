@@ -61,10 +61,14 @@ function App() {
 
  const ScrollToTop = () => {
   const { pathname } = useLocation();
+  const [previousPath, setPreviousPath] = useState(pathname);
 
   useEffect(() => {
-   window.scrollTo(0, 0);
-  }, [pathname]);
+   if (previousPath !== pathname) {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    setPreviousPath(pathname);
+   }
+  }, [pathname, previousPath]);
 
   return null;
  };
