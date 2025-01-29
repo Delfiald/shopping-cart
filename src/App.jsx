@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Footer from "./components/Footer/Footer";
 import { fetchData } from "./services/fakeStoreAPI";
 import Header from "./components/Header/Header";
@@ -59,6 +59,16 @@ function App() {
   }
  }, []);
 
+ const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+   window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+ };
+
  return (
   <>
    <Header
@@ -72,6 +82,7 @@ function App() {
     searchInput={searchInput}
     setSearchInput={setSearchInput}
    />
+   <ScrollToTop />
    <Outlet
     context={{
      categories,

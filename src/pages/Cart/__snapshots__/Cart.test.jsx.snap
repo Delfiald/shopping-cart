@@ -2,7 +2,9 @@
 
 exports[`Test Cart Page > Should Render Cart Page 1`] = `
 <div>
-  <main>
+  <main
+    class="_cart_716e15"
+  >
     <h2>
       Cart
     </h2>

@@ -396,7 +396,7 @@ function WishlistMain({
   : products;
 
  return (
-  <main>
+  <main className={styles.wishlist}>
    <h2>Wishlist</h2>
    {products && (
     <WishlistListHeader

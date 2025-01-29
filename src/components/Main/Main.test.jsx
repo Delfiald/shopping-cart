@@ -240,7 +240,7 @@ describe("Test Main component of Shop", () => {
   ).toBeInTheDocument();
   expect(screen.getByAltText(mockProducts[0].title)).toBeInTheDocument();
   expect(screen.getByText(mockProducts[0].title)).toBeInTheDocument();
-  expect(screen.getByText(mockProducts[0].price)).toBeInTheDocument();
+  expect(screen.getByText(/100/i)).toBeInTheDocument();
  });
 
  it("Should Route to Product Page when clicked Product", async () => {
@@ -514,7 +514,7 @@ describe("Test Main component of Shop", () => {
   expect(lastPageButton).toHaveTextContent("5");
  });
 
- it("Should Render Item Per Page Downdown and Change Value", async () => {
+ it("Should Render Item Per Page Dropdown and Change Value", async () => {
   const event = userEvent.setup();
 
   render(<DropdownTest />);
@@ -623,11 +623,11 @@ describe("Test Main component of Shop", () => {
   const categoriesButtonLists = screen.getByTestId("category-lists");
   expect(categoriesButtonLists).toBeInTheDocument();
   expect(categoriesButtonLists.children).toHaveLength(4);
-  expect(categoriesButtonLists.children[0]).toHaveTextContent("category-1");
+  expect(categoriesButtonLists.children[0]).toHaveTextContent("Category-1");
 
   await user.click(screen.getByTestId("category-button-0"));
 
-  shopMainTitle = screen.getByRole("heading", { name: "category-1" });
+  shopMainTitle = screen.getByRole("heading", { name: "Category-1" });
   expect(shopMainTitle).toBeInTheDocument();
 
   expect(screen.getByTestId("product-card-1")).toBeInTheDocument();
@@ -713,7 +713,7 @@ describe("Test Main component of Product", () => {
   await user.click(categoriesButton);
 
   expect(
-   screen.getByRole("heading", { name: mockProducts[0].category })
+   screen.getByRole("heading", { name: "Category-1" })
   ).toBeInTheDocument();
  });
 

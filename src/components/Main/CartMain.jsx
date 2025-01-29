@@ -222,7 +222,7 @@ function CartMain({
 
  return (
   <>
-   <main>
+   <main className={styles.cart}>
     <h2>Cart</h2>
     <CartContents
      setCartItem={setCartItem}

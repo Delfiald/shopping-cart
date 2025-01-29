@@ -2,7 +2,9 @@
 
 exports[`Home Page Test > Renders Home Page 1`] = `
 <div>
-  <main>
+  <main
+    class="_home_716e15"
+  >
     <div
       class="_hero_716e15"
     >
@@ -160,7 +162,7 @@ exports[`Home Page Test > Renders Home Page 1`] = `
       >
         <img
           alt="Call to Action Background"
-          src="/image/product-3.png"
+          src="/image/product-4.png"
         />
       </div>
     </div>

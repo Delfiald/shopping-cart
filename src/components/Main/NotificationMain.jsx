@@ -144,7 +144,7 @@ function NotificationMain({
  };
 
  return (
-  <main>
+  <main className={styles.notification}>
    <h2>Notifications</h2>
    <div
     data-testid="marks-all-read"

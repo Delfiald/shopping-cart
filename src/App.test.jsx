@@ -8,7 +8,7 @@ import Home from "./pages/Home/Home";
 import PropTypes from "prop-types";
 import ErrorPage from "./router/ErrorPage";
 import userEvent from "@testing-library/user-event";
-import { expect } from "vitest";
+import { beforeAll, expect } from "vitest";
 
 const MockRouter = ({ initialPath = "/" }) => {
  return (
@@ -31,6 +31,9 @@ MockRouter.propTypes = {
 };
 
 describe("It Render App", () => {
+ beforeAll(() => {
+  globalThis.window.scrollTo = vi.fn();
+ });
  it("render app", () => {
   const { container } = render(<MockRouter />);
   expect(container).toMatchSnapshot();

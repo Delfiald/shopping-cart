@@ -2,7 +2,9 @@
 
 exports[`Test Product Page > Should Render Product Page Component 1`] = `
 <div>
-  <main>
+  <main
+    class="_product_716e15"
+  >
     <div
       class="_breadcrumb_716e15"
       data-testid="breadcrumb"

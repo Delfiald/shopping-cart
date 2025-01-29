@@ -21,7 +21,7 @@ exports[`It Render App > render app 1`] = `
         </h1>
       </div>
       <div
-        class="sc-KXCwU iXASSf _search-container_d33141"
+        class="sc-KXCwU bVINFz _search-container_d33141"
       >
         <label
           for="search"
@@ -262,7 +262,9 @@ exports[`It Render App > render app 1`] = `
       class="sc-gyycJP fctqsH _header-overlay_d33141"
     />
   </header>
-  <main>
+  <main
+    class="_home_716e15"
+  >
     <div
       class="_hero_716e15"
     >

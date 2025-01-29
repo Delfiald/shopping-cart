@@ -11,6 +11,10 @@ main {
 }
 
 /* Home */
+.home {
+ grid-column: 1 / -1;
+}
+
 .hero {
  height: calc(100vh - 90px - 2rem);
  width: 100%;
@@ -355,4 +359,228 @@ main {
  width: 100%;
  height: 100%;
  object-fit: contain;
+}
+
+/* Shop */
+.shop {
+ grid-column: 2 / -1;
+}
+
+.shop h2 {
+ align-self: start;
+ font-size: 2rem;
+}
+
+.shop .product-list-header {
+ width: 100%;
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+}
+
+.shop .product-list-header > div {
+ flex: 1;
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+}
+
+.shop .option-wrapper {
+ display: grid;
+ grid-template-columns: 150px 130px;
+ align-items: center;
+ justify-content: center;
+ gap: 1rem;
+}
+
+.shop .option-wrapper .sort-button,
+.shop .option-wrapper .item-per-page {
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ gap: 0.5rem;
+ cursor: pointer;
+ border: 1px solid var(--light-500-color);
+ border-radius: 10px;
+ position: relative;
+}
+
+.shop .option-wrapper .sort-button > div,
+.shop .option-wrapper .item-per-page > div {
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ gap: 0.5rem;
+ padding: 0.5rem;
+ white-space: nowrap;
+}
+
+.shop .option-wrapper .sort-button .dropdown-wrapper,
+.shop .option-wrapper .item-per-page .dropdown-wrapper {
+ position: absolute;
+ top: 100%;
+ left: 0;
+ width: 100%;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ flex-direction: column;
+ gap: 0.5rem;
+ z-index: 1;
+ background: var(--light-color);
+ border: 1px solid var(--light-500-color);
+ border-radius: 10px;
+ transform-origin: top;
+ animation: dropdown-down 0.3s ease forwards;
+}
+
+.shop .option-wrapper .sort-button .dropdown-wrapper > div,
+.shop .option-wrapper .item-per-page .dropdown-wrapper > div {
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ width: 100%;
+}
+
+.shop .option-wrapper .sort-button .dropdown-wrapper > div > div,
+.shop .option-wrapper .item-per-page .dropdown-wrapper > div > div {
+ position: relative;
+}
+
+.shop .option-wrapper .sort-button .dropdown-wrapper > div > div::before,
+.shop .option-wrapper .item-per-page .dropdown-wrapper > div > div::before {
+ position: absolute;
+ content: "";
+ bottom: 0;
+ left: 0;
+ width: 100%;
+ height: 2px;
+ background: var(--dark-color);
+ transform-origin: right;
+ transform: scaleX(0);
+ opacity: 0;
+ transition: 0.3s transform ease, 0.3s opacity ease;
+}
+
+.shop .option-wrapper .sort-button .dropdown-wrapper > div:hover > div::before,
+.shop
+ .option-wrapper
+ .item-per-page
+ .dropdown-wrapper
+ > div:hover
+ > div::before {
+ transform-origin: left;
+ transform: scaleX(1);
+ opacity: 1;
+}
+
+.product-list-wrapper {
+ display: grid;
+ grid-template-columns: repeat(4, 1fr);
+ justify-content: center;
+ align-items: stretch;
+ gap: 1rem;
+}
+
+.card {
+ height: 500px;
+ display: grid;
+ grid-template-columns: 1fr;
+ grid-template-rows: 1fr 100px min-content;
+ align-items: start;
+ justify-content: start;
+ gap: 0.5rem;
+ flex-direction: column;
+ border: 1px solid var(--light-500-color);
+ padding: 1rem;
+ border-radius: 10px;
+}
+
+.card .image-wrapper {
+ align-self: center;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ overflow: hidden;
+}
+
+.card .image-wrapper img {
+ width: 80%;
+ object-fit: contain;
+}
+
+.card .product-name {
+ font-size: 0.9rem;
+}
+
+.product-list-bottom,
+.wishlist-list-bottom {
+ width: 100%;
+}
+
+.pagination {
+ width: 100%;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ position: relative;
+}
+
+.pagination .arrow-button {
+ display: flex;
+ align-items: center;
+ justify-content: center;
+}
+
+.pagination .prev-button,
+.pagination .next-button {
+ position: absolute;
+ top: 50%;
+ transform: translateY(-50%);
+ height: 50px;
+ width: 50px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+}
+
+.pagination .prev-button {
+ left: 0;
+}
+
+.pagination .next-button {
+ right: 0;
+}
+
+.pagination .number-button {
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ gap: 0.5rem;
+}
+
+.pagination .number-button > div {
+ width: 50px;
+ height: 50px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ border: 1px solid var(--light-500-color);
+ border-radius: 10px;
+ cursor: pointer;
+}
+
+.pagination .active {
+ background: var(--dark-color);
+ color: var(--light-color);
+}
+
+@keyframes dropdown-down {
+ 0% {
+  transform: translateX(0) scaleY(0);
+ }
+
+ 100% {
+  transform: translateX(0) scaleY(1);
+ }
 }

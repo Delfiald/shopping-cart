@@ -64,11 +64,11 @@ body {
 }
 
 #root {
- display: flex;
+ position: relative;
+ display: grid;
+ grid-template-columns: repeat(2, auto);
  align-items: center;
  justify-content: center;
- flex-direction: column;
- position: relative;
 }
 
 #root > * {

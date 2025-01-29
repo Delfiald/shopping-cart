@@ -5,13 +5,14 @@ import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { removeItem, setItem } from "../../utils/localStorage";
 import styled from "styled-components";
+import formatText from "../../utils/formatText";
 
 const SearchContainer = styled.div`
- &:focus-within {
+ &:has(input:focus) {
   color: #000;
  }
 
- &:focus-within::before {
+ &:has(input:focus)::before {
   transform: translate(0, -50%) scaleX(1);
  }
 `;
@@ -219,7 +220,7 @@ function Header({
             <div className={styles.subtotal}>
              <p className={styles.amount}>{item.amount}</p>
              <X size={16} />
-             <p className={styles.price}>{item.price}</p>
+             <p className={styles.price}>{formatText.priceText(item.price)}</p>
             </div>
            </div>
           ))}
@@ -375,7 +376,9 @@ function Header({
              <img src={item.image} alt={item.title} />
             </div>
             <div className={styles.title}>{item.title}</div>
-            <div className={styles.price}>{item.price}</div>
+            <div className={styles.price}>
+             {formatText.priceText(item.price)}
+            </div>
            </div>
           ))}
          </div>

@@ -45,7 +45,7 @@ const generateMockNotification = (num) => {
 const generateMockCategories = (num) => {
  const mockCategories = [];
  for (let i = 1; i <= num; i++) {
-  mockCategories.push([`category-${i}`]);
+  mockCategories.push(`category-${i}`);
  }
 
  return mockCategories;

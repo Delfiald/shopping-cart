@@ -252,7 +252,7 @@ function ProductMain({ product, setCartItem, wishlistItem, setWishlistItem }) {
  };
 
  return (
-  <main>
+  <main className={styles.product}>
    <div data-testid="breadcrumb" className={styles.breadcrumb}>
     <div onClick={handleNavigate}>Home</div>
     <ChevronRight size={16} />

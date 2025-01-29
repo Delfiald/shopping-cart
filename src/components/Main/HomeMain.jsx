@@ -31,6 +31,7 @@ function HomeMain({ categories, products }) {
  });
  const [loadingDuration, setLoadingDuration] = useState("7.5s");
  const [fadeIn, setFadeIn] = useState(false);
+ const [ctaProductIndex, setCtaProductIndex] = useState(null);
 
  const handleDisplayedProduct = (
   displayedId,
@@ -78,14 +79,18 @@ function HomeMain({ categories, products }) {
   if (products.length > 0) {
    const intervalId = startCarousel();
 
+   if (ctaProductIndex === null) {
+    setCtaProductIndex(Math.floor(Math.random() * products.length));
+   }
+
    return () => {
     clearInterval(intervalId);
    };
   }
- }, [displayedProduct.id, products]);
+ }, [ctaProductIndex, displayedProduct.id, products]);
 
  return (
-  <main>
+  <main className={styles.home}>
    <div className={styles.hero}>
     <div data-testid="products-carousel-section" className={styles.carousel}>
      {products && products.length > 0 && (
@@ -159,8 +164,8 @@ function HomeMain({ categories, products }) {
     <div className={styles["cta-background-wrapper"]}>
      <img
       src={
-       products.length > 0
-        ? products[Math.floor(Math.random() * products.length)].image
+       products.length > 0 && ctaProductIndex !== null
+        ? products[ctaProductIndex].image
         : ""
       }
       alt="Call to Action Background"
