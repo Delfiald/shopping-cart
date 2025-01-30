@@ -48,7 +48,7 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
         />
       </svg>
       <div>
-        category-2
+        Category-2
       </div>
       <svg
         class="lucide lucide-chevron-right"
@@ -68,7 +68,9 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
       </svg>
       product-1
     </div>
-    <main>
+    <div
+      class="_product-overview_716e15"
+    >
       <section
         class="_media_716e15"
       >
@@ -90,13 +92,13 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
             <svg
               class="lucide lucide-chevron-left"
               fill="none"
-              height="16"
+              height="24"
               stroke="currentColor"
               stroke-linecap="round"
               stroke-linejoin="round"
               stroke-width="2"
               viewBox="0 0 24 24"
-              width="16"
+              width="24"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
@@ -150,13 +152,13 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
             <svg
               class="lucide lucide-chevron-right"
               fill="none"
-              height="16"
+              height="24"
               stroke="currentColor"
               stroke-linecap="round"
               stroke-linejoin="round"
               stroke-width="2"
               viewBox="0 0 24 24"
-              width="16"
+              width="24"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
@@ -180,7 +182,7 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
           <div
             class="_product-price_716e15"
           >
-            110
+            $110
           </div>
         </div>
         <div
@@ -190,13 +192,13 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
             class="_detail-option_716e15"
           >
             <div
-              class="_detail-button_716e15"
+              class="_detail-button_716e15 _active_716e15"
               data-testid="detail-button"
             >
               Detail
             </div>
             <div
-              class="_info-button_716e15"
+              class="_info-button_716e15 __716e15"
               data-testid="info-button"
             >
               Important Information
@@ -216,8 +218,10 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
               <div
                 class="_product-category_716e15"
               >
-                Category: 
-                category-2
+                Category:
+                <div>
+                  Category-2
+                </div>
               </div>
               <div
                 class="_product-description_716e15"
@@ -300,7 +304,7 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
             </button>
           </div>
           <div
-            class="_sub-total_716e15"
+            class="_subtotal_716e15"
           >
             <p>
               Subtotal
@@ -308,43 +312,18 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
             <p
               data-testid="subtotal"
             >
-              $ 110
+              $110
             </p>
           </div>
           <button
             class="_add-to-cart_716e15"
             data-testid="add-to-cart"
           >
-            <svg
-              class="lucide lucide-plus"
-              fill="none"
-              height="16"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-              width="16"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M5 12h14"
-              />
-              <path
-                d="M12 5v14"
-              />
-            </svg>
-            Add to Cart
-          </button>
-          <div
-            class="_actions_716e15"
-          >
             <div
-              class="_wishlist_716e15 _inactive_716e15"
-              data-testid="wishlist-button"
+              class="_displayed_716e15"
             >
               <svg
-                class="lucide lucide-heart"
+                class="lucide lucide-plus"
                 fill="none"
                 height="16"
                 stroke="currentColor"
@@ -356,9 +335,66 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+                  d="M5 12h14"
+                />
+                <path
+                  d="M12 5v14"
                 />
               </svg>
+              Add to Cart
+            </div>
+            <div
+              class="_hovered_716e15"
+            >
+              <svg
+                class="lucide lucide-plus"
+                fill="none"
+                height="16"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M5 12h14"
+                />
+                <path
+                  d="M12 5v14"
+                />
+              </svg>
+              Add to Cart
+            </div>
+          </button>
+          <div
+            class="_actions_716e15"
+          >
+            <div
+              class="_wishlist_716e15 _inactive_716e15"
+              data-testid="wishlist-button"
+            >
+              <div
+                class="_heart-icon_716e15"
+              >
+                <svg
+                  class="lucide lucide-heart"
+                  fill="none"
+                  height="16"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+                  />
+                </svg>
+              </div>
               Wishlist
             </div>
             <div
@@ -394,7 +430,7 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
           </div>
         </div>
       </aside>
-    </main>
+    </div>
   </main>
 </div>
 `;

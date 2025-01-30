@@ -706,7 +706,7 @@ describe("Test Main component of Product", () => {
   const productTitle = screen.getByTestId("breadcrumb");
   expect(productTitle).toBeInTheDocument();
 
-  const categoriesButton = screen.getByText(mockProducts[0].category);
+  const categoriesButton = screen.getAllByText("Category-1")[0];
   expect(categoriesButton).toBeInTheDocument();
 
   // Route to Category By clicking Category Button in Breadcrumb

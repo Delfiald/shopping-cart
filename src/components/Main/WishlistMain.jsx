@@ -116,8 +116,7 @@ function WishlistListHeader(props) {
       Math.min(props.page * props.itemPerPage, props.totalProducts)
      } products`}
     </div>
-    <div className={styles["sort-wrapper"]}>
-     <p>Sort:</p>
+    <div className={styles["option-wrapper"]}>
      <div
       data-testid="sort-button"
       className={styles["sort-button"]}
@@ -138,72 +137,76 @@ function WishlistListHeader(props) {
          data-testid="sort-option-1"
          onClick={() => props.setSort("name-asc")}
         >
-         Name Asc
+         <div>Name Asc</div>
         </div>
         <div
          data-testid="sort-option-2"
          onClick={() => props.setSort("name-desc")}
         >
-         Name Desc
+         <div>Name Desc</div>
         </div>
         <div
          data-testid="sort-option-3"
          onClick={() => props.setSort("price-asc")}
         >
-         Lowest Price
+         <div>Lowest Price</div>
         </div>
         <div
          data-testid="sort-option-4"
          onClick={() => props.setSort("price-desc")}
         >
-         Highest Price
+         <div>Highest Price</div>
         </div>
        </div>
       )}
      </div>
-    </div>
-    <div
-     data-testid="item-per-page"
-     className={styles["item-per-page"]}
-     onMouseEnter={() => props.setHoverButton("item-per-page")}
-     onMouseLeave={handleMouseLeave}
-    >
      <div
-      data-testid="item-per-page-value"
-      className={styles["item-per-page-value"]}
+      data-testid="item-per-page"
+      className={styles["item-per-page"]}
+      onMouseEnter={() => props.setHoverButton("item-per-page")}
+      onMouseLeave={handleMouseLeave}
      >
-      <p>{!Number.isNaN(props.itemPerPage) ? props.itemPerPage : "Show All"}</p>
-      {props.hoverButton && props.hoverButton === "item-per-page" ? (
-       <ChevronUp size={16} />
-      ) : (
-       <ChevronDown size={16} />
+      <div
+       data-testid="item-per-page-value"
+       className={styles["item-per-page-value"]}
+      >
+       <p>
+        {!Number.isNaN(parseInt(props.itemPerPage))
+         ? props.itemPerPage
+         : "Show All"}
+       </p>
+       {props.hoverButton && props.hoverButton === "item-per-page" ? (
+        <ChevronUp size={16} />
+       ) : (
+        <ChevronDown size={16} />
+       )}
+      </div>
+      {props.hoverButton && props.hoverButton === "item-per-page" && (
+       <div
+        data-testid="item-per-page-dropdown"
+        className={styles["dropdown-wrapper"]}
+       >
+        <div
+         data-testid="item-per-page-option-1"
+         onClick={() => handleItemPerPageDropdown(ITEM_PER_PAGE.FIVE)}
+        >
+         <div>5</div>
+        </div>
+        <div
+         data-testid="item-per-page-option-2"
+         onClick={() => handleItemPerPageDropdown(ITEM_PER_PAGE.TEN)}
+        >
+         <div>10</div>
+        </div>
+        <div
+         data-testid="item-per-page-option-3"
+         onClick={() => handleItemPerPageDropdown(ITEM_PER_PAGE.SHOW_ALL)}
+        >
+         <div>Show All</div>
+        </div>
+       </div>
       )}
      </div>
-     {props.hoverButton && props.hoverButton === "item-per-page" && (
-      <div
-       data-testid="item-per-page-dropdown"
-       className={styles["dropdown-wrapper"]}
-      >
-       <div
-        data-testid="item-per-page-option-1"
-        onClick={() => handleItemPerPageDropdown(ITEM_PER_PAGE.FIVE)}
-       >
-        5
-       </div>
-       <div
-        data-testid="item-per-page-option-2"
-        onClick={() => handleItemPerPageDropdown(ITEM_PER_PAGE.TEN)}
-       >
-        10
-       </div>
-       <div
-        data-testid="item-per-page-option-3"
-        onClick={() => handleItemPerPageDropdown(ITEM_PER_PAGE.SHOW_ALL)}
-       >
-        Show All
-       </div>
-      </div>
-     )}
     </div>
    </div>
   </div>

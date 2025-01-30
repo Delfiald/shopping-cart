@@ -20,11 +20,8 @@ exports[`Test Wishlist Page > Should Render Wishlist Page 1`] = `
           Showing 1 - 2 products
         </div>
         <div
-          class="_sort-wrapper_716e15"
+          class="_option-wrapper_716e15"
         >
-          <p>
-            Sort:
-          </p>
           <div
             class="_sort-button_716e15"
             data-testid="sort-button"
@@ -53,34 +50,34 @@ exports[`Test Wishlist Page > Should Render Wishlist Page 1`] = `
               </svg>
             </div>
           </div>
-        </div>
-        <div
-          class="_item-per-page_716e15"
-          data-testid="item-per-page"
-        >
           <div
-            class="_item-per-page-value_716e15"
-            data-testid="item-per-page-value"
+            class="_item-per-page_716e15"
+            data-testid="item-per-page"
           >
-            <p>
-              10
-            </p>
-            <svg
-              class="lucide lucide-chevron-down"
-              fill="none"
-              height="16"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-              width="16"
-              xmlns="http://www.w3.org/2000/svg"
+            <div
+              class="_item-per-page-value_716e15"
+              data-testid="item-per-page-value"
             >
-              <path
-                d="m6 9 6 6 6-6"
-              />
-            </svg>
+              <p>
+                10
+              </p>
+              <svg
+                class="lucide lucide-chevron-down"
+                fill="none"
+                height="16"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m6 9 6 6 6-6"
+                />
+              </svg>
+            </div>
           </div>
         </div>
       </div>

@@ -12,6 +12,7 @@ import PropTypes from "prop-types";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { setItem } from "../../utils/localStorage";
+import formatText from "../../utils/formatText";
 
 function Media(props) {
  const trackRef = useRef(null);
@@ -38,7 +39,7 @@ function Media(props) {
    </div>
    <div className={styles["image-carousel"]}>
     <div className={styles["left-arrow"]} onClick={handleScrollLeft}>
-     <ChevronLeft size={16} />
+     <ChevronLeft size={24} />
     </div>
     {/* Use Map if Image more than one (in an array) */}
     <div className={styles["carousel-track"]} ref={trackRef}>
@@ -80,7 +81,7 @@ function Media(props) {
      </div>
     </div>
     <div className={styles["right-arrow"]} onClick={handleScrollRight}>
-     <ChevronRight size={16} />
+     <ChevronRight size={24} />
     </div>
    </div>
   </section>
@@ -92,20 +93,26 @@ function Detail(props) {
   <section className={styles.detail}>
    <div className={styles["top-detail"]}>
     <h2 className={styles["product-title"]}>{props.title}</h2>
-    <div className={styles["product-price"]}>{props.price}</div>
+    <div className={styles["product-price"]}>
+     {formatText.priceText(props.price)}
+    </div>
    </div>
    <div className={styles["main-detail"]}>
     <div className={styles["detail-option"]}>
      <div
       data-testid="detail-button"
-      className={styles["detail-button"]}
+      className={`${styles["detail-button"]} ${
+       styles[props.detail === "detail" ? "active" : ""]
+      }`}
       onClick={() => props.setDetail("detail")}
      >
       Detail
      </div>
      <div
       data-testid="info-button"
-      className={styles["info-button"]}
+      className={`${styles["info-button"]} ${
+       styles[props.detail === "info" ? "active" : ""]
+      }`}
       onClick={() => props.setDetail("info")}
      >
       Important Information
@@ -119,7 +126,10 @@ function Detail(props) {
         className={styles["product-category"]}
         onClick={() => props.handleNavigate(`/shop?category=${props.category}`)}
        >
-        Category: {props.category ? props.category : "-"}
+        Category:
+        <div>
+         {props.category ? formatText.capitalizedWords(props.category) : "-"}
+        </div>
        </div>
        <div className={styles["product-description"]}>{props.description}</div>
       </div>
@@ -172,17 +182,25 @@ function Option(props) {
       <Plus size={16} />
      </button>
     </div>
-    <div className={styles["sub-total"]}>
+    <div className={styles["subtotal"]}>
      <p>Subtotal</p>
-     <p data-testid="subtotal">{`$ ${props.price * props.amount}`}</p>
+     <p data-testid="subtotal">
+      {formatText.priceText(props.price * props.amount)}
+     </p>
     </div>
     <button
      data-testid="add-to-cart"
      className={styles["add-to-cart"]}
      onClick={props.handleAddToCart}
     >
-     <Plus size={16} />
-     Add to Cart
+     <div className={styles.displayed}>
+      <Plus size={16} />
+      Add to Cart
+     </div>
+     <div className={styles.hovered}>
+      <Plus size={16} />
+      Add to Cart
+     </div>
     </button>
     <div className={styles.actions}>
      <div
@@ -192,7 +210,12 @@ function Option(props) {
       }`}
       onClick={props.handleWishlistItem}
      >
-      <Heart size={16} />
+      <div className={styles["heart-icon"]}>
+       <Heart size={16} />
+       {props.isWishlistItem() && (
+        <Heart className={styles["active-icon"]} size={16} />
+       )}
+      </div>
       Wishlist
      </div>
      <div className={styles.share}>
@@ -241,6 +264,7 @@ function ProductMain({ product, setCartItem, wishlistItem, setWishlistItem }) {
  const handleWishlistItem = () => {
   setWishlistItem((prevWishlistItem) => {
    const exists = prevWishlistItem.find((item) => item.id === product.id);
+
    const updatedWishlist = exists
     ? prevWishlistItem.filter((item) => item.id !== product.id)
     : [...prevWishlistItem, { id: product.id }];
@@ -259,12 +283,12 @@ function ProductMain({ product, setCartItem, wishlistItem, setWishlistItem }) {
     <div onClick={() => handleNavigate("/shop")}>Shop</div>
     <ChevronRight size={16} />
     <div onClick={() => handleNavigate(`/shop?category=${product.category}`)}>
-     {product.category}
+     {formatText.capitalizedWords(product.category)}
     </div>
     <ChevronRight size={16} />
     {product.title}
    </div>
-   <main>
+   <div className={styles["product-overview"]}>
     <Media
      image={product.image}
      title={product.title}
@@ -290,7 +314,7 @@ function ProductMain({ product, setCartItem, wishlistItem, setWishlistItem }) {
      handleWishlistItem={handleWishlistItem}
      isWishlistItem={isWishlist}
     />
-   </main>
+   </div>
   </main>
  );
 }

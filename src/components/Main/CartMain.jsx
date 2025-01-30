@@ -62,81 +62,88 @@ function CartContents({
  return (
   <section className={styles["cart-contents"]}>
    <div data-testid="item-list" className={styles["item-list"]}>
-    {getCartDetails().map((cartItemProduct) => {
-     const isWishlist = wishlistItem.some(
-      (wishlist) => wishlist.id === cartItemProduct.id
-     );
-     return (
-      <div className={styles.item} key={cartItemProduct.id}>
-       {/* Product Image */}
-       <div
-        className={styles["product-image"]}
-        onClick={() => navigate(`/product/${cartItemProduct.id}`)}
-       >
-        <img src={cartItemProduct.image} alt={cartItemProduct.title} />
-       </div>
-
-       {/* Product Title */}
-       <div
-        className={styles["product-title"]}
-        onClick={() => navigate(`/product/${cartItemProduct.id}`)}
-       >
-        {cartItemProduct.title}
-       </div>
-
-       {/* Product Price */}
-       <div className={styles["product-price"]}>${cartItemProduct.price}</div>
-
-       {/* Product Options */}
-       <div className={styles["product-option"]}>
-        {/* Wishlist Button */}
+    {getCartDetails().length > 0 ? (
+     getCartDetails().map((cartItemProduct) => {
+      const isWishlist = wishlistItem.some(
+       (wishlist) => wishlist.id === cartItemProduct.id
+      );
+      return (
+       <div className={styles.item} key={cartItemProduct.id}>
+        {/* Product Image */}
         <div
-         data-testid={`wishlist-button-${cartItemProduct.id}`}
-         className={`${styles["wishlist-button"]} ${
-          styles[isWishlist ? "active" : "inactive"]
-         }`}
-         onClick={() => handleWishlistItem(cartItemProduct)}
+         className={styles["product-image"]}
+         onClick={() => navigate(`/product/${cartItemProduct.id}`)}
         >
-         <Heart size={16} />
+         <img src={cartItemProduct.image} alt={cartItemProduct.title} />
         </div>
 
-        {/* Remove Button */}
+        {/* Product Title */}
         <div
-         data-testid={`remove-button-${cartItemProduct.id}`}
-         className={styles["remove-button"]}
-         onClick={() => handleRemoveCart(cartItemProduct.id)}
+         className={styles["product-title"]}
+         onClick={() => navigate(`/product/${cartItemProduct.id}`)}
         >
-         <Trash size={16} />
+         {cartItemProduct.title}
         </div>
 
-        {/* Amount Control */}
-        <div className={styles["product-amount"]}>
-         <button
-          data-testid={`reduce-button-${cartItemProduct.id}`}
-          className={styles["reduce-button"]}
-          disabled={cartItemProduct.amount <= 1}
-          onClick={() => handleAmount(-1, cartItemProduct.id)}
-         >
-          <Minus size={16} />
-         </button>
+        {/* Product Price */}
+        <div className={styles["product-price"]}>${cartItemProduct.price}</div>
+
+        {/* Product Options */}
+        <div className={styles["product-option"]}>
+         {/* Wishlist Button */}
          <div
-          data-testid={`amount-${cartItemProduct.id}`}
-          className={styles.amount}
+          data-testid={`wishlist-button-${cartItemProduct.id}`}
+          className={`${styles["wishlist-button"]} ${
+           styles[isWishlist ? "active" : "inactive"]
+          }`}
+          onClick={() => handleWishlistItem(cartItemProduct)}
          >
-          {cartItemProduct.amount}
+          <Heart size={16} />
          </div>
-         <button
-          data-testid={`add-button-${cartItemProduct.id}`}
-          className={styles["add-button"]}
-          onClick={() => handleAmount(1, cartItemProduct.id)}
+
+         {/* Remove Button */}
+         <div
+          data-testid={`remove-button-${cartItemProduct.id}`}
+          className={styles["remove-button"]}
+          onClick={() => handleRemoveCart(cartItemProduct.id)}
          >
-          <Plus size={16} />
-         </button>
+          <Trash size={16} />
+         </div>
+
+         {/* Amount Control */}
+         <div className={styles["product-amount"]}>
+          <button
+           data-testid={`reduce-button-${cartItemProduct.id}`}
+           className={styles["reduce-button"]}
+           disabled={cartItemProduct.amount <= 1}
+           onClick={() => handleAmount(-1, cartItemProduct.id)}
+          >
+           <Minus size={16} />
+          </button>
+          <div
+           data-testid={`amount-${cartItemProduct.id}`}
+           className={styles.amount}
+          >
+           {cartItemProduct.amount}
+          </div>
+          <button
+           data-testid={`add-button-${cartItemProduct.id}`}
+           className={styles["add-button"]}
+           onClick={() => handleAmount(1, cartItemProduct.id)}
+          >
+           <Plus size={16} />
+          </button>
+         </div>
         </div>
        </div>
-      </div>
-     );
-    })}
+      );
+     })
+    ) : (
+     <div className={styles["empty-cart"]}>
+      <div>Your cart is empty. Start adding some products!</div>
+      <button onClick={() => navigate("/shop")}>Go to Shop</button>
+     </div>
+    )}
    </div>
   </section>
  );
