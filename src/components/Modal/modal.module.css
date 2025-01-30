@@ -1,0 +1,98 @@
+.buy-modal {
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ z-index: 2;
+}
+
+.buy-modal-wrapper {
+ position: relative;
+ width: 100%;
+ height: 100%;
+}
+
+.buy-modal-wrapper::before {
+ content: "";
+ position: absolute;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ background: var(--dark-color);
+ opacity: 0.5;
+}
+
+.buy-modal-wrapper .buy-modal-container {
+ position: absolute;
+ top: 50%;
+ left: 50%;
+ transform: translate(-50%, -50%);
+ padding: 1rem;
+ background: var(--light-color);
+ border-radius: 10px;
+ display: flex;
+ align-items: center;
+ justify-content: space-evenly;
+ flex-direction: column;
+ gap: 1rem;
+ min-height: 30vh;
+}
+
+.buy-modal-wrapper .buy-modal-container h3 {
+ align-content: start;
+ text-align: center;
+}
+
+.buy-modal-wrapper .buy-modal-container button {
+ font-size: 1rem;
+ font-weight: bold;
+ padding: 0.75rem 1.25rem;
+ position: relative;
+ overflow: hidden;
+}
+
+.buy-modal-wrapper .buy-modal-container button::before {
+ position: absolute;
+ content: "";
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ background: var(--dark-color);
+ transform: scaleY(0);
+ transform-origin: bottom;
+ transition: var(--transition-medium);
+}
+
+.buy-modal-wrapper .buy-modal-container button:hover::before {
+ transform: scaleY(1);
+}
+
+.buy-modal-wrapper .buy-modal-container button .displayed {
+ transform-origin: top;
+ transition: var(--transition-medium);
+}
+
+.buy-modal-wrapper .buy-modal-container button:hover .displayed {
+ transform: scaleY(0);
+}
+
+.buy-modal-wrapper .buy-modal-container button .hovered {
+ transform-origin: bottom;
+ position: absolute;
+ top: 50%;
+ left: 50%;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ transform: translate(-50%, -50%) scaleY(0);
+ transform-origin: bottom;
+ transition: var(--transition-medium);
+ color: var(--light-color);
+}
+
+.buy-modal-wrapper .buy-modal-container button:hover .hovered {
+ transform: translate(-50%, -50%) scaleY(1);
+}

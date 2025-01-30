@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { BuyModal } from "../Modal/Modal";
 import { format } from "date-fns";
 import { removeItem, setItem } from "../../utils/localStorage";
+import formatText from "../../utils/formatText";
 
 function CartContents({
  wishlistItem = [],
@@ -98,7 +99,10 @@ function CartContents({
           }`}
           onClick={() => handleWishlistItem(cartItemProduct)}
          >
-          <Heart size={16} />
+          <div className={styles["heart-icon"]}>
+           <Heart size={16} />
+           {isWishlist && <Heart className={styles["active-icon"]} size={16} />}
+          </div>
          </div>
 
          {/* Remove Button */}
@@ -107,7 +111,7 @@ function CartContents({
           className={styles["remove-button"]}
           onClick={() => handleRemoveCart(cartItemProduct.id)}
          >
-          <Trash size={16} />
+          <Trash size={18} />
          </div>
 
          {/* Amount Control */}
@@ -141,7 +145,13 @@ function CartContents({
     ) : (
      <div className={styles["empty-cart"]}>
       <div>Your cart is empty. Start adding some products!</div>
-      <button onClick={() => navigate("/shop")}>Go to Shop</button>
+      <button
+       onClick={() => navigate("/shop")}
+       className={styles["go-to-shop"]}
+      >
+       <div className={styles.displayed}>Go to Shop</div>
+       <div className={styles.hovered}>Go to Shop</div>
+      </button>
      </div>
     )}
    </div>
@@ -155,14 +165,18 @@ function Summary({ totalPrice, orderAmount, handleBuy }) {
    <div>Shopping Summary</div>
    <div className={styles.total}>
     <p>Total</p>
-    <div data-testid="total-price">{totalPrice()}</div>
+    <div data-testid="total-price" className={styles["total-price"]}>
+     {formatText.priceText(totalPrice())}
+    </div>
    </div>
    <button
     data-testid="buy-button"
     className={styles["buy-button"]}
     onClick={handleBuy}
+    disabled={orderAmount() === 0}
    >
-    Buy ({orderAmount()})
+    <div className={styles.displayed}>Buy ({orderAmount()})</div>
+    <div className={styles.hovered}>Buy ({orderAmount()})</div>
    </button>
   </section>
  );

@@ -84,7 +84,7 @@ function Wishlist() {
    JSON.stringify(updatedParams) !==
    JSON.stringify(Object.fromEntries(searchParams))
   ) {
-   setSearchParams(updatedParams);
+   setSearchParams(updatedParams, { replace: true });
   }
  }, [
   page,

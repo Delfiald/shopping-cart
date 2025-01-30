@@ -44,22 +44,42 @@ exports[`Test Cart Page > Should Render Cart Page 1`] = `
               class="_wishlist-button_716e15 _active_716e15"
               data-testid="wishlist-button-1"
             >
-              <svg
-                class="lucide lucide-heart"
-                fill="none"
-                height="16"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                viewBox="0 0 24 24"
-                width="16"
-                xmlns="http://www.w3.org/2000/svg"
+              <div
+                class="_heart-icon_716e15"
               >
-                <path
-                  d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
-                />
-              </svg>
+                <svg
+                  class="lucide lucide-heart"
+                  fill="none"
+                  height="16"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+                  />
+                </svg>
+                <svg
+                  class="lucide lucide-heart _active-icon_716e15"
+                  fill="none"
+                  height="16"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+                  />
+                </svg>
+              </div>
             </div>
             <div
               class="_remove-button_716e15"
@@ -68,13 +88,13 @@ exports[`Test Cart Page > Should Render Cart Page 1`] = `
               <svg
                 class="lucide lucide-trash"
                 fill="none"
-                height="16"
+                height="18"
                 stroke="currentColor"
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
                 viewBox="0 0 24 24"
-                width="16"
+                width="18"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
@@ -175,22 +195,42 @@ exports[`Test Cart Page > Should Render Cart Page 1`] = `
               class="_wishlist-button_716e15 _active_716e15"
               data-testid="wishlist-button-2"
             >
-              <svg
-                class="lucide lucide-heart"
-                fill="none"
-                height="16"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                viewBox="0 0 24 24"
-                width="16"
-                xmlns="http://www.w3.org/2000/svg"
+              <div
+                class="_heart-icon_716e15"
               >
-                <path
-                  d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
-                />
-              </svg>
+                <svg
+                  class="lucide lucide-heart"
+                  fill="none"
+                  height="16"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+                  />
+                </svg>
+                <svg
+                  class="lucide lucide-heart _active-icon_716e15"
+                  fill="none"
+                  height="16"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+                  />
+                </svg>
+              </div>
             </div>
             <div
               class="_remove-button_716e15"
@@ -199,13 +239,13 @@ exports[`Test Cart Page > Should Render Cart Page 1`] = `
               <svg
                 class="lucide lucide-trash"
                 fill="none"
-                height="16"
+                height="18"
                 stroke="currentColor"
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
                 viewBox="0 0 24 24"
-                width="16"
+                width="18"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
@@ -292,18 +332,30 @@ exports[`Test Cart Page > Should Render Cart Page 1`] = `
           Total
         </p>
         <div
+          class="_total-price_716e15"
           data-testid="total-price"
         >
-          230
+          $230
         </div>
       </div>
       <button
         class="_buy-button_716e15"
         data-testid="buy-button"
       >
-        Buy (
-        2
-        )
+        <div
+          class="_displayed_716e15"
+        >
+          Buy (
+          2
+          )
+        </div>
+        <div
+          class="_hovered_716e15"
+        >
+          Buy (
+          2
+          )
+        </div>
       </button>
     </section>
   </main>

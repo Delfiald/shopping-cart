@@ -361,8 +361,8 @@ header nav .search-container .search-button:hover::before {
  transform: translateX(6px);
 }
 
-.cart-items-wrapper > div::before,
-.wishlist-items-wrapper > div::before {
+.cart-items-wrapper > div::after,
+.wishlist-items-wrapper > div::after {
  position: absolute;
  content: "";
  top: 50%;
@@ -376,8 +376,8 @@ header nav .search-container .search-button:hover::before {
  opacity: 0;
 }
 
-.cart-items-wrapper > div:hover::before,
-.wishlist-items-wrapper > div:hover::before {
+.cart-items-wrapper > div:hover::after,
+.wishlist-items-wrapper > div:hover::after {
  transform: translate(-50%, -50%) scaleX(1);
  opacity: 1;
 }
@@ -425,8 +425,8 @@ header nav .search-container .search-button:hover::before {
  align-items: center;
  justify-content: start;
  font-weight: bold;
+ max-width: 90px;
  width: 100%;
- max-width: 75px;
  flex-grow: 0;
  border-left: 1px solid var(--light-500-color);
  padding: 0 0.5rem;
