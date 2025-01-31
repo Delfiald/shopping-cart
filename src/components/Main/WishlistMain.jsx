@@ -1,5 +1,5 @@
 import styles from "./main.module.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import {
  ChevronDown,
@@ -59,7 +59,9 @@ function Card({ product, setCartItem, wishlistItem, setWishlistItem }) {
     data-testid={`product-card-${product.id}`}
     to={`/product/${product.id}`}
    >
-    <img src={product.image} alt={product.title} />
+    <div className={styles["image-wrapper"]}>
+     <img src={product.image} alt={product.title} />
+    </div>
     <div className={styles["product-name"]}>{product.title}</div>
     <div className={styles["product-price"]}>{product.price}</div>
    </Link>
@@ -71,15 +73,21 @@ function Card({ product, setCartItem, wishlistItem, setWishlistItem }) {
      }`}
      onClick={handleWishlistItem}
     >
-     <Heart size={16} />
+     <Heart size={20} />
     </button>
     <button
      data-testid={`add-to-cart-button-${product.id}`}
      className={styles["add-to-cart"]}
      onClick={handleAddToCart}
     >
-     <Plus size={16} />
-     <p>Cart</p>
+     <div className={styles.displayed}>
+      <Plus size={16} />
+      <p>Cart</p>
+     </div>
+     <div className={styles.hovered}>
+      <Plus size={16} />
+      <p>Cart</p>
+     </div>
     </button>
    </div>
   </div>
@@ -214,20 +222,22 @@ function WishlistListHeader(props) {
 }
 
 function WishlistListWrapper(props) {
+ const navigate = useNavigate();
  if (!props.products || props.products.length === 0) {
   return (
    <div data-testid="no-wishlist" className={styles["no-wishlist"]}>
-    <p>
+    <div>
      You have no items in your wishlist. Browse products and add them to your
      favorites!
-    </p>
-    <Link
+    </div>
+    <button
      data-testid="shop-button"
      className={styles["shop-button"]}
-     to={"/shop"}
+     onClick={() => navigate("/shop")}
     >
-     Explore Products
-    </Link>
+     <div className={styles.displayed}>Explore Products</div>
+     <div className={styles.hovered}>Explore Products</div>
+    </button>
    </div>
   );
  }

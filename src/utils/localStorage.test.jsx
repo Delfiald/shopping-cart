@@ -39,7 +39,7 @@ const formattedDate = format(timeStamp, "dd/MM/yyyy HH:mm");
 
 const mockNotification = {
  id: 1,
- message: `Purchase Complete, total Price: 360`,
+ message: `Purchase Complete, total Price: $360`,
  products: [...generateMockCartItem(3)],
  timeStamp: formattedDate,
  isRead: false,

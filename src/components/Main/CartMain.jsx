@@ -225,7 +225,9 @@ function CartMain({
     ...prevNotification,
     {
      id: prevNotification.length + 1,
-     message: `Purchase Complete, total Price: ${totalPrice()}`,
+     message: `Purchase Complete, total Price: ${formatText.priceText(
+      totalPrice()
+     )}`,
      products: [...cartItem],
      timeStamp: formattedDate,
      isRead: false,

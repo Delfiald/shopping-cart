@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { removeItem, setItem } from "../../utils/localStorage";
 import { useNavigate } from "react-router-dom";
+import formatText from "../../utils/formatText";
 
 function NotificationList({ notificationItem, products, setNotificationItem }) {
  const [detail, setDetail] = useState("");
@@ -50,7 +51,7 @@ function NotificationList({ notificationItem, products, setNotificationItem }) {
  };
 
  const handlePurchaseTotal = (products) => {
-  return products.reduce(
+  return getNotificationItemDetails(products).reduce(
    (total, product) => total + product.amount * product.price,
    0
   );
@@ -85,8 +86,8 @@ function NotificationList({ notificationItem, products, setNotificationItem }) {
         }`}
         onClick={() => handleDetails(notification.id)}
        >
-        <ChevronRight size={16} />
         <p>Details</p>
+        <ChevronRight size={18} />
        </div>
        {detail === notification.id && (
         <div
@@ -97,17 +98,20 @@ function NotificationList({ notificationItem, products, setNotificationItem }) {
           <div key={item.id} className={styles.item}>
            <div className={styles["product-title"]}>{item.title}</div>
            <div className={styles["product-subtotal"]}>
-            {item.amount}
-            <X size={16} />
-            {item.price}
+            <div className={styles["amount-and-price"]}>
+             {item.amount}
+             <X size={16} />
+             {formatText.priceText(item.price)}
+            </div>
             <div className={styles.subtotal}>
-             Subtotal: {item.amount * item.price}
+             Subtotal: {formatText.priceText(item.amount * item.price)}
             </div>
            </div>
           </div>
          ))}
          <div data-testid={`total-${notification.id}`} className={styles.total}>
-          Total: {handlePurchaseTotal(notification.products)}
+          Total:{" "}
+          {formatText.priceText(handlePurchaseTotal(notification.products))}
          </div>
         </div>
        )}
@@ -116,7 +120,10 @@ function NotificationList({ notificationItem, products, setNotificationItem }) {
     ) : (
      <div className={styles["no-notification"]}>
       <div>No notifications yet. Stay tuned for updates!</div>
-      <button onClick={() => navigate("/")}>Back to Home</button>
+      <button className={styles["back-to-home"]} onClick={() => navigate("/")}>
+       <div className={styles.displayed}>Back to Home</div>
+       <div className={styles.hovered}>Back to Home</div>
+      </button>
      </div>
     )}
    </section>
@@ -155,27 +162,43 @@ function NotificationMain({
  return (
   <main className={styles.notification}>
    <h2>Notifications</h2>
-   <div
-    data-testid="marks-all-read"
-    className={styles["marks-all-read"]}
-    onClick={handleMarksAllRead}
-   >
-    <Check size={16} />
-    <div>Marks All Read ({unreadNotificationAmount()})</div>
-   </div>
+   {notificationItem.length > 0 && (
+    <div
+     data-testid="marks-all-read"
+     className={styles["marks-all-read"]}
+     onClick={handleMarksAllRead}
+    >
+     <div className={styles.displayed}>
+      <Check size={16} />
+      Marks All Read ({unreadNotificationAmount()})
+     </div>
+     <div className={styles.hovered}>
+      <Check size={16} />
+      Marks All Read ({unreadNotificationAmount()})
+     </div>
+    </div>
+   )}
    <NotificationList
     products={products}
     notificationItem={notificationItem}
     setNotificationItem={setNotificationItem}
    />
-   <div
-    data-testid="clear-notification-button"
-    className={styles["clear-notification-button"]}
-    onClick={handleRemoveAllNotification}
-   >
-    <Trash size={16} />
-    <p>Clear Notification</p>
-   </div>
+   {notificationItem.length > 0 && (
+    <div
+     data-testid="clear-notification-button"
+     className={styles["clear-notification-button"]}
+     onClick={handleRemoveAllNotification}
+    >
+     <div className={styles.displayed}>
+      <Trash size={16} />
+      <p>Clear Notification</p>
+     </div>
+     <div className={styles.hovered}>
+      <Trash size={16} />
+      <p>Clear Notification</p>
+     </div>
+    </div>
+   )}
   </main>
  );
 }

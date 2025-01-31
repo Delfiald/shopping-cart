@@ -14,7 +14,7 @@ export function BuyModal({ setModal }) {
    <div className={styles["buy-modal-wrapper"]}>
     <div className={styles["buy-modal-container"]}>
      <h3>Your purchase is complete! Would you like to continue shopping?</h3>
-     <button onClick={handleRouteToShop}>
+     <button data-testid="shop-button" onClick={handleRouteToShop}>
       <div className={styles.displayed}>Shop</div>
       <div className={styles.hovered}>Shop</div>
      </button>

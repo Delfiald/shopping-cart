@@ -94,10 +94,14 @@ exports[`Test Wishlist Page > Should Render Wishlist Page 1`] = `
           data-testid="product-card-1"
           href="/product/1"
         >
-          <img
-            alt="product-1"
-            src="/image/product-1.png"
-          />
+          <div
+            class="_image-wrapper_716e15"
+          >
+            <img
+              alt="product-1"
+              src="/image/product-1.png"
+            />
+          </div>
           <div
             class="_product-name_716e15"
           >
@@ -119,13 +123,13 @@ exports[`Test Wishlist Page > Should Render Wishlist Page 1`] = `
             <svg
               class="lucide lucide-heart"
               fill="none"
-              height="16"
+              height="20"
               stroke="currentColor"
               stroke-linecap="round"
               stroke-linejoin="round"
               stroke-width="2"
               viewBox="0 0 24 24"
-              width="16"
+              width="20"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
@@ -137,28 +141,58 @@ exports[`Test Wishlist Page > Should Render Wishlist Page 1`] = `
             class="_add-to-cart_716e15"
             data-testid="add-to-cart-button-1"
           >
-            <svg
-              class="lucide lucide-plus"
-              fill="none"
-              height="16"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-              width="16"
-              xmlns="http://www.w3.org/2000/svg"
+            <div
+              class="_displayed_716e15"
             >
-              <path
-                d="M5 12h14"
-              />
-              <path
-                d="M12 5v14"
-              />
-            </svg>
-            <p>
-              Cart
-            </p>
+              <svg
+                class="lucide lucide-plus"
+                fill="none"
+                height="16"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M5 12h14"
+                />
+                <path
+                  d="M12 5v14"
+                />
+              </svg>
+              <p>
+                Cart
+              </p>
+            </div>
+            <div
+              class="_hovered_716e15"
+            >
+              <svg
+                class="lucide lucide-plus"
+                fill="none"
+                height="16"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M5 12h14"
+                />
+                <path
+                  d="M12 5v14"
+                />
+              </svg>
+              <p>
+                Cart
+              </p>
+            </div>
           </button>
         </div>
       </div>
@@ -170,10 +204,14 @@ exports[`Test Wishlist Page > Should Render Wishlist Page 1`] = `
           data-testid="product-card-2"
           href="/product/2"
         >
-          <img
-            alt="product-2"
-            src="/image/product-2.png"
-          />
+          <div
+            class="_image-wrapper_716e15"
+          >
+            <img
+              alt="product-2"
+              src="/image/product-2.png"
+            />
+          </div>
           <div
             class="_product-name_716e15"
           >
@@ -195,13 +233,13 @@ exports[`Test Wishlist Page > Should Render Wishlist Page 1`] = `
             <svg
               class="lucide lucide-heart"
               fill="none"
-              height="16"
+              height="20"
               stroke="currentColor"
               stroke-linecap="round"
               stroke-linejoin="round"
               stroke-width="2"
               viewBox="0 0 24 24"
-              width="16"
+              width="20"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
@@ -213,28 +251,58 @@ exports[`Test Wishlist Page > Should Render Wishlist Page 1`] = `
             class="_add-to-cart_716e15"
             data-testid="add-to-cart-button-2"
           >
-            <svg
-              class="lucide lucide-plus"
-              fill="none"
-              height="16"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-              width="16"
-              xmlns="http://www.w3.org/2000/svg"
+            <div
+              class="_displayed_716e15"
             >
-              <path
-                d="M5 12h14"
-              />
-              <path
-                d="M12 5v14"
-              />
-            </svg>
-            <p>
-              Cart
-            </p>
+              <svg
+                class="lucide lucide-plus"
+                fill="none"
+                height="16"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M5 12h14"
+                />
+                <path
+                  d="M12 5v14"
+                />
+              </svg>
+              <p>
+                Cart
+              </p>
+            </div>
+            <div
+              class="_hovered_716e15"
+            >
+              <svg
+                class="lucide lucide-plus"
+                fill="none"
+                height="16"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M5 12h14"
+                />
+                <path
+                  d="M12 5v14"
+                />
+              </svg>
+              <p>
+                Cart
+              </p>
+            </div>
           </button>
         </div>
       </div>

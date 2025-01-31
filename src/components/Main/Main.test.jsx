@@ -1066,7 +1066,7 @@ describe("Test Main component of Cart", () => {
 
   expect(screen.getByTestId("buy-button")).toHaveTextContent("Buy (0)");
 
-  expect(screen.getByRole("button", { name: "Shop" })).toBeInTheDocument();
+  expect(screen.getByTestId("shop-button")).toBeInTheDocument();
  });
 
  it("Should navigate to shop when shop button is clicked in modal", async () => {
@@ -1113,7 +1113,7 @@ describe("Test Main component of Cart", () => {
 
   await user.click(buyButton);
 
-  const shopButton = screen.getByRole("button", { name: "Shop" });
+  const shopButton = screen.getByTestId("shop-button");
   expect(shopButton).toBeInTheDocument();
 
   await user.click(shopButton);
