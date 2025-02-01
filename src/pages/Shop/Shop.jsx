@@ -6,8 +6,14 @@ import { useEffect } from "react";
 function Shop() {
  const [searchParams, setSearchParams] = useSearchParams();
  const category = searchParams.get("category");
- const { categories, products, hoverButton, setHoverButton } =
-  useOutletContext();
+ const {
+  categories,
+  products,
+  hoverButton,
+  setHoverButton,
+  isExiting,
+  setIsExiting,
+ } = useOutletContext();
 
  const page = searchParams.get("page");
  const itemPerPage = searchParams.get("itemsPerPage");
@@ -136,6 +142,8 @@ function Shop() {
     hoverButton={hoverButton}
     setHoverButton={setHoverButton}
     search={search}
+    isExiting={isExiting}
+    setIsExiting={setIsExiting}
    />
   </>
  );

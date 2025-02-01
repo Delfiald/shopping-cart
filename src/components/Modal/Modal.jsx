@@ -3,11 +3,15 @@ import { useNavigate } from "react-router-dom";
 
 import styles from "./modal.module.css";
 
-export function BuyModal({ setModal }) {
+export function BuyModal({ setModal, setIsExiting }) {
  const navigate = useNavigate();
  const handleRouteToShop = () => {
-  setModal("");
-  navigate("/shop");
+  setIsExiting(true);
+  setTimeout(() => {
+   setModal("");
+   navigate("/shop");
+   setIsExiting(false);
+  }, 500);
  };
  return (
   <div className={styles["buy-modal"]}>
@@ -25,6 +29,6 @@ export function BuyModal({ setModal }) {
 }
 
 BuyModal.propTypes = {
- navigate: PropTypes.func,
  setModal: PropTypes.func,
+ setIsExiting: PropTypes.func,
 };

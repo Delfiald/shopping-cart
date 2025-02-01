@@ -7,9 +7,10 @@ import {
  Minus,
  Plus,
  Share,
+ X,
 } from "lucide-react";
 import PropTypes from "prop-types";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { setItem } from "../../utils/localStorage";
 import formatText from "../../utils/formatText";
@@ -148,11 +149,34 @@ function Detail(props) {
 }
 
 function Option(props) {
+ const [shareIndicator, setShareIndicator] = useState(false);
+ const [timeoutId, setTimeoutId] = useState(null);
  const handleAmount = (change) => {
   const newAmount = props.amount + change;
   if (newAmount > 0) {
    props.setAmount(newAmount);
   }
+ };
+
+ const handleShareIndicator = () => {
+  setShareIndicator(true);
+
+  if (timeoutId) clearTimeout(timeoutId);
+
+  const newTimeout = setTimeout(() => {
+   setShareIndicator(false);
+   setTimeoutId(null);
+  }, 3250);
+
+  setTimeoutId(newTimeout);
+ };
+
+ const handleShare = () => {
+  const currentUrl = window.location.href;
+
+  navigator.clipboard.writeText(currentUrl);
+
+  handleShareIndicator();
  };
 
  return (
@@ -205,7 +229,7 @@ function Option(props) {
     <div className={styles.actions}>
      <div
       data-testid="wishlist-button"
-      className={`${styles.wishlist} ${
+      className={`${styles["wishlist-button"]} ${
        styles[props.isWishlistItem() ? "active" : "inactive"]
       }`}
       onClick={props.handleWishlistItem}
@@ -218,24 +242,50 @@ function Option(props) {
       </div>
       Wishlist
      </div>
-     <div className={styles.share}>
+     <div className={styles["share-button"]} onClick={handleShare}>
       <Share size={16} />
       Share
      </div>
     </div>
    </div>
+   {shareIndicator && (
+    <div className={styles["share-indicator"]}>
+     <div className={styles["share-indicator-wrapper"]}>
+      <div>Link copied to clipboard</div>
+      <div
+       onClick={() => setShareIndicator(false)}
+       className={styles["close-button"]}
+      >
+       <X size={16} />
+      </div>
+     </div>
+    </div>
+   )}
   </aside>
  );
 }
 
-function ProductMain({ product, setCartItem, wishlistItem, setWishlistItem }) {
+function ProductMain({
+ product,
+ setCartItem,
+ wishlistItem,
+ setWishlistItem,
+ isExiting,
+ setIsExiting,
+}) {
  const navigate = useNavigate();
  const [detail, setDetail] = useState("detail");
  const [displayedImage, setDisplayedImage] = useState(product.image);
  const [amount, setAmount] = useState(1);
 
+ const [isVisible, setIsVisible] = useState(false);
+
  const handleNavigate = (entries = "/") => {
-  navigate(entries);
+  setIsExiting(true);
+  setTimeout(() => {
+   navigate(entries);
+   setIsExiting(false);
+  }, 500);
  };
 
  const handleAddToCart = () => {
@@ -275,10 +325,22 @@ function ProductMain({ product, setCartItem, wishlistItem, setWishlistItem }) {
   });
  };
 
+ useEffect(() => {
+  setDisplayedImage(product.image);
+ }, [product]);
+
+ useEffect(() => {
+  setIsVisible(true);
+ }, []);
+
  return (
-  <main className={styles.product}>
+  <main
+   className={`${styles.product} ${isVisible ? styles["fade-out"] : ""} ${
+    isExiting ? styles["fade-in"] : ""
+   }`}
+  >
    <div data-testid="breadcrumb" className={styles.breadcrumb}>
-    <div onClick={handleNavigate}>Home</div>
+    <div onClick={() => handleNavigate("/")}>Home</div>
     <ChevronRight size={16} />
     <div onClick={() => handleNavigate("/shop")}>Shop</div>
     <ChevronRight size={16} />
@@ -324,6 +386,8 @@ ProductMain.propTypes = {
  setCartItem: PropTypes.func,
  wishlistItem: PropTypes.array.isRequired,
  setWishlistItem: PropTypes.func,
+ isExiting: PropTypes.bool,
+ setIsExiting: PropTypes.func,
 };
 
 Media.propTypes = {

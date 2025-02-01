@@ -1,4 +1,4 @@
-import { act, render, screen } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import HomeMain from "./HomeMain";
 import { MemoryRouter, Outlet, Route, Routes } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
@@ -17,6 +17,7 @@ import Header from "../Header/Header";
 import NotificationMain from "./NotificationMain";
 
 import styles from "./main.module.css";
+import { vi } from "vitest";
 
 const mockCategories = ["category-1", "category-2", "category-3", "category-4"];
 
@@ -131,6 +132,8 @@ describe("Test Main component of Home", () => {
         context={{
          products: mockProducts,
          categories: mockCategories,
+         isExiting: false,
+         setIsExiting: vi.fn(),
         }}
        />
       }
@@ -147,7 +150,9 @@ describe("Test Main component of Home", () => {
 
   await userEvent.click(ctaButton);
 
-  expect(screen.getByText("All Products")).toBeInTheDocument();
+  await waitFor(() => {
+   expect(screen.getByText("All Products")).toBeInTheDocument();
+  });
  });
 });
 
@@ -253,7 +258,11 @@ describe("Test Main component of Shop", () => {
       path="/"
       element={
        <Outlet
-        context={{ products: mockProducts, categories: mockCategories }}
+        context={{
+         products: mockProducts,
+         categories: mockCategories,
+         setIsExiting: vi.fn(),
+        }}
        />
       }
      >
@@ -268,9 +277,11 @@ describe("Test Main component of Shop", () => {
   expect(productLink).toBeInTheDocument();
   await event.click(productLink);
 
-  expect(
-   screen.getByRole("heading", { name: "product-1" })
-  ).toBeInTheDocument();
+  await waitFor(() => {
+   expect(
+    screen.getByRole("heading", { name: "product-1" })
+   ).toBeInTheDocument();
+  });
  });
 
  it("Should Render Product List Header", () => {
@@ -691,7 +702,11 @@ describe("Test Main component of Product", () => {
       path="/"
       element={
        <Outlet
-        context={{ products: mockProducts, categories: mockCategories }}
+        context={{
+         products: mockProducts,
+         categories: mockCategories,
+         setIsExiting: vi.fn(),
+        }}
        />
       }
      >
@@ -712,9 +727,11 @@ describe("Test Main component of Product", () => {
   // Route to Category By clicking Category Button in Breadcrumb
   await user.click(categoriesButton);
 
-  expect(
-   screen.getByRole("heading", { name: "Category-1" })
-  ).toBeInTheDocument();
+  await waitFor(() => {
+   expect(
+    screen.getByRole("heading", { name: "Category-1" })
+   ).toBeInTheDocument();
+  });
  });
 
  it("Should Render Media for Product", async () => {
@@ -797,14 +814,18 @@ describe("Test Main component of Product", () => {
 
   let wishlistButton = screen.getByTestId("wishlist-button");
   expect(wishlistButton).toBeInTheDocument();
-  expect(wishlistButton).toHaveClass(`${styles.wishlist} ${styles.inactive}`);
+  expect(wishlistButton).toHaveClass(
+   `${styles["wishlist-button"]} ${styles.inactive}`
+  );
 
   await user.click(wishlistButton);
 
   wishlistButton = screen.getByTestId("wishlist-button");
   expect(wishlistButton).toBeInTheDocument();
 
-  expect(wishlistButton).toHaveClass(`${styles.wishlist} ${styles.active}`);
+  expect(wishlistButton).toHaveClass(
+   `${styles["wishlist-button"]} ${styles.active}`
+  );
  });
 });
 
@@ -961,6 +982,7 @@ describe("Test Main component of Cart", () => {
           setCartItem: setCartItem,
           wishlistItem: wishlist,
           setWishlistItem: setWishlistItem,
+          setIsExiting: vi.fn(),
          }}
         />
        }
@@ -980,9 +1002,11 @@ describe("Test Main component of Cart", () => {
 
   await user.click(productImageOne);
 
-  expect(
-   screen.getByRole("heading", { name: "product-1" })
-  ).toBeInTheDocument();
+  await waitFor(() => {
+   expect(
+    screen.getByRole("heading", { name: "product-1" })
+   ).toBeInTheDocument();
+  });
  });
 
  it("Should Render Summary Section", () => {
@@ -1094,6 +1118,7 @@ describe("Test Main component of Cart", () => {
           setWishlistItem: setWishlistItem,
           notificationItem: notificationItem,
           setNotificationItem: setNotificationItem,
+          setIsExiting: vi.fn(),
          }}
         />
        }
@@ -1118,9 +1143,11 @@ describe("Test Main component of Cart", () => {
 
   await user.click(shopButton);
 
-  expect(
-   screen.getByRole("heading", { name: "All Products" })
-  ).toBeInTheDocument();
+  await waitFor(() => {
+   expect(
+    screen.getByRole("heading", { name: "All Products" })
+   ).toBeInTheDocument();
+  });
  });
 
  it("Should Add notification Item After Buying Product", async () => {
@@ -1203,6 +1230,7 @@ describe("Test Main Component of Wishlist", () => {
      setPage={() => vi.fn()}
      itemPerPage={1}
      setItemPerPage={() => vi.fn()}
+     isExiting={false}
     />
    </MemoryRouter>
   );
@@ -1214,7 +1242,7 @@ describe("Test Main Component of Wishlist", () => {
   ).toBeInTheDocument();
   expect(screen.getByAltText(mockProducts[0].title)).toBeInTheDocument();
   expect(screen.getByText(mockProducts[0].title)).toBeInTheDocument();
-  expect(screen.getByText(mockProducts[0].price)).toBeInTheDocument();
+  expect(screen.getByText("$100")).toBeInTheDocument();
  });
 
  it("Should Route to Product Page when clicked Product on Wishlist Page", async () => {
@@ -1230,6 +1258,8 @@ describe("Test Main Component of Wishlist", () => {
         context={{
          products: generateMockProducts(4),
          wishlistItem: generateMockWishlist(3),
+         isExiting: false,
+         setIsExiting: vi.fn(),
         }}
        />
       }
@@ -1245,9 +1275,11 @@ describe("Test Main Component of Wishlist", () => {
   expect(productLink).toBeInTheDocument();
   await user.click(productLink);
 
-  expect(
-   screen.getByRole("heading", { name: "product-1" })
-  ).toBeInTheDocument();
+  await waitFor(() => {
+   expect(
+    screen.getByRole("heading", { name: "product-1" })
+   ).toBeInTheDocument();
+  });
  });
 
  it("Should remove Product from wishlist when clicked wishlist button", async () => {
@@ -1317,6 +1349,7 @@ describe("Test Main Component of Wishlist", () => {
   const MockRoute = () => {
    const [cartItem, setCartItem] = useState([]);
    const [wishlist, setWishlistItem] = useState(generateMockWishlist(5));
+   const [isExiting, setIsExiting] = useState(false);
 
    const mockProducts = generateMockProducts(6);
    return (
@@ -1325,6 +1358,8 @@ describe("Test Main Component of Wishlist", () => {
       products={mockProducts}
       cartItem={cartItem}
       setHoverButton={vi.fn()}
+      isExiting={isExiting}
+      setIsExiting={setIsExiting}
      />
      <Routes>
       <Route
@@ -1337,6 +1372,8 @@ describe("Test Main Component of Wishlist", () => {
           setCartItem: setCartItem,
           wishlistItem: wishlist,
           setWishlistItem: setWishlistItem,
+          isExiting: isExiting,
+          setIsExiting,
          }}
         />
        }
@@ -1363,9 +1400,11 @@ describe("Test Main Component of Wishlist", () => {
 
   await user.click(cartButton);
 
-  const buyButton = screen.getByTestId("buy-button");
-  expect(buyButton).toBeInTheDocument();
-  expect(buyButton).toHaveTextContent("Buy (1)");
+  await waitFor(() => {
+   const buyButton = screen.getByTestId("buy-button");
+   expect(buyButton).toBeInTheDocument();
+   expect(buyButton).toHaveTextContent("Buy (1)");
+  });
  });
 
  it("Should Route to valid Query Path", async () => {

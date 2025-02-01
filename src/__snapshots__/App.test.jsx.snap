@@ -263,7 +263,7 @@ exports[`It Render App > render app 1`] = `
     />
   </header>
   <main
-    class="_home_716e15"
+    class="_home_716e15 _fade-in_716e15 "
   >
     <div
       class="_hero_716e15"
@@ -326,9 +326,24 @@ exports[`It Render App > render app 1`] = `
   <section
     class="_loading_442184"
   >
-    <p>
-      Loading
-    </p>
+    <div
+      class="_loading-wrapper_442184"
+    >
+      <div
+        class="_loading-container_442184"
+      >
+        <p>
+          Loading
+        </p>
+        <div
+          class="_dots_442184"
+        >
+          <div />
+          <div />
+          <div />
+        </div>
+      </div>
+    </div>
   </section>
   <footer>
     <div

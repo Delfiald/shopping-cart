@@ -2,14 +2,18 @@ import styles from "./main.module.css";
 
 import { Check, ChevronRight, Trash, X } from "lucide-react";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { removeItem, setItem } from "../../utils/localStorage";
 import { useNavigate } from "react-router-dom";
 import formatText from "../../utils/formatText";
 
-function NotificationList({ notificationItem, products, setNotificationItem }) {
+function NotificationList({
+ notificationItem,
+ products,
+ setNotificationItem,
+ handleNavigate,
+}) {
  const [detail, setDetail] = useState("");
- const navigate = useNavigate();
 
  const handleReadNotification = (notificationId) => {
   setNotificationItem((prevNotification) =>
@@ -120,7 +124,10 @@ function NotificationList({ notificationItem, products, setNotificationItem }) {
     ) : (
      <div className={styles["no-notification"]}>
       <div>No notifications yet. Stay tuned for updates!</div>
-      <button className={styles["back-to-home"]} onClick={() => navigate("/")}>
+      <button
+       className={styles["back-to-home"]}
+       onClick={() => handleNavigate("/")}
+      >
        <div className={styles.displayed}>Back to Home</div>
        <div className={styles.hovered}>Back to Home</div>
       </button>
@@ -135,7 +142,19 @@ function NotificationMain({
  products = [],
  notificationItem = [],
  setNotificationItem,
+ isExiting,
+ setIsExiting,
 }) {
+ const navigate = useNavigate();
+ const [isVisible, setIsVisible] = useState(false);
+
+ const handleNavigate = (path) => {
+  setIsExiting(true);
+  setTimeout(() => {
+   navigate(path);
+   setIsExiting(false);
+  }, 500);
+ };
  const unreadNotificationAmount = () => {
   return notificationItem.filter(
    (notification) => notification.isRead === false
@@ -159,8 +178,16 @@ function NotificationMain({
   removeItem("notification");
  };
 
+ useEffect(() => {
+  setIsVisible(true);
+ }, []);
+
  return (
-  <main className={styles.notification}>
+  <main
+   className={`${styles.notification} ${isVisible ? styles["fade-out"] : ""} ${
+    isExiting ? styles["fade-in"] : ""
+   }`}
+  >
    <h2>Notifications</h2>
    {notificationItem.length > 0 && (
     <div
@@ -182,6 +209,7 @@ function NotificationMain({
     products={products}
     notificationItem={notificationItem}
     setNotificationItem={setNotificationItem}
+    handleNavigate={handleNavigate}
    />
    {notificationItem.length > 0 && (
     <div
@@ -207,12 +235,15 @@ NotificationMain.propTypes = {
  products: PropTypes.array,
  notificationItem: PropTypes.array,
  setNotificationItem: PropTypes.func,
+ isExiting: PropTypes.bool,
+ setIsExiting: PropTypes.func,
 };
 
 NotificationList.propTypes = {
  products: PropTypes.array,
  notificationItem: PropTypes.array,
  setNotificationItem: PropTypes.func,
+ handleNavigate: PropTypes.func,
 };
 
 export default NotificationMain;

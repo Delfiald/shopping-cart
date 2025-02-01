@@ -3,7 +3,7 @@
 exports[`Test Product Page > Should Render Product Page Component 1`] = `
 <div>
   <main
-    class="_product_716e15"
+    class="_product_716e15 _fade-in_716e15 "
   >
     <div
       class="_breadcrumb_716e15"
@@ -372,7 +372,7 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
             class="_actions_716e15"
           >
             <div
-              class="_wishlist_716e15 _inactive_716e15"
+              class="_wishlist-button_716e15 _inactive_716e15"
               data-testid="wishlist-button"
             >
               <div
@@ -398,7 +398,7 @@ exports[`Test Product Page > Should Render Product Page Component 1`] = `
               Wishlist
             </div>
             <div
-              class="_share_716e15"
+              class="_share-button_716e15"
             >
               <svg
                 class="lucide lucide-share"

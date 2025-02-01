@@ -2,7 +2,7 @@ import styles from "./main.module.css";
 
 import { Heart, Minus, Plus, Trash } from "lucide-react";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BuyModal } from "../Modal/Modal";
 import { format } from "date-fns";
@@ -14,9 +14,8 @@ function CartContents({
  setCartItem,
  setWishlistItem,
  getCartDetails,
+ handleNavigate,
 }) {
- const navigate = useNavigate();
-
  const handleRemoveCart = (productId) => {
   setCartItem((prevItem) => {
    const updatedCart = prevItem.filter((item) => item.id !== productId);
@@ -73,7 +72,7 @@ function CartContents({
         {/* Product Image */}
         <div
          className={styles["product-image"]}
-         onClick={() => navigate(`/product/${cartItemProduct.id}`)}
+         onClick={() => handleNavigate(`/product/${cartItemProduct.id}`)}
         >
          <img src={cartItemProduct.image} alt={cartItemProduct.title} />
         </div>
@@ -81,7 +80,7 @@ function CartContents({
         {/* Product Title */}
         <div
          className={styles["product-title"]}
-         onClick={() => navigate(`/product/${cartItemProduct.id}`)}
+         onClick={() => handleNavigate(`/product/${cartItemProduct.id}`)}
         >
          {cartItemProduct.title}
         </div>
@@ -146,7 +145,7 @@ function CartContents({
      <div className={styles["empty-cart"]}>
       <div>Your cart is empty. Start adding some products!</div>
       <button
-       onClick={() => navigate("/shop")}
+       onClick={() => handleNavigate("/shop")}
        className={styles["go-to-shop"]}
       >
        <div className={styles.displayed}>Go to Shop</div>
@@ -189,8 +188,20 @@ function CartMain({
  wishlistItem = [],
  setWishlistItem,
  setNotificationItem,
+ isExiting,
+ setIsExiting,
 }) {
+ const navigate = useNavigate();
  const [modal, setModal] = useState("");
+ const [isVisible, setIsVisible] = useState(false);
+
+ const handleNavigate = (path) => {
+  setIsExiting(true);
+  setTimeout(() => {
+   navigate(path);
+   setIsExiting(false);
+  }, 500);
+ };
 
  const getCartDetails = () => {
   return cartItem.map((cart) => {
@@ -243,9 +254,17 @@ function CartMain({
   removeItem("cart");
  };
 
+ useEffect(() => {
+  setIsVisible(true);
+ }, []);
+
  return (
   <>
-   <main className={styles.cart}>
+   <main
+    className={`${styles.cart} ${isVisible ? styles["fade-out"] : ""} ${
+     isExiting ? styles["fade-in"] : ""
+    }`}
+   >
     <h2>Cart</h2>
     <CartContents
      setCartItem={setCartItem}
@@ -253,6 +272,7 @@ function CartMain({
      setWishlistItem={setWishlistItem}
      setModal={setModal}
      getCartDetails={getCartDetails}
+     handleNavigate={handleNavigate}
     />
     <Summary
      totalPrice={totalPrice}
@@ -260,7 +280,9 @@ function CartMain({
      handleBuy={handleBuy}
     />
    </main>
-   {modal === "buy-modal" ? <BuyModal setModal={setModal} /> : null}
+   {modal === "buy-modal" ? (
+    <BuyModal setModal={setModal} setIsExiting={setIsExiting} />
+   ) : null}
   </>
  );
 }
@@ -272,6 +294,8 @@ CartMain.propTypes = {
  wishlistItem: PropTypes.array,
  setWishlistItem: PropTypes.func,
  setNotificationItem: PropTypes.func,
+ isExiting: PropTypes.bool,
+ setIsExiting: PropTypes.func,
 };
 
 CartContents.propTypes = {
@@ -280,6 +304,7 @@ CartContents.propTypes = {
  wishlistItem: PropTypes.array,
  setWishlistItem: PropTypes.func,
  getCartDetails: PropTypes.func,
+ handleNavigate: PropTypes.func,
 };
 
 Summary.propTypes = {

@@ -19,6 +19,8 @@ function App() {
  const [categories, setCategories] = useState([]);
  const [products, setProducts] = useState([]);
 
+ const [isExiting, setIsExiting] = useState(false);
+
  const handleProducts = (productsData) => {
   setProducts(productsData);
  };
@@ -85,6 +87,7 @@ function App() {
     setHoverButton={setHoverButton}
     searchInput={searchInput}
     setSearchInput={setSearchInput}
+    setIsExiting={setIsExiting}
    />
    <ScrollToTop />
    <Outlet
@@ -100,6 +103,8 @@ function App() {
      notificationItem,
      setNotificationItem,
      searchInput,
+     isExiting,
+     setIsExiting,
     }}
    />
    <Feedback error={error} setError={setError} loading={loading} />

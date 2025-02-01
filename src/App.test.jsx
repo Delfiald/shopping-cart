@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import Cart from "./pages/Cart/Cart";
 import Shop from "./pages/Shop/Shop";
@@ -81,9 +81,10 @@ describe("It Render App", () => {
   const shoppingCartButton = screen.getByTestId("cart-button");
   await user.click(shoppingCartButton);
 
-  const cartHeading = screen.getByText("Cart");
-
-  expect(cartHeading).toBeInTheDocument();
+  await waitFor(() => {
+   const cartHeading = screen.getByText("Cart");
+   expect(cartHeading).toBeInTheDocument();
+  });
 
   const cartMain = screen.getByRole("heading", { name: "Cart" });
   expect(cartMain).toBeInTheDocument();
@@ -96,8 +97,10 @@ describe("It Render App", () => {
   const ctaButton = screen.getByTestId("cta-button");
   await user.click(ctaButton);
 
-  const shopHeading = screen.getByText("All Products");
+  await waitFor(() => {
+   const shopHeading = screen.getByText("All Products");
 
-  expect(shopHeading).toBeInTheDocument();
+   expect(shopHeading).toBeInTheDocument();
+  });
  });
 });

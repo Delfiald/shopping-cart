@@ -1,5 +1,5 @@
 import styles from "./main.module.css";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import {
  ChevronDown,
@@ -10,6 +10,8 @@ import {
  Plus,
 } from "lucide-react";
 import { setItem } from "../../utils/localStorage";
+import { useEffect, useState } from "react";
+import formatText from "../../utils/formatText";
 
 const ITEM_PER_PAGE = {
  FIVE: 5,
@@ -17,7 +19,13 @@ const ITEM_PER_PAGE = {
  SHOW_ALL: Infinity,
 };
 
-function Card({ product, setCartItem, wishlistItem, setWishlistItem }) {
+function Card({
+ product,
+ setCartItem,
+ wishlistItem,
+ setWishlistItem,
+ handleNavigate,
+}) {
  const handleAddToCart = () => {
   setCartItem((prevCartItem) => {
    const exists = prevCartItem.find((item) => item.id === product.id);
@@ -55,16 +63,18 @@ function Card({ product, setCartItem, wishlistItem, setWishlistItem }) {
 
  return (
   <div className={styles.card}>
-   <Link
+   <div
     data-testid={`product-card-${product.id}`}
-    to={`/product/${product.id}`}
+    onClick={() => handleNavigate(`/product/${product.id}`)}
    >
     <div className={styles["image-wrapper"]}>
      <img src={product.image} alt={product.title} />
     </div>
     <div className={styles["product-name"]}>{product.title}</div>
-    <div className={styles["product-price"]}>{product.price}</div>
-   </Link>
+    <div className={styles["product-price"]}>
+     {formatText.priceText(product.price)}
+    </div>
+   </div>
    <div className={styles["card-action"]}>
     <button
      data-testid={`wishlist-button-${product.id}`}
@@ -119,10 +129,11 @@ function WishlistListHeader(props) {
   <div className={styles["product-list-header"]}>
    <div data-testid="list-header">
     <div className={styles["item-information"]}>
-     {`Showing ${props.page && (props.page - 1) * props.itemPerPage + 1} - ${
-      props.totalProducts &&
-      Math.min(props.page * props.itemPerPage, props.totalProducts)
-     } products`}
+     {props.totalProducts > 0 &&
+      `Showing ${props.page && (props.page - 1) * props.itemPerPage + 1} - ${
+       props.totalProducts &&
+       Math.min(props.page * props.itemPerPage, props.totalProducts)
+      } products`}
     </div>
     <div className={styles["option-wrapper"]}>
      <div
@@ -222,7 +233,6 @@ function WishlistListHeader(props) {
 }
 
 function WishlistListWrapper(props) {
- const navigate = useNavigate();
  if (!props.products || props.products.length === 0) {
   return (
    <div data-testid="no-wishlist" className={styles["no-wishlist"]}>
@@ -233,7 +243,7 @@ function WishlistListWrapper(props) {
     <button
      data-testid="shop-button"
      className={styles["shop-button"]}
-     onClick={() => navigate("/shop")}
+     onClick={() => props.handleNavigate("/shop")}
     >
      <div className={styles.displayed}>Explore Products</div>
      <div className={styles.hovered}>Explore Products</div>
@@ -262,6 +272,7 @@ function WishlistListWrapper(props) {
       setCartItem={props.setCartItem}
       wishlistItem={props.wishlistItem}
       setWishlistItem={props.setWishlistItem}
+      handleNavigate={props.handleNavigate}
      />
     ))}
   </section>
@@ -390,7 +401,19 @@ function WishlistMain({
  setSort,
  hoverButton,
  setHoverButton,
+ isExiting,
+ setIsExiting,
 }) {
+ const navigate = useNavigate();
+ const [isVisible, setIsVisible] = useState(false);
+
+ const handleNavigate = (path) => {
+  setIsExiting(true);
+  setTimeout(() => {
+   navigate(path);
+   setIsExiting(false);
+  }, 500);
+ };
  const displayedProducts = products
   ? [...products].sort((a, b) => {
      switch (sort) {
@@ -408,8 +431,16 @@ function WishlistMain({
     })
   : products;
 
+ useEffect(() => {
+  setIsVisible(true);
+ }, []);
+
  return (
-  <main className={styles.wishlist}>
+  <main
+   className={`${styles.wishlist} ${isVisible ? styles["fade-out"] : ""} ${
+    isExiting ? styles["fade-in"] : ""
+   }`}
+  >
    <h2>Wishlist</h2>
    {products && (
     <WishlistListHeader
@@ -430,6 +461,7 @@ function WishlistMain({
     setCartItem={setCartItem}
     wishlistItem={wishlistItem}
     setWishlistItem={setWishlistItem}
+    handleNavigate={handleNavigate}
    />
    {products && (
     <WishlistListBottom
@@ -456,6 +488,8 @@ WishlistMain.propTypes = {
  setSort: PropTypes.func,
  hoverButton: PropTypes.string,
  setHoverButton: PropTypes.func,
+ isExiting: PropTypes.bool,
+ setIsExiting: PropTypes.func,
 };
 
 Card.propTypes = {
@@ -463,6 +497,7 @@ Card.propTypes = {
  setCartItem: PropTypes.func,
  wishlistItem: PropTypes.array,
  setWishlistItem: PropTypes.func,
+ handleNavigate: PropTypes.func,
 };
 
 WishlistListHeader.propTypes = {
@@ -483,6 +518,7 @@ WishlistListWrapper.propTypes = {
  setCartItem: PropTypes.func,
  wishlistItem: PropTypes.array,
  setWishlistItem: PropTypes.func,
+ handleNavigate: PropTypes.func,
 };
 
 WishlistListBottom.propTypes = {

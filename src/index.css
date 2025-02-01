@@ -59,6 +59,24 @@ input::placeholder {
  transition: var(--transition-slow);
 }
 
+::-webkit-scrollbar {
+ width: 8px;
+ height: 8px;
+}
+
+::-webkit-scrollbar-track {
+ background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+ background: var(--dark-300-color);
+}
+
+::-webkit-scrollbar-thumb:hover {
+ background: var(--dark-color);
+}
+
+/* Body */
 body {
  font-family: "Manrope", "Roboto", sans-serif;
  line-height: 1.6;

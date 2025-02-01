@@ -49,7 +49,7 @@ exports[`Test Home Page > Should Render Home Page 1`] = `
     </div>
   </aside>
   <main
-    class="_shop_716e15"
+    class="_shop_716e15 _fade-in_716e15 "
   >
     <h2>
       All Products
@@ -132,11 +132,9 @@ exports[`Test Home Page > Should Render Home Page 1`] = `
       class="_product-list-wrapper_716e15"
       data-testid="product-card"
     >
-      <a
+      <div
         class="_card_716e15"
-        data-discover="true"
         data-testid="product-card-1"
-        href="/product/1"
       >
         <div
           class="_image-wrapper_716e15"
@@ -156,12 +154,10 @@ exports[`Test Home Page > Should Render Home Page 1`] = `
         >
           $110
         </div>
-      </a>
-      <a
+      </div>
+      <div
         class="_card_716e15"
-        data-discover="true"
         data-testid="product-card-2"
-        href="/product/2"
       >
         <div
           class="_image-wrapper_716e15"
@@ -181,12 +177,10 @@ exports[`Test Home Page > Should Render Home Page 1`] = `
         >
           $120
         </div>
-      </a>
-      <a
+      </div>
+      <div
         class="_card_716e15"
-        data-discover="true"
         data-testid="product-card-3"
-        href="/product/3"
       >
         <div
           class="_image-wrapper_716e15"
@@ -206,12 +200,10 @@ exports[`Test Home Page > Should Render Home Page 1`] = `
         >
           $130
         </div>
-      </a>
-      <a
+      </div>
+      <div
         class="_card_716e15"
-        data-discover="true"
         data-testid="product-card-4"
-        href="/product/4"
       >
         <div
           class="_image-wrapper_716e15"
@@ -231,12 +223,10 @@ exports[`Test Home Page > Should Render Home Page 1`] = `
         >
           $140
         </div>
-      </a>
-      <a
+      </div>
+      <div
         class="_card_716e15"
-        data-discover="true"
         data-testid="product-card-5"
-        href="/product/5"
       >
         <div
           class="_image-wrapper_716e15"
@@ -256,7 +246,7 @@ exports[`Test Home Page > Should Render Home Page 1`] = `
         >
           $150
         </div>
-      </a>
+      </div>
     </section>
     <div
       class="_product-list-bottom_716e15"

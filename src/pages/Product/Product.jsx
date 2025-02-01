@@ -7,6 +7,8 @@ function Product() {
   setCartItem,
   wishlistItem = [],
   setWishlistItem,
+  isExiting,
+  setIsExiting,
  } = useOutletContext();
  const { id } = useParams();
 
@@ -26,6 +28,8 @@ function Product() {
     setCartItem={setCartItem}
     wishlistItem={wishlistItem}
     setWishlistItem={setWishlistItem}
+    isExiting={isExiting}
+    setIsExiting={setIsExiting}
    />
   </>
  );

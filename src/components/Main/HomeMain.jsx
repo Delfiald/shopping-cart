@@ -22,7 +22,7 @@ const CarouselLoading = styled.div.withConfig({
  }
 `;
 
-function HomeMain({ categories, products }) {
+function HomeMain({ categories, products, isExiting, setIsExiting }) {
  const navigate = useNavigate();
  const [displayedProduct, setDisplayedProduct] = useState({
   id: -1,
@@ -32,6 +32,8 @@ function HomeMain({ categories, products }) {
  const [loadingDuration, setLoadingDuration] = useState("7.5s");
  const [fadeIn, setFadeIn] = useState(false);
  const [ctaProductIndex, setCtaProductIndex] = useState(null);
+
+ const [isVisible, setIsVisible] = useState(false);
 
  const handleDisplayedProduct = (
   displayedId,
@@ -49,6 +51,14 @@ function HomeMain({ categories, products }) {
    setLoadingDuration("7.5s");
    setFadeIn(true);
   }, 300);
+ };
+
+ const handleNavigate = (path) => {
+  setIsExiting(true);
+  setTimeout(() => {
+   navigate(path);
+   setIsExiting(false);
+  }, 500);
  };
 
  useEffect(() => {
@@ -89,8 +99,16 @@ function HomeMain({ categories, products }) {
   }
  }, [ctaProductIndex, displayedProduct.id, products]);
 
+ useEffect(() => {
+  setIsVisible(true);
+ }, []);
+
  return (
-  <main className={styles.home}>
+  <main
+   className={`${styles.home} ${isVisible ? styles["fade-out"] : ""} ${
+    isExiting ? styles["fade-in"] : ""
+   }`}
+  >
    <div className={styles.hero}>
     <div data-testid="products-carousel-section" className={styles.carousel}>
      {products && products.length > 0 && (
@@ -99,7 +117,7 @@ function HomeMain({ categories, products }) {
         className={`${styles["item-display"]} ${
          fadeIn ? styles["fade-in"] : ""
         }`}
-        onClick={() => navigate(`/product/${displayedProduct.id}`)}
+        onClick={() => handleNavigate(`/product/${displayedProduct.id}`)}
        >
         <div className={styles["displayed-image"]}>
          <img src={displayedProduct.image} alt={displayedProduct.title} />
@@ -139,7 +157,7 @@ function HomeMain({ categories, products }) {
       <div
        key={index}
        className={styles.category}
-       onClick={() => navigate(`/shop?category=${category}`)}
+       onClick={() => handleNavigate(`/shop?category=${category}`)}
       >
        <img src={`Categories/${category}.jpg`} alt={category} />
        <h3>{category}</h3>
@@ -155,7 +173,7 @@ function HomeMain({ categories, products }) {
      <button
       data-testid="cta-button"
       className={styles["cta-button"]}
-      onClick={() => navigate("/shop")}
+      onClick={() => handleNavigate("/shop")}
      >
       <div className={styles["displayed"]}>Shop Now</div>
       <div className={styles["hovered"]}>Shop Now</div>
@@ -179,6 +197,8 @@ function HomeMain({ categories, products }) {
 HomeMain.propTypes = {
  categories: PropTypes.array,
  products: PropTypes.array,
+ isExiting: PropTypes.bool,
+ setIsExiting: PropTypes.func,
 };
 
 export default HomeMain;

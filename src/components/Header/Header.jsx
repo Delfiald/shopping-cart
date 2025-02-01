@@ -38,19 +38,16 @@ function Header({
  setHoverButton,
  searchInput,
  setSearchInput,
+ setIsExiting,
 }) {
  const navigate = useNavigate();
 
- const handleCartClick = () => {
-  navigate("/cart");
- };
-
- const handleWishlistClick = () => {
-  navigate("/wishlist");
- };
-
- const handleNotificationClick = () => {
-  navigate("/notification");
+ const handleNavigate = (path) => {
+  setIsExiting(true);
+  setTimeout(() => {
+   navigate(path);
+   setIsExiting(false);
+  }, 500);
  };
 
  const handleHoverButton = (isCartOpen) => {
@@ -129,9 +126,9 @@ function Header({
 
  const handleSearch = () => {
   if (searchInput.trim() !== "") {
-   navigate(`/shop?search=${searchInput}`);
+   handleNavigate(`/shop?search=${searchInput}`);
   } else {
-   navigate(`/shop`);
+   handleNavigate(`/shop`);
   }
  };
 
@@ -139,7 +136,7 @@ function Header({
   <header>
    <nav>
     <div className={styles.hero}>
-     <h1 onClick={() => navigate("/")}>
+     <h1 onClick={() => handleNavigate("/")}>
       <div className={styles["displayed"]}>Shoppers</div>
       <div className={styles["hovered"]}>Shoppers</div>
      </h1>
@@ -177,7 +174,7 @@ function Header({
       className={styles["cart-button-wrapper"]}
      >
       <button
-       onClick={handleCartClick}
+       onClick={() => handleNavigate("/cart")}
        data-testid="cart-button"
        className={styles["cart-button"]}
       >
@@ -200,7 +197,7 @@ function Header({
          <div
           className={styles["see-all-button"]}
           role="button"
-          onClick={handleCartClick}
+          onClick={() => handleNavigate("/cart")}
          >
           See All
          </div>
@@ -211,7 +208,7 @@ function Header({
            <div
             data-testid={`product-${item.id}`}
             key={item.id}
-            onClick={() => navigate(`/product/${item.id}`)}
+            onClick={() => handleNavigate(`/product/${item.id}`)}
            >
             <div className={styles.image}>
              <img src={item.image} alt={item.title} />
@@ -230,7 +227,7 @@ function Header({
           <p>Your Cart is Empty</p>
           <button
            className={styles["start-shopping-button"]}
-           onClick={() => navigate("/shop")}
+           onClick={() => handleNavigate("/shop")}
           >
            Start Shopping
           </button>
@@ -248,7 +245,7 @@ function Header({
       <button
        data-testid="notification-button"
        className={styles["notification-button"]}
-       onClick={handleNotificationClick}
+       onClick={() => handleNavigate("/notification")}
       >
        <div className={styles["displayed"]}>
         <Bell size={18} title="Notification Button" />
@@ -272,7 +269,7 @@ function Header({
          <div
           className={styles["see-all-button"]}
           role="button"
-          onClick={handleNotificationClick}
+          onClick={() => handleNavigate("/notification")}
          >
           See All
          </div>
@@ -309,7 +306,7 @@ function Header({
           <p>Start Shopping</p>
           <button
            className={styles["start-shopping-button"]}
-           onClick={() => navigate("/shop")}
+           onClick={() => handleNavigate("/shop")}
           >
            Start Shopping
           </button>
@@ -336,7 +333,7 @@ function Header({
       className={styles["wishlist-button-wrapper"]}
      >
       <button
-       onClick={handleWishlistClick}
+       onClick={() => handleNavigate("/wishlist")}
        data-testid="wishlist-button"
        className={styles["wishlist-button"]}
       >
@@ -359,7 +356,7 @@ function Header({
          <div
           className={styles["see-all-button"]}
           role="button"
-          onClick={handleWishlistClick}
+          onClick={() => handleNavigate("/wishlist")}
          >
           See All
          </div>
@@ -370,7 +367,7 @@ function Header({
            <div
             data-testid={`product-${item.id}`}
             key={item.id}
-            onClick={() => navigate(`/product/${item.id}`)}
+            onClick={() => handleNavigate(`/product/${item.id}`)}
            >
             <div className={styles.image}>
              <img src={item.image} alt={item.title} />
@@ -387,7 +384,7 @@ function Header({
           <p>Your wishlist is currently empty.</p>
           <button
            className={styles["start-shopping-button"]}
-           onClick={() => navigate("/shop")}
+           onClick={() => handleNavigate("/shop")}
           >
            Start Shopping
           </button>
@@ -416,6 +413,7 @@ Header.propTypes = {
  setHoverButton: PropTypes.func,
  searchInput: PropTypes.string,
  setSearchInput: PropTypes.func,
+ setIsExiting: PropTypes.func,
 };
 
 export default Header;

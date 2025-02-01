@@ -11,6 +11,8 @@ function Wishlist() {
   setWishlistItem,
   hoverButton,
   setHoverButton,
+  isExiting,
+  setIsExiting,
  } = useOutletContext();
 
  const page = searchParams.get("page");
@@ -110,6 +112,8 @@ function Wishlist() {
     setSort={handleSortChange}
     hoverButton={hoverButton}
     setHoverButton={setHoverButton}
+    isExiting={isExiting}
+    setIsExiting={setIsExiting}
    />
   </>
  );

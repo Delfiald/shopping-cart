@@ -411,6 +411,7 @@ header nav .search-container .search-button:hover::before {
 .cart-items-wrapper .image img,
 .wishlist-items-wrapper .image img {
  width: 100%;
+ height: 100%;
  object-fit: contain;
 }
 

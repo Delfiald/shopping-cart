@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styles from "./main.module.css";
 
 import PropTypes from "prop-types";
@@ -9,6 +9,7 @@ import {
  ChevronUp,
 } from "lucide-react";
 import formatText from "../../utils/formatText";
+import { useEffect, useState } from "react";
 
 const ITEM_PER_PAGE = {
  FIVE: 5,
@@ -16,10 +17,10 @@ const ITEM_PER_PAGE = {
  SHOW_ALL: Infinity,
 };
 
-function Card({ product }) {
+function Card({ product, handleNavigate }) {
  return (
-  <Link
-   to={`/product/${product.id}`}
+  <div
+   onClick={() => handleNavigate(`/product/${product.id}`)}
    data-testid={`product-card-${product.id}`}
    className={styles.card}
   >
@@ -30,7 +31,7 @@ function Card({ product }) {
    <div className={styles["product-price"]}>
     {formatText.priceText(product.price)}
    </div>
-  </Link>
+  </div>
  );
 }
 
@@ -59,19 +60,20 @@ function ProductListHeader(props) {
   <div className={styles["product-list-header"]}>
    <div data-testid="list-header">
     <div className={styles["item-information"]}>
-     {`Showing ${
-      props.page && !isNaN(props.itemPerPage)
-       ? (props.page - 1) * props.itemPerPage + 1
-       : 1
-     } - ${
-      props.totalProducts
-       ? isNaN(props.itemPerPage)
-         ? props.totalProducts
-         : Math.min(props.page * props.itemPerPage, props.totalProducts)
-       : 0
-     } products${
-      props.search && props.search !== "" ? ` of ${props.search}` : ""
-     }`}
+     {props.totalProducts > 0 &&
+      `Showing ${
+       props.page && !isNaN(props.itemPerPage)
+        ? (props.page - 1) * props.itemPerPage + 1
+        : 1
+      } - ${
+       props.totalProducts
+        ? isNaN(props.itemPerPage)
+          ? props.totalProducts
+          : Math.min(props.page * props.itemPerPage, props.totalProducts)
+        : 0
+      } products${
+       props.search && props.search !== "" ? ` of ${props.search}` : ""
+      }`}
     </div>
     <div className={styles["option-wrapper"]}>
      <div
@@ -182,6 +184,14 @@ function ProductListWrapper(props) {
      props.page * props.itemPerPage
     );
 
+ if (!props.products.length > 0) {
+  return (
+   <div className={styles["empty-shop"]}>
+    <div>{`There are no products for "${props.search}"`}</div>
+   </div>
+  );
+ }
+
  return (
   <section
    data-testid="product-card"
@@ -189,7 +199,11 @@ function ProductListWrapper(props) {
   >
    {props.products &&
     currentProducts.map((product) => (
-     <Card key={product.id} product={product} />
+     <Card
+      key={product.id}
+      product={product}
+      handleNavigate={props.handleNavigate}
+     />
     ))}
   </section>
  );
@@ -308,6 +322,15 @@ function ProductListBottom(props) {
 }
 
 function ShopMain(props) {
+ const navigate = useNavigate();
+ const [isVisible, setIsVisible] = useState(false);
+ const handleNavigate = (path) => {
+  props.setIsExiting(true);
+  setTimeout(() => {
+   navigate(path);
+   props.setIsExiting(false);
+  }, 500);
+ };
  // Displayed Products Sorted
  const displayedProducts = props.products
   ? [...props.products].sort((a, b) => {
@@ -326,8 +349,16 @@ function ShopMain(props) {
     })
   : props.products;
 
+ useEffect(() => {
+  setIsVisible(true);
+ }, []);
+
  return (
-  <main className={styles.shop}>
+  <main
+   className={`${styles.shop} ${isVisible ? styles["fade-out"] : ""} ${
+    props.isExiting ? styles["fade-in"] : ""
+   }`}
+  >
    <h2>
     {props.category && props.category !== "all"
      ? formatText.capitalizedWords(props.category)
@@ -350,6 +381,8 @@ function ShopMain(props) {
     products={displayedProducts}
     page={props.page}
     itemPerPage={props.itemPerPage}
+    handleNavigate={handleNavigate}
+    search={props.search}
    />
    {props.products && (
     <ProductListBottom
@@ -375,10 +408,13 @@ ShopMain.propTypes = {
  hoverButton: PropTypes.string,
  setHoverButton: PropTypes.func,
  search: PropTypes.string,
+ isExiting: PropTypes.bool,
+ setIsExiting: PropTypes.func,
 };
 
 Card.propTypes = {
  product: PropTypes.object,
+ handleNavigate: PropTypes.func,
 };
 
 ProductListHeader.propTypes = {
@@ -397,6 +433,8 @@ ProductListWrapper.propTypes = {
  products: PropTypes.array,
  page: PropTypes.number,
  itemPerPage: PropTypes.number,
+ handleNavigate: PropTypes.func,
+ search: PropTypes.string,
 };
 
 ProductListBottom.propTypes = {

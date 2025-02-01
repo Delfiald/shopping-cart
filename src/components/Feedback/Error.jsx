@@ -12,14 +12,19 @@ function Error({ error, setError }) {
  };
  return (
   <section className={styles.error}>
-   <div className={styles["error-message"]}>{error}</div>
-   <button
-    data-testid="return-button"
-    className={styles["return-button"]}
-    onClick={handleReturn}
-   >
-    Return to Home
-   </button>
+   <div className={styles["error-wrapper"]}>
+    <div className={styles["error-container"]}>
+     <div className={styles["error-message"]}>{error}</div>
+     <button
+      data-testid="return-button"
+      className={styles["return-button"]}
+      onClick={handleReturn}
+     >
+      <div className={styles.displayed}>Return to Home</div>
+      <div className={styles.hovered}>Return to Home</div>
+     </button>
+    </div>
+   </div>
   </section>
  );
 }
