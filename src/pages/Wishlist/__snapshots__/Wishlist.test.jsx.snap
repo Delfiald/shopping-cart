@@ -3,7 +3,7 @@
 exports[`Test Wishlist Page > Should Render Wishlist Page 1`] = `
 <div>
   <main
-    class="_wishlist_716e15 _fade-in_716e15 "
+    class="_wishlist_716e15 _fade-out_716e15 "
   >
     <h2>
       Wishlist

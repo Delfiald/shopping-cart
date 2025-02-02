@@ -3,7 +3,7 @@
 exports[`Home Page Test > Renders Home Page 1`] = `
 <div>
   <main
-    class="_home_716e15 _fade-in_716e15 "
+    class="_home_716e15 _fade-out_716e15 "
   >
     <div
       class="_hero_716e15"
@@ -162,7 +162,7 @@ exports[`Home Page Test > Renders Home Page 1`] = `
       >
         <img
           alt="Call to Action Background"
-          src="/image/product-2.png"
+          src="/image/product-3.png"
         />
       </div>
     </div>

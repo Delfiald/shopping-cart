@@ -3,7 +3,7 @@
 exports[`Test Cart Page > Should Render Cart Page 1`] = `
 <div>
   <main
-    class="_cart_716e15 _fade-in_716e15 "
+    class="_cart_716e15 _fade-out_716e15 "
   >
     <h2>
       Cart

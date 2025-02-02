@@ -144,7 +144,7 @@ footer .top-footer .socials > a:hover::before {
  transform: translate(-50%, -100%) scaleY(1);
 }
 
-footer .top-footer .content:last-child {
+footer .top-footer .apps {
  display: grid;
  grid-template-columns: repeat(3, 1fr);
  grid-template-rows: auto;
@@ -161,6 +161,7 @@ footer .top-footer .content:last-child .title {
 footer .top-footer .apps > div:not(.title) {
  position: relative;
  width: 150px;
+ height: 54.4px;
  display: grid;
  grid-template-columns: repeat(2, 1fr);
  align-items: center;
@@ -222,4 +223,38 @@ footer .bottom-footer {
  align-items: center;
  justify-content: flex-end;
  padding: 1rem;
+}
+
+@media (max-width: 1100px) {
+ footer .top-footer .content {
+  padding: 0.75rem;
+ }
+ footer .top-footer .content .title {
+  font-size: 1.25rem;
+ }
+
+ footer .top-footer .apps > div > p:last-child {
+  font-size: 0.8rem;
+  font-weight: bold;
+ }
+}
+
+@media (max-width: 950px) {
+ footer .top-footer {
+  flex-wrap: wrap;
+ }
+
+ footer .top-footer .apps {
+  grid-template-columns: repeat(1, 1fr);
+ }
+
+ footer .top-footer .apps > div:not(.title) {
+  grid-template-columns: 30px 1fr;
+ }
+}
+
+@media (max-width: 550px) {
+ footer .top-footer .apps {
+  margin: 0 auto;
+ }
 }
