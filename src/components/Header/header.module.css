@@ -585,7 +585,7 @@ header nav .search-container .search-button:hover::before {
  }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
  header {
   padding: 1rem;
  }
@@ -640,5 +640,13 @@ header nav .search-container .search-button:hover::before {
  header nav .button-wrapper svg {
   width: 16px;
   height: 16px;
+ }
+}
+
+@media (max-height: 600px) {
+ .cart-items-wrapper,
+ .notification-items-wrapper,
+ .wishlist-items-wrapper {
+  max-height: calc(300px - 90px - 1rem);
  }
 }
