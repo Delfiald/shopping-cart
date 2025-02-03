@@ -3,7 +3,7 @@ header {
  position: sticky;
  top: 0;
  left: 0;
- width: 100%;
+ width: 100vw;
  display: flex;
  align-items: center;
  justify-content: center;
@@ -12,8 +12,8 @@ header {
  background: var(--dark-color);
  color: var(--light-color);
  overflow: hidden;
- border-end-end-radius: 10px;
- border-end-start-radius: 10px;
+ border-end-end-radius: 15px;
+ border-end-start-radius: 15px;
  z-index: 2;
 }
 
