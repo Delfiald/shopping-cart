@@ -162,7 +162,7 @@ exports[`Home Page Test > Renders Home Page 1`] = `
       >
         <img
           alt="Call to Action Background"
-          src="/image/product-5.png"
+          src="/image/product-4.png"
         />
       </div>
     </div>

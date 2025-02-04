@@ -1,10 +1,10 @@
 import { getItem, removeItem, setItem } from "./localStorage";
 import { render, screen } from "@testing-library/react";
-import ProductMain from "../components/Main/ProductMain";
+import ProductMain from "../../components/Main/ProductMain";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { MemoryRouter } from "react-router-dom";
-import CartMain from "../components/Main/CartMain";
+import CartMain from "../../components/Main/CartMain";
 import { format } from "date-fns";
 
 const generateMockProducts = (num) => {

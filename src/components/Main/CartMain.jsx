@@ -6,8 +6,12 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BuyModal } from "../Modal/Modal";
 import { format } from "date-fns";
-import { removeItem, setItem } from "../../utils/localStorage";
+import { removeItem, setItem } from "../../utils/localStorage/localStorage";
 import formatText from "../../utils/formatText";
+import { orderAmount } from "../../utils/cartUtils";
+import getDetails from "../../utils/getDetails";
+import createHandleNavigate from "../../utils/handleNavigate";
+import handleWishlistItem from "../../utils/handleWishlistItem";
 
 function CartContents({
  wishlistItem = [],
@@ -41,29 +45,11 @@ function CartContents({
   );
  };
 
- const handleWishlistItem = (product) => {
-  setWishlistItem((prevWishlistItem) => {
-   const exists = prevWishlistItem.find((item) => item.id === product.id);
-
-   let updatedWishlist;
-
-   if (exists) {
-    updatedWishlist = prevWishlistItem.filter((item) => item.id !== product.id);
-   } else {
-    updatedWishlist = [...prevWishlistItem, { id: product.id }];
-   }
-
-   setItem("wishlist", updatedWishlist);
-
-   return updatedWishlist;
-  });
- };
-
  return (
   <section className={styles["cart-contents"]}>
    <div data-testid="item-list" className={styles["item-list"]}>
-    {getCartDetails().length > 0 ? (
-     getCartDetails().map((cartItemProduct) => {
+    {getCartDetails.length > 0 ? (
+     getCartDetails.map((cartItemProduct) => {
       const isWishlist = wishlistItem.some(
        (wishlist) => wishlist.id === cartItemProduct.id
       );
@@ -96,7 +82,9 @@ function CartContents({
           className={`${styles["wishlist-button"]} ${
            styles[isWishlist ? "active" : "inactive"]
           }`}
-          onClick={() => handleWishlistItem(cartItemProduct)}
+          onClick={() =>
+           handleWishlistItem(setWishlistItem, cartItemProduct, setItem)
+          }
          >
           <div className={styles["heart-icon"]}>
            <Heart size={16} />
@@ -172,10 +160,10 @@ function Summary({ totalPrice, orderAmount, handleBuy }) {
     data-testid="buy-button"
     className={styles["buy-button"]}
     onClick={handleBuy}
-    disabled={orderAmount() === 0}
+    disabled={orderAmount === 0}
    >
-    <div className={styles.displayed}>Buy ({orderAmount()})</div>
-    <div className={styles.hovered}>Buy ({orderAmount()})</div>
+    <div className={styles.displayed}>Buy ({orderAmount})</div>
+    <div className={styles.hovered}>Buy ({orderAmount})</div>
    </button>
   </section>
  );
@@ -195,33 +183,13 @@ function CartMain({
  const [modal, setModal] = useState("");
  const [isVisible, setIsVisible] = useState(false);
 
- const handleNavigate = (path) => {
-  setIsExiting(true);
-  setTimeout(() => {
-   navigate(path);
-   setIsExiting(false);
-  }, 500);
- };
-
- const getCartDetails = () => {
-  return cartItem.map((cart) => {
-   const product = products.find((p) => p.id === cart.id);
-   return {
-    ...product,
-    amount: cart.amount,
-   };
-  });
- };
+ const handleNavigate = createHandleNavigate(setIsExiting, navigate);
 
  const totalPrice = () => {
-  const cartDetails = getCartDetails();
+  const cartDetails = getDetails(products).getCartDetails(cartItem);
   return cartDetails.reduce((total, item) => {
    return total + item.price * item.amount;
   }, 0);
- };
-
- const orderAmount = () => {
-  return cartItem.reduce((prevItem, item) => prevItem + item.amount, 0);
  };
 
  const handleBuy = () => {
@@ -271,12 +239,12 @@ function CartMain({
      wishlistItem={wishlistItem}
      setWishlistItem={setWishlistItem}
      setModal={setModal}
-     getCartDetails={getCartDetails}
+     getCartDetails={getDetails(products).getCartDetails(cartItem)}
      handleNavigate={handleNavigate}
     />
     <Summary
      totalPrice={totalPrice}
-     orderAmount={orderAmount}
+     orderAmount={orderAmount(cartItem)}
      handleBuy={handleBuy}
     />
    </main>
@@ -303,13 +271,13 @@ CartContents.propTypes = {
  setCartItem: PropTypes.func,
  wishlistItem: PropTypes.array,
  setWishlistItem: PropTypes.func,
- getCartDetails: PropTypes.func,
+ getCartDetails: PropTypes.array,
  handleNavigate: PropTypes.func,
 };
 
 Summary.propTypes = {
  totalPrice: PropTypes.func,
- orderAmount: PropTypes.func,
+ orderAmount: PropTypes.number,
  handleBuy: PropTypes.func,
 };
 

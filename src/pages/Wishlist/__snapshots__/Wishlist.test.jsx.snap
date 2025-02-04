@@ -316,7 +316,7 @@ exports[`Test Wishlist Page > Should Render Wishlist Page 1`] = `
           class="_number-button_716e15"
         >
           <div
-            class="_active_716e15"
+            class="_current-page-button_716e15 _active_716e15"
             data-testid="current-page-button"
           >
             1

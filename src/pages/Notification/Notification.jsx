@@ -9,6 +9,10 @@ function Notification() {
   isExiting,
   setIsExiting,
  } = useOutletContext();
+
+ if (products.length === 0) {
+  return null;
+ }
  return (
   <NotificationMain
    products={products}

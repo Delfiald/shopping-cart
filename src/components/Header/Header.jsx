@@ -3,9 +3,16 @@ import styles from "./header.module.css";
 import { Bell, Heart, Search, ShoppingCart, X } from "lucide-react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
-import { removeItem, setItem } from "../../utils/localStorage";
+import { removeItem } from "../../utils/localStorage/localStorage";
 import styled from "styled-components";
 import formatText from "../../utils/formatText";
+import {
+ handleReadNotification,
+ unreadNotificationAmount,
+} from "../../utils/notificationUtils";
+import { orderAmount } from "../../utils/cartUtils";
+import getDetails from "../../utils/getDetails";
+import createHandleNavigate from "../../utils/handleNavigate";
 
 const SearchContainer = styled.div`
  &:has(input:focus) {
@@ -41,14 +48,7 @@ function Header({
  setIsExiting,
 }) {
  const navigate = useNavigate();
-
- const handleNavigate = (path) => {
-  setIsExiting(true);
-  setTimeout(() => {
-   navigate(path);
-   setIsExiting(false);
-  }, 500);
- };
+ const handleNavigate = createHandleNavigate(setIsExiting, navigate);
 
  const handleHoverButton = (isCartOpen) => {
   setHoverButton(isCartOpen);
@@ -58,47 +58,15 @@ function Header({
   setSearchInput(value);
  };
 
- const orderAmount = () => {
-  return cartItem.reduce((prevItem, item) => prevItem + item.amount, 0);
+ const handleSearch = () => {
+  if (searchInput.trim() !== "") {
+   handleNavigate(`/shop?search=${searchInput}`);
+  } else {
+   handleNavigate(`/shop`);
+  }
  };
 
- const unreadNotificationAmount = () => {
-  return notificationItem.filter(
-   (notification) => notification.isRead === false
-  ).length;
- };
-
- const getCartDetails = () => {
-  return cartItem.map((cart) => {
-   const product = products.find((p) => p.id === cart.id);
-   return {
-    ...product,
-    amount: cart.amount,
-   };
-  });
- };
-
- const getWishlistDetails = () => {
-  return wishlistItem.map((wishlist) => {
-   const product = products.find((p) => p.id === wishlist.id);
-   return {
-    ...product,
-   };
-  });
- };
-
- const handleReadNotification = (notificationId) => {
-  setNotificationItem((prevNotification) =>
-   prevNotification.map((item) => {
-    const updatedNotification =
-     item.id === notificationId ? { ...item, isRead: true } : item;
-
-    setItem("notification", updatedNotification);
-    return updatedNotification;
-   })
-  );
- };
-
+ //  Handle Remove Notification with Animation
  const handleRemoveAllNotification = () => {
   const removeWithAnimation = () => {
    setTimeout(() => {
@@ -122,14 +90,6 @@ function Header({
 
   addExitAnimation();
   removeWithAnimation();
- };
-
- const handleSearch = () => {
-  if (searchInput.trim() !== "") {
-   handleNavigate(`/shop?search=${searchInput}`);
-  } else {
-   handleNavigate(`/shop`);
-  }
  };
 
  return (
@@ -185,15 +145,15 @@ function Header({
         <ShoppingCart size={18} title="Cart Button Hovered" />
        </div>
       </button>
-      {cartItem && orderAmount() > 0 && (
+      {cartItem && orderAmount(cartItem) > 0 && (
        <div data-testid="item-count" className={styles["item-count"]}>
-        {orderAmount()}
+        {orderAmount(cartItem)}
        </div>
       )}
       {hoverButton === "cart" && (
        <div>
         <div className={styles["cart-information"]}>
-         <div>Cart ({orderAmount()})</div>
+         <div>Cart ({orderAmount(cartItem)})</div>
          <div
           className={styles["see-all-button"]}
           role="button"
@@ -202,25 +162,27 @@ function Header({
           See All
          </div>
         </div>
-        {getCartDetails().length > 0 ? (
+        {orderAmount(cartItem) > 0 ? (
          <div className={styles["cart-items-wrapper"]}>
-          {getCartDetails().map((item) => (
-           <div
-            data-testid={`product-${item.id}`}
-            key={item.id}
-            onClick={() => handleNavigate(`/product/${item.id}`)}
-           >
-            <div className={styles.image}>
-             <img src={item.image} alt={item.title} />
+          {getDetails(products)
+           .getCartDetails(cartItem)
+           .map((item) => (
+            <div
+             data-testid={`product-${item.id}`}
+             key={item.id}
+             onClick={() => handleNavigate(`/product/${item.id}`)}
+            >
+             <div className={styles.image}>
+              <img src={item.image} alt={item.title} />
+             </div>
+             <div className={styles.title}>{item.title}</div>
+             <div className={styles.subtotal}>
+              <p className={styles.amount}>{item.amount}</p>
+              <X size={16} />
+              <p className={styles.price}>{formatText.priceText(item.price)}</p>
+             </div>
             </div>
-            <div className={styles.title}>{item.title}</div>
-            <div className={styles.subtotal}>
-             <p className={styles.amount}>{item.amount}</p>
-             <X size={16} />
-             <p className={styles.price}>{formatText.priceText(item.price)}</p>
-            </div>
-           </div>
-          ))}
+           ))}
          </div>
         ) : (
          <div className={styles["empty-cart"]}>
@@ -254,12 +216,12 @@ function Header({
         <Bell size={18} title="Notification Button Hovered" />
        </div>
       </button>
-      {notificationItem && unreadNotificationAmount() > 0 && (
+      {notificationItem && unreadNotificationAmount(notificationItem) > 0 && (
        <div
         data-testid="notification-count"
         className={styles["notification-count"]}
        >
-        {unreadNotificationAmount()}
+        {unreadNotificationAmount(notificationItem)}
        </div>
       )}
       {hoverButton === "notification" && (
@@ -283,7 +245,9 @@ function Header({
             className={`${styles["notification-item"]} ${
              styles[item.isRead ? "read" : "unread"]
             } ${item.isExiting ? styles["exiting"] : ""}`}
-            onMouseEnter={() => handleReadNotification(item.id)}
+            onMouseEnter={() =>
+             handleReadNotification(item.id, setNotificationItem)
+            }
            >
             <div
              data-testid={`notification-time-${item.id}`}
@@ -361,23 +325,25 @@ function Header({
           See All
          </div>
         </div>
-        {getWishlistDetails().length > 0 ? (
+        {getDetails(products).getWishlistDetails(wishlistItem).length > 0 ? (
          <div className={styles["wishlist-items-wrapper"]}>
-          {getWishlistDetails().map((item) => (
-           <div
-            data-testid={`product-${item.id}`}
-            key={item.id}
-            onClick={() => handleNavigate(`/product/${item.id}`)}
-           >
-            <div className={styles.image}>
-             <img src={item.image} alt={item.title} />
+          {getDetails(products)
+           .getWishlistDetails(wishlistItem)
+           .map((item) => (
+            <div
+             data-testid={`product-${item.id}`}
+             key={item.id}
+             onClick={() => handleNavigate(`/product/${item.id}`)}
+            >
+             <div className={styles.image}>
+              <img src={item.image} alt={item.title} />
+             </div>
+             <div className={styles.title}>{item.title}</div>
+             <div className={styles.price}>
+              {formatText.priceText(item.price)}
+             </div>
             </div>
-            <div className={styles.title}>{item.title}</div>
-            <div className={styles.price}>
-             {formatText.priceText(item.price)}
-            </div>
-           </div>
-          ))}
+           ))}
          </div>
         ) : (
          <div className={styles["empty-wishlist"]}>

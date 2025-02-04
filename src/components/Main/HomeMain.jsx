@@ -4,6 +4,7 @@ import styles from "./main.module.css";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import createHandleNavigate from "../../utils/handleNavigate";
 
 const CarouselLoading = styled.div.withConfig({
  shouldForwardProp: (prop) => prop !== "loadingDuration",
@@ -24,16 +25,24 @@ const CarouselLoading = styled.div.withConfig({
 
 function HomeMain({ categories, products, isExiting, setIsExiting }) {
  const navigate = useNavigate();
+ const handleNavigate = createHandleNavigate(setIsExiting, navigate);
+
+ const [isVisible, setIsVisible] = useState(false);
+
+ useEffect(() => {
+  setIsVisible(true);
+ }, []);
+
+ //  Carousel Logic
  const [displayedProduct, setDisplayedProduct] = useState({
   id: -1,
   image: "",
   title: "",
  });
+
  const [loadingDuration, setLoadingDuration] = useState("7.5s");
  const [fadeIn, setFadeIn] = useState(false);
  const [ctaProductIndex, setCtaProductIndex] = useState(null);
-
- const [isVisible, setIsVisible] = useState(false);
 
  const handleDisplayedProduct = (
   displayedId,
@@ -51,14 +60,6 @@ function HomeMain({ categories, products, isExiting, setIsExiting }) {
    setLoadingDuration("7.5s");
    setFadeIn(true);
   }, 300);
- };
-
- const handleNavigate = (path) => {
-  setIsExiting(true);
-  setTimeout(() => {
-   navigate(path);
-   setIsExiting(false);
-  }, 500);
  };
 
  useEffect(() => {
@@ -98,10 +99,6 @@ function HomeMain({ categories, products, isExiting, setIsExiting }) {
    };
   }
  }, [ctaProductIndex, displayedProduct.id, products]);
-
- useEffect(() => {
-  setIsVisible(true);
- }, []);
 
  return (
   <main
