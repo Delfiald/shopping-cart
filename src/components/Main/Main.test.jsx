@@ -17,7 +17,7 @@ import Header from "../Header/Header";
 import NotificationMain from "./NotificationMain";
 
 import styles from "./main.module.css";
-import { vi } from "vitest";
+import { expect, vi } from "vitest";
 
 const mockCategories = ["category-1", "category-2", "category-3", "category-4"];
 
@@ -1091,6 +1091,14 @@ describe("Test Main component of Cart", () => {
   expect(screen.getByTestId("buy-button")).toHaveTextContent("Buy (0)");
 
   expect(screen.getByTestId("shop-button")).toBeInTheDocument();
+
+  // Close Modal
+  const closeButton = screen.getByTestId("close-button");
+  expect(closeButton).toBeInTheDocument();
+
+  await user.click(closeButton);
+
+  expect(screen.queryByTestId("shop-button")).not.toBeInTheDocument();
  });
 
  it("Should navigate to shop when shop button is clicked in modal", async () => {

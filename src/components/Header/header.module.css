@@ -603,6 +603,10 @@ header nav .search-container .search-button:hover::before {
  header nav .search-container .search-button {
   font-size: 0.8rem;
  }
+
+ .button-wrapper {
+  justify-content: end;
+ }
 }
 
 @media (max-width: 500px) {

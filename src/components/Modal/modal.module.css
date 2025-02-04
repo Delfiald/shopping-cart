@@ -11,6 +11,9 @@
  position: relative;
  width: 100%;
  height: 100%;
+ display: flex;
+ align-items: center;
+ justify-content: center;
 }
 
 .buy-modal-wrapper::before {
@@ -25,10 +28,7 @@
 }
 
 .buy-modal-wrapper .buy-modal-container {
- position: absolute;
- top: 50%;
- left: 50%;
- transform: translate(-50%, -50%);
+ position: relative;
  padding: 1rem;
  background: var(--light-color);
  border-radius: 10px;
@@ -38,6 +38,21 @@
  flex-direction: column;
  gap: 1rem;
  min-height: 30vh;
+}
+
+.buy-modal-wrapper .close-button {
+ position: absolute;
+ top: 0;
+ right: 0;
+ width: 30px;
+ height: 30px;
+ transform: translate(50%, -50%);
+ background: var(--light-color);
+ border-radius: 50%;
+ border: 1px solid var(--light-500-color);
+ display: flex;
+ align-items: center;
+ justify-content: center;
 }
 
 .buy-modal-wrapper .buy-modal-container h3 {
@@ -95,4 +110,35 @@
 
 .buy-modal-wrapper .buy-modal-container button:hover .hovered {
  transform: translate(-50%, -50%) scaleY(1);
+}
+
+@media (max-width: 1100px) {
+ .buy-modal .buy-modal-container h3 {
+  font-size: 1rem;
+ }
+}
+
+@media (max-width: 1100px) and (orientation: portrait) {
+ .buy-modal-wrapper .buy-modal-container {
+  min-height: 15vh;
+ }
+
+ .buy-modal .buy-modal-container h3 {
+  font-size: 1.25rem;
+ }
+}
+
+@media (max-width: 600px) {
+ .buy-modal .buy-modal-container {
+  width: 80%;
+ }
+ .buy-modal .buy-modal-container h3 {
+  font-size: 1.15rem;
+ }
+}
+
+@media (max-width: 400px) {
+ .buy-modal .buy-modal-container h3 {
+  font-size: 1rem;
+ }
 }
