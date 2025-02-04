@@ -6,6 +6,7 @@ import { X } from "lucide-react";
 
 export function BuyModal({ setModal, setIsExiting }) {
  const navigate = useNavigate();
+
  const handleRouteToShop = () => {
   setIsExiting(true);
   setTimeout(() => {
@@ -14,6 +15,7 @@ export function BuyModal({ setModal, setIsExiting }) {
    setIsExiting(false);
   }, 500);
  };
+
  return (
   <div className={styles["buy-modal"]}>
    <div className={styles["buy-modal-wrapper"]}>

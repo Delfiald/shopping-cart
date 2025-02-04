@@ -3,9 +3,15 @@ import styles from "./main.module.css";
 import { Check, ChevronRight, Trash, X } from "lucide-react";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { removeItem, setItem } from "../../utils/localStorage";
+import { removeItem, setItem } from "../../utils/localStorage/localStorage";
 import { useNavigate } from "react-router-dom";
 import formatText from "../../utils/formatText";
+import {
+ handleReadNotification,
+ unreadNotificationAmount,
+} from "../../utils/notificationUtils";
+import createHandleNavigate from "../../utils/handleNavigate";
+import getDetails from "../../utils/getDetails";
 
 function NotificationList({
  notificationItem,
@@ -14,19 +20,6 @@ function NotificationList({
  handleNavigate,
 }) {
  const [detail, setDetail] = useState("");
-
- const handleReadNotification = (notificationId) => {
-  setNotificationItem((prevNotification) =>
-   prevNotification.map((item) => {
-    const updatedNotification =
-     item.id === notificationId ? { ...item, isRead: true } : item;
-
-    setItem("notification", updatedNotification);
-
-    return updatedNotification;
-   })
-  );
- };
 
  const handleNotificationRemove = (notificationId) => {
   setNotificationItem((prevNotification) => {
@@ -44,21 +37,10 @@ function NotificationList({
   );
  };
 
- const getNotificationItemDetails = (notificationProducts) => {
-  return notificationProducts.map((item) => {
-   const product = products.find((p) => p.id === item.id);
-   return {
-    ...product,
-    amount: item.amount,
-   };
-  });
- };
-
- const handlePurchaseTotal = (products) => {
-  return getNotificationItemDetails(products).reduce(
-   (total, product) => total + product.amount * product.price,
-   0
-  );
+ const handlePurchaseTotal = (productsList) => {
+  return getDetails(products)
+   .getNotificationItemDetails(productsList)
+   .reduce((total, product) => total + product.amount * product.price, 0);
  };
 
  return (
@@ -71,8 +53,10 @@ function NotificationList({
        data-testid={`notification-item-${notification.id}`}
        className={`${styles["notification-item"]} ${
         styles[notification.isRead ? "read" : "unread"]
-       }`}
-       onMouseEnter={() => handleReadNotification(notification.id)}
+       } ${styles[detail === notification.id ? "open" : "closed"]}`}
+       onMouseEnter={() =>
+        handleReadNotification(notification.id, setNotificationItem)
+       }
       >
        <p className={styles.time}>{notification.timeStamp}</p>
        <div
@@ -98,23 +82,25 @@ function NotificationList({
          data-testid={`notification-${notification.id}`}
          className={styles.detail}
         >
-         {getNotificationItemDetails(notification.products).map((item) => (
-          <div key={item.id} className={styles.item}>
-           <div className={styles["product-title"]}>{item.title}</div>
-           <div className={styles["product-subtotal"]}>
-            <div className={styles["amount-and-price"]}>
-             {item.amount}
-             <X size={16} />
-             {formatText.priceText(item.price)}
-            </div>
-            <div className={styles.subtotal}>
-             Subtotal: {formatText.priceText(item.amount * item.price)}
+         {getDetails(products)
+          .getNotificationItemDetails(notification.products)
+          .map((item) => (
+           <div key={item.id} className={styles.item}>
+            <div className={styles["product-title"]}>{item.title}</div>
+            <div className={styles["product-subtotal"]}>
+             <div className={styles["amount-and-price"]}>
+              {item.amount}
+              <X size={16} />
+              {formatText.priceText(item.price)}
+             </div>
+             <div className={styles.subtotal}>
+              Subtotal: {formatText.priceText(item.amount * item.price)}
+             </div>
             </div>
            </div>
-          </div>
-         ))}
+          ))}
          <div data-testid={`total-${notification.id}`} className={styles.total}>
-          Total:{" "}
+          Total:
           {formatText.priceText(handlePurchaseTotal(notification.products))}
          </div>
         </div>
@@ -148,18 +134,7 @@ function NotificationMain({
  const navigate = useNavigate();
  const [isVisible, setIsVisible] = useState(false);
 
- const handleNavigate = (path) => {
-  setIsExiting(true);
-  setTimeout(() => {
-   navigate(path);
-   setIsExiting(false);
-  }, 500);
- };
- const unreadNotificationAmount = () => {
-  return notificationItem.filter(
-   (notification) => notification.isRead === false
-  ).length;
- };
+ const handleNavigate = createHandleNavigate(setIsExiting, navigate);
 
  const handleMarksAllRead = () => {
   setNotificationItem((prevNotification) => {
@@ -197,11 +172,11 @@ function NotificationMain({
     >
      <div className={styles.displayed}>
       <Check size={16} />
-      Marks All Read ({unreadNotificationAmount()})
+      Marks All Read ({unreadNotificationAmount(notificationItem)})
      </div>
      <div className={styles.hovered}>
       <Check size={16} />
-      Marks All Read ({unreadNotificationAmount()})
+      Marks All Read ({unreadNotificationAmount(notificationItem)})
      </div>
     </div>
    )}

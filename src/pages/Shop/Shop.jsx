@@ -1,11 +1,15 @@
-import ShopMain from "../../components/Main/ShopMain";
-import Aside from "../../components/Aside/Aside";
 import { useOutletContext, useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
+import ShopMain from "../../components/Main/ShopMain";
+import Aside from "../../components/Aside/Aside";
+import {
+ createHandleFilterChange,
+ createHandleItemsPerPageChange,
+ createHandlePageChange,
+ createHandleSortChange,
+} from "../../utils/searchParamsUtils";
 
 function Shop() {
- const [searchParams, setSearchParams] = useSearchParams();
- const category = searchParams.get("category");
  const {
   categories,
   products,
@@ -15,6 +19,8 @@ function Shop() {
   setIsExiting,
  } = useOutletContext();
 
+ const [searchParams, setSearchParams] = useSearchParams();
+ const category = searchParams.get("category");
  const page = searchParams.get("page");
  const itemPerPage = searchParams.get("itemsPerPage");
  const sort = searchParams.get("sort");
@@ -37,40 +43,11 @@ function Shop() {
    return true;
   });
 
- const handleFilterChange = (newCategory) => {
-  setSearchParams((prevParams) => {
-   const params = new URLSearchParams(prevParams);
-   params.set("category", newCategory);
-   params.set("page", 1);
-   return params;
-  });
- };
-
- const handlePageChange = (page) => {
-  setSearchParams((prevParams) => {
-   const params = new URLSearchParams(prevParams);
-   params.set("page", page);
-   return params;
-  });
- };
-
- const handleItemsPerPageChange = (itemsPerPage) => {
-  setSearchParams((prevParams) => {
-   const params = new URLSearchParams(prevParams);
-   params.set("page", 1);
-   params.set("itemsPerPage", itemsPerPage);
-
-   return params;
-  });
- };
-
- const handleSortChange = (sort) => {
-  setSearchParams((prevParams) => {
-   const params = new URLSearchParams(prevParams);
-   params.set("sort", sort);
-   return params;
-  });
- };
+ const handleItemsPerPageChange =
+  createHandleItemsPerPageChange(setSearchParams);
+ const handlePageChange = createHandlePageChange(setSearchParams);
+ const handleSortChange = createHandleSortChange(setSearchParams);
+ const handleFilterChange = createHandleFilterChange(setSearchParams);
 
  useEffect(() => {
   const validCategory = categories.includes(category) ? category : "all";

@@ -1,9 +1,14 @@
 import { useOutletContext, useSearchParams } from "react-router-dom";
-import WishlistMain from "../../components/Main/WishlistMain";
 import { useEffect } from "react";
+import WishlistMain from "../../components/Main/WishlistMain";
+import getDetails from "../../utils/getDetails";
+import {
+ createHandleItemsPerPageChange,
+ createHandlePageChange,
+ createHandleSortChange,
+} from "../../utils/searchParamsUtils";
 
 function Wishlist() {
- const [searchParams, setSearchParams] = useSearchParams();
  const {
   products,
   setCartItem,
@@ -15,44 +20,15 @@ function Wishlist() {
   setIsExiting,
  } = useOutletContext();
 
+ const [searchParams, setSearchParams] = useSearchParams();
  const page = searchParams.get("page");
  const itemPerPage = searchParams.get("itemsPerPage");
  const sort = searchParams.get("sort");
 
- const handlePageChange = (page) => {
-  setSearchParams((prevParams) => {
-   const params = new URLSearchParams(prevParams);
-   params.set("page", page);
-   return params;
-  });
- };
-
- const handleItemsPerPageChange = (itemsPerPage) => {
-  setSearchParams((prevParams) => {
-   const params = new URLSearchParams(prevParams);
-   params.set("page", 1);
-   params.set("itemsPerPage", itemsPerPage);
-
-   return params;
-  });
- };
-
- const handleSortChange = (sort) => {
-  setSearchParams((prevParams) => {
-   const params = new URLSearchParams(prevParams);
-   params.set("sort", sort);
-   return params;
-  });
- };
-
- const getWishlistDetails = () => {
-  return wishlistItem.map((wishlist) => {
-   const product = products.find((p) => p.id === wishlist.id);
-   return {
-    ...product,
-   };
-  });
- };
+ const handleItemsPerPageChange =
+  createHandleItemsPerPageChange(setSearchParams);
+ const handlePageChange = createHandlePageChange(setSearchParams);
+ const handleSortChange = createHandleSortChange(setSearchParams);
 
  useEffect(() => {
   const validSort = [
@@ -97,10 +73,14 @@ function Wishlist() {
   sort,
  ]);
 
+ if (products.length === 0) {
+  return null;
+ }
+
  return (
   <>
    <WishlistMain
-    products={getWishlistDetails()}
+    products={getDetails(products).getWishlistDetails(wishlistItem)}
     setCartItem={setCartItem}
     wishlistItem={wishlistItem}
     setWishlistItem={setWishlistItem}

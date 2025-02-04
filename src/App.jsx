@@ -3,7 +3,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import Footer from "./components/Footer/Footer";
 import { fetchData } from "./services/fakeStoreAPI";
 import Header from "./components/Header/Header";
-import { getItem } from "./utils/localStorage";
+import { getItem } from "./utils/localStorage/localStorage";
 import Feedback from "./components/Feedback/Feedback";
 
 function App() {

@@ -12,8 +12,11 @@ import {
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { setItem } from "../../utils/localStorage";
+import { setItem } from "../../utils/localStorage/localStorage";
 import formatText from "../../utils/formatText";
+import createHandleNavigate from "../../utils/handleNavigate";
+import { handleAddToCart } from "../../utils/cartUtils";
+import handleWishlistItem, { isWishlist } from "../../utils/handleWishlistItem";
 
 function Media(props) {
  const trackRef = useRef(null);
@@ -158,6 +161,7 @@ function Option(props) {
   }
  };
 
+ //  Handle Share Button
  const handleShareIndicator = () => {
   setShareIndicator(true);
 
@@ -280,50 +284,7 @@ function ProductMain({
 
  const [isVisible, setIsVisible] = useState(false);
 
- const handleNavigate = (entries = "/") => {
-  setIsExiting(true);
-  setTimeout(() => {
-   navigate(entries);
-   setIsExiting(false);
-  }, 500);
- };
-
- const handleAddToCart = () => {
-  setCartItem((prevCartItem) => {
-   const exists = prevCartItem.find((item) => item.id == product.id);
-
-   let updatedCart;
-
-   if (exists) {
-    updatedCart = prevCartItem.map((item) =>
-     item.id === product.id ? { ...item, amount: item.amount + amount } : item
-    );
-   } else {
-    updatedCart = [...prevCartItem, { id: product.id, amount: amount }];
-   }
-
-   setItem("cart", updatedCart);
-
-   return updatedCart;
-  });
- };
-
- const isWishlist = () =>
-  wishlistItem.some((wishlist) => wishlist.id === product.id);
-
- const handleWishlistItem = () => {
-  setWishlistItem((prevWishlistItem) => {
-   const exists = prevWishlistItem.find((item) => item.id === product.id);
-
-   const updatedWishlist = exists
-    ? prevWishlistItem.filter((item) => item.id !== product.id)
-    : [...prevWishlistItem, { id: product.id }];
-
-   setItem("wishlist", updatedWishlist);
-
-   return updatedWishlist;
-  });
- };
+ const handleNavigate = createHandleNavigate(setIsExiting, navigate);
 
  useEffect(() => {
   setDisplayedImage(product.image);
@@ -372,9 +333,11 @@ function ProductMain({
      image={product.image}
      amount={amount}
      setAmount={setAmount}
-     handleAddToCart={handleAddToCart}
-     handleWishlistItem={handleWishlistItem}
-     isWishlistItem={isWishlist}
+     handleAddToCart={() => handleAddToCart(setCartItem, product, amount)}
+     handleWishlistItem={() =>
+      handleWishlistItem(setWishlistItem, product, setItem)
+     }
+     isWishlistItem={() => isWishlist(wishlistItem, product)}
     />
    </div>
   </main>
