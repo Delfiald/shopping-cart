@@ -6,8 +6,14 @@ import { useEffect } from "react";
 function Shop() {
  const [searchParams, setSearchParams] = useSearchParams();
  const category = searchParams.get("category");
- const { categories, products, hoverButton, setHoverButton } =
-  useOutletContext();
+ const {
+  categories,
+  products,
+  hoverButton,
+  setHoverButton,
+  isExiting,
+  setIsExiting,
+ } = useOutletContext();
 
  const page = searchParams.get("page");
  const itemPerPage = searchParams.get("itemsPerPage");
@@ -77,11 +83,15 @@ function Shop() {
    ? sort
    : "name-asc";
   const totalItems = displayedProducts.length;
-  const maxPage = Math.ceil(totalItems / (itemPerPage || 10));
+  const maxPage =
+   itemPerPage === "Infinity" ? 1 : Math.ceil(totalItems / (itemPerPage || 10));
   const validPage = Math.max(1, Math.min(parseInt(page) || 1, maxPage));
-  const validItemsPerPage = [5, 10, null].includes(parseInt(itemPerPage))
-   ? itemPerPage
-   : 10;
+  const validItemsPerPage =
+   itemPerPage === "Infinity"
+    ? Infinity
+    : [5, 10].includes(parseInt(itemPerPage))
+    ? itemPerPage
+    : 10;
 
   const defaultParams = {
    category: validCategory,
@@ -97,7 +107,7 @@ function Shop() {
    JSON.stringify(updatedParams) !==
    JSON.stringify(Object.fromEntries(searchParams))
   ) {
-   setSearchParams(updatedParams);
+   setSearchParams(updatedParams, { replace: true });
   }
  }, [
   categories,
@@ -132,6 +142,8 @@ function Shop() {
     hoverButton={hoverButton}
     setHoverButton={setHoverButton}
     search={search}
+    isExiting={isExiting}
+    setIsExiting={setIsExiting}
    />
   </>
  );

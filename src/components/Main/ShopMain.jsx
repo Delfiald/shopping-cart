@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styles from "./main.module.css";
 
 import PropTypes from "prop-types";
@@ -8,24 +8,30 @@ import {
  ChevronRight,
  ChevronUp,
 } from "lucide-react";
+import formatText from "../../utils/formatText";
+import { useEffect, useState } from "react";
 
 const ITEM_PER_PAGE = {
  FIVE: 5,
  TEN: 10,
- SHOW_ALL: null,
+ SHOW_ALL: Infinity,
 };
 
-function Card({ product }) {
+function Card({ product, handleNavigate }) {
  return (
-  <Link
-   to={`/product/${product.id}`}
+  <div
+   onClick={() => handleNavigate(`/product/${product.id}`)}
    data-testid={`product-card-${product.id}`}
    className={styles.card}
   >
-   <img src={product.image} alt={product.title} />
+   <div className={styles["image-wrapper"]}>
+    <img src={product.image} alt={product.title} />
+   </div>
    <div className={styles["product-name"]}>{product.title}</div>
-   <div className={styles["product-price"]}>{product.price}</div>
-  </Link>
+   <div className={styles["product-price"]}>
+    {formatText.priceText(product.price)}
+   </div>
+  </div>
  );
 }
 
@@ -54,14 +60,22 @@ function ProductListHeader(props) {
   <div className={styles["product-list-header"]}>
    <div data-testid="list-header">
     <div className={styles["item-information"]}>
-     {`Showing ${props.page && (props.page - 1) * props.itemPerPage + 1} - ${
-      props.totalProducts &&
-      Math.min(props.page * props.itemPerPage, props.totalProducts)
-     } products`}{" "}
-     {props.search && props.search !== "" && `of ${props.search}`}
+     {props.totalProducts > 0 &&
+      `Showing ${
+       props.page && !isNaN(props.itemPerPage)
+        ? (props.page - 1) * props.itemPerPage + 1
+        : 1
+      } - ${
+       props.totalProducts
+        ? isNaN(props.itemPerPage)
+          ? props.totalProducts
+          : Math.min(props.page * props.itemPerPage, props.totalProducts)
+        : 0
+      } products${
+       props.search && props.search !== "" ? ` of ${props.search}` : ""
+      }`}
     </div>
-    <div className={styles["sort-wrapper"]}>
-     <p>Sort:</p>
+    <div className={styles["option-wrapper"]}>
      <div
       data-testid="sort-button"
       className={styles["sort-button"]}
@@ -82,72 +96,76 @@ function ProductListHeader(props) {
          data-testid="sort-option-1"
          onClick={() => props.setSort("name-asc")}
         >
-         Name Asc
+         <div>Name Asc</div>
         </div>
         <div
          data-testid="sort-option-2"
          onClick={() => props.setSort("name-desc")}
         >
-         Name Desc
+         <div>Name Desc</div>
         </div>
         <div
          data-testid="sort-option-3"
          onClick={() => props.setSort("price-asc")}
         >
-         Lowest Price
+         <div>Lowest Price</div>
         </div>
         <div
          data-testid="sort-option-4"
          onClick={() => props.setSort("price-desc")}
         >
-         Highest Price
+         <div>Highest Price</div>
         </div>
        </div>
       )}
      </div>
-    </div>
-    <div
-     data-testid="item-per-page"
-     className={styles["item-per-page"]}
-     onMouseEnter={() => props.setHoverButton("item-per-page")}
-     onMouseLeave={handleMouseLeave}
-    >
      <div
-      data-testid="item-per-page-value"
-      className={styles["item-per-page-value"]}
+      data-testid="item-per-page"
+      className={styles["item-per-page"]}
+      onMouseEnter={() => props.setHoverButton("item-per-page")}
+      onMouseLeave={handleMouseLeave}
      >
-      <p>{props.itemPerPage ? props.itemPerPage : "Show All"}</p>
-      {props.hoverButton && props.hoverButton === "item-per-page" ? (
-       <ChevronUp size={16} />
-      ) : (
-       <ChevronDown size={16} />
+      <div
+       data-testid="item-per-page-value"
+       className={styles["item-per-page-value"]}
+      >
+       <p>
+        {!Number.isNaN(parseInt(props.itemPerPage))
+         ? props.itemPerPage
+         : "Show All"}
+       </p>
+       {props.hoverButton && props.hoverButton === "item-per-page" ? (
+        <ChevronUp size={16} />
+       ) : (
+        <ChevronDown size={16} />
+       )}
+      </div>
+      {props.hoverButton && props.hoverButton === "item-per-page" && (
+       <div
+        data-testid="item-per-page-dropdown"
+        className={styles["dropdown-wrapper"]}
+       >
+        <div
+         data-testid="item-per-page-option-1"
+         onClick={() => handleItemPerPageDropdown(ITEM_PER_PAGE.FIVE)}
+        >
+         <div>5</div>
+        </div>
+        <div
+         data-testid="item-per-page-option-2"
+         onClick={() => handleItemPerPageDropdown(ITEM_PER_PAGE.TEN)}
+        >
+         <div>10</div>
+        </div>
+        <div
+         data-testid="item-per-page-option-3"
+         onClick={() => handleItemPerPageDropdown(ITEM_PER_PAGE.SHOW_ALL)}
+        >
+         <div>Show All</div>
+        </div>
+       </div>
       )}
      </div>
-     {props.hoverButton && props.hoverButton === "item-per-page" && (
-      <div
-       data-testid="item-per-page-dropdown"
-       className={styles["dropdown-wrapper"]}
-      >
-       <div
-        data-testid="item-per-page-option-1"
-        onClick={() => handleItemPerPageDropdown(ITEM_PER_PAGE.FIVE)}
-       >
-        5
-       </div>
-       <div
-        data-testid="item-per-page-option-2"
-        onClick={() => handleItemPerPageDropdown(ITEM_PER_PAGE.TEN)}
-       >
-        10
-       </div>
-       <div
-        data-testid="item-per-page-option-3"
-        onClick={() => handleItemPerPageDropdown(ITEM_PER_PAGE.SHOW_ALL)}
-       >
-        Show All
-       </div>
-      </div>
-     )}
     </div>
    </div>
   </div>
@@ -159,13 +177,20 @@ function ProductListWrapper(props) {
   return null;
  }
 
- const currentProducts =
-  props.itemPerPage === null
-   ? props.products
-   : props.products.slice(
-      (props.page - 1) * props.itemPerPage,
-      props.page * props.itemPerPage
-     );
+ const currentProducts = Number.isNaN(props.itemPerPage)
+  ? props.products
+  : props.products.slice(
+     (props.page - 1) * props.itemPerPage,
+     props.page * props.itemPerPage
+    );
+
+ if (!props.products.length > 0) {
+  return (
+   <div className={styles["empty-shop"]}>
+    <div>{`There are no products for "${props.search}"`}</div>
+   </div>
+  );
+ }
 
  return (
   <section
@@ -174,7 +199,11 @@ function ProductListWrapper(props) {
   >
    {props.products &&
     currentProducts.map((product) => (
-     <Card key={product.id} product={product} />
+     <Card
+      key={product.id}
+      product={product}
+      handleNavigate={props.handleNavigate}
+     />
     ))}
   </section>
  );
@@ -246,7 +275,10 @@ function ProductListBottom(props) {
      )}
 
      {/* It render current Page Number */}
-     <div data-testid="current-page-button" className={styles["active"]}>
+     <div
+      data-testid="current-page-button"
+      className={`${styles["current-page-button"]} ${styles["active"]}`}
+     >
       {props.page}
      </div>
 
@@ -290,6 +322,15 @@ function ProductListBottom(props) {
 }
 
 function ShopMain(props) {
+ const navigate = useNavigate();
+ const [isVisible, setIsVisible] = useState(false);
+ const handleNavigate = (path) => {
+  props.setIsExiting(true);
+  setTimeout(() => {
+   navigate(path);
+   props.setIsExiting(false);
+  }, 500);
+ };
  // Displayed Products Sorted
  const displayedProducts = props.products
   ? [...props.products].sort((a, b) => {
@@ -308,11 +349,19 @@ function ShopMain(props) {
     })
   : props.products;
 
+ useEffect(() => {
+  setIsVisible(true);
+ }, []);
+
  return (
-  <main>
+  <main
+   className={`${styles.shop} ${isVisible ? styles["fade-out"] : ""} ${
+    props.isExiting ? styles["fade-in"] : ""
+   }`}
+  >
    <h2>
     {props.category && props.category !== "all"
-     ? props.category
+     ? formatText.capitalizedWords(props.category)
      : "All Products"}
    </h2>
    {props.products && (
@@ -332,6 +381,8 @@ function ShopMain(props) {
     products={displayedProducts}
     page={props.page}
     itemPerPage={props.itemPerPage}
+    handleNavigate={handleNavigate}
+    search={props.search}
    />
    {props.products && (
     <ProductListBottom
@@ -357,10 +408,13 @@ ShopMain.propTypes = {
  hoverButton: PropTypes.string,
  setHoverButton: PropTypes.func,
  search: PropTypes.string,
+ isExiting: PropTypes.bool,
+ setIsExiting: PropTypes.func,
 };
 
 Card.propTypes = {
  product: PropTypes.object,
+ handleNavigate: PropTypes.func,
 };
 
 ProductListHeader.propTypes = {
@@ -379,6 +433,8 @@ ProductListWrapper.propTypes = {
  products: PropTypes.array,
  page: PropTypes.number,
  itemPerPage: PropTypes.number,
+ handleNavigate: PropTypes.func,
+ search: PropTypes.string,
 };
 
 ProductListBottom.propTypes = {

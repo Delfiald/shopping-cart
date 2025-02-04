@@ -9,6 +9,8 @@ function Cart() {
   wishlistItem,
   setWishlistItem,
   setNotificationItem,
+  isExiting,
+  setIsExiting,
  } = useOutletContext();
  return (
   <>
@@ -19,6 +21,8 @@ function Cart() {
     wishlistItem={wishlistItem}
     setWishlistItem={setWishlistItem}
     setNotificationItem={setNotificationItem}
+    isExiting={isExiting}
+    setIsExiting={setIsExiting}
    />
   </>
  );

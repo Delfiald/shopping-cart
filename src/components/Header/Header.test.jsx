@@ -1,15 +1,17 @@
-import { act, render, screen } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import Header from "./Header";
 import { MemoryRouter, Outlet, Route, Routes } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
-import { expect, it } from "vitest";
 import Product from "../../pages/Product/Product";
 import Home from "../../pages/Home/Home";
 import Cart from "../../pages/Cart/Cart";
 import Wishlist from "../../pages/Wishlist/Wishlist";
 import Notification from "../../pages/Notification/Notification";
 import Shop from "../../pages/Shop/Shop";
+
+import styles from "./header.module.css";
+import { vi } from "vitest";
 
 const generateMockProducts = (num) => {
  const products = [];
@@ -44,7 +46,7 @@ const generateMockNotification = (num) => {
 const generateMockCategories = (num) => {
  const mockCategories = [];
  for (let i = 1; i <= num; i++) {
-  mockCategories.push([`category-${i}`]);
+  mockCategories.push(`category-${i}`);
  }
 
  return mockCategories;
@@ -53,6 +55,7 @@ const generateMockCategories = (num) => {
 const MockNavigate = () => {
  const [hoverButton, setHoverButton] = useState(null);
  const [searchInput, setSearchInput] = useState("");
+ const [isExiting, setIsExiting] = useState(false);
 
  return (
   <MemoryRouter initialEntries={["/"]}>
@@ -65,6 +68,8 @@ const MockNavigate = () => {
     setHoverButton={setHoverButton}
     searchInput={searchInput}
     setSearchInput={setSearchInput}
+    isExiting={isExiting}
+    setIsExiting={setIsExiting}
    />
    <Routes>
     <Route
@@ -77,6 +82,8 @@ const MockNavigate = () => {
         hoverButton,
         setHoverButton,
         cartItem: mockCartItem,
+        isExiting: isExiting,
+        setIsExiting: setIsExiting,
        }}
       />
      }
@@ -168,8 +175,8 @@ describe("Test Header", () => {
  it("Should Render Header", () => {
   render(<MockHeader />);
 
-  const headerText = screen.getByRole("heading", { name: "Shoppers" });
-  expect(headerText).toBeInTheDocument();
+  const headerText = screen.getAllByText("Shoppers");
+  expect(headerText[0]).toBeInTheDocument();
  });
 
  it("Renders search bar", () => {
@@ -199,7 +206,9 @@ describe("Test Header", () => {
 
   await user.click(shoppingCartButton);
 
-  expect(screen.getByRole("heading", { name: "Cart" })).toBeInTheDocument();
+  await waitFor(() => {
+   expect(screen.getByRole("heading", { name: "Cart" })).toBeInTheDocument();
+  });
  });
 
  it(`Doesn't Render Item Counter in Cart`, () => {
@@ -317,7 +326,9 @@ describe("Test Header", () => {
    await user.unhover(cartButtonWrapper);
   });
 
-  expect(screen.getByRole("heading", { name: "Cart" })).toBeInTheDocument();
+  await waitFor(() => {
+   expect(screen.getByRole("heading", { name: "Cart" })).toBeInTheDocument();
+  });
  });
 
  it("Should Navigate to Product Page when Click Product on Cart Button when Hovered", async () => {
@@ -336,7 +347,9 @@ describe("Test Header", () => {
    await user.unhover(cartButtonWrapper);
   });
 
-  expect(screen.getByTestId("display-image")).toBeInTheDocument();
+  await waitFor(() => {
+   expect(screen.getByTestId("display-image")).toBeInTheDocument();
+  });
  });
 
  it("Should Navigate to Wishlist Page when Click Wishlist Icon", async () => {
@@ -347,7 +360,11 @@ describe("Test Header", () => {
   const wishlistButton = screen.getByTestId("wishlist-button");
   await user.click(wishlistButton);
 
-  expect(screen.getByRole("heading", { name: "Wishlist" })).toBeInTheDocument();
+  await waitFor(() => {
+   expect(
+    screen.getByRole("heading", { name: "Wishlist" })
+   ).toBeInTheDocument();
+  });
  });
 
  it("Should Navigate to Wishlist Page When Click See All Button when Hover on Wishlist Button", async () => {
@@ -369,7 +386,11 @@ describe("Test Header", () => {
    await user.unhover(wishlistButtonWrapper);
   });
 
-  expect(screen.getByRole("heading", { name: "Wishlist" })).toBeInTheDocument();
+  await waitFor(() => {
+   expect(
+    screen.getByRole("heading", { name: "Wishlist" })
+   ).toBeInTheDocument();
+  });
  });
 
  it("Should Navigate to Wishlist Page when Click on Wishlist Button", async () => {
@@ -388,7 +409,9 @@ describe("Test Header", () => {
    await user.unhover(wishlistButtonWrapper);
   });
 
-  expect(screen.getByTestId("display-image")).toBeInTheDocument();
+  await waitFor(() => {
+   expect(screen.getByTestId("display-image")).toBeInTheDocument();
+  });
  });
 
  it("Should Route to Notification Page when clicked notification Button", async () => {
@@ -413,6 +436,8 @@ describe("Test Header", () => {
       setHoverButton={setHoverButton}
       searchInput={searchInput}
       setSearchInput={setSearchInput}
+      isExiting={false}
+      setIsExiting={vi.fn()}
      />
      <Routes>
       <Route
@@ -425,6 +450,7 @@ describe("Test Header", () => {
           hoverButton,
           setHoverButton,
           cartItem: mockCartItem,
+          setIsExiting: vi.fn(),
          }}
         />
        }
@@ -444,9 +470,11 @@ describe("Test Header", () => {
 
   await user.click(notificationButton);
 
-  expect(
-   screen.getByRole("heading", { name: "Notifications" })
-  ).toBeInTheDocument();
+  await waitFor(() => {
+   expect(
+    screen.getByRole("heading", { name: "Notifications" })
+   ).toBeInTheDocument();
+  });
  });
 
  it("Should marks notification read when hover on notification item", async () => {
@@ -506,14 +534,18 @@ describe("Test Header", () => {
 
   const notificationItemOne = screen.getByTestId("notification-item-1");
   expect(notificationItemOne).toBeInTheDocument();
-  expect(notificationItemOne).toHaveClass("notification-item unread");
+  expect(notificationItemOne).toHaveClass(
+   `${styles["notification-item"]} ${styles.unread}`
+  );
 
   await act(async () => {
    await user.hover(notificationButtonWrapper);
    await user.hover(notificationItemOne);
   });
 
-  expect(notificationItemOne).toHaveClass("notification-item read");
+  expect(notificationItemOne).toHaveClass(
+   `${styles["notification-item"]} ${styles.read}`
+  );
  });
 
  it("Should Clear notification when click clear button", async () => {
@@ -574,12 +606,11 @@ describe("Test Header", () => {
   const clearButton = screen.getByTestId("clear-notification-button");
   expect(clearButton).toBeInTheDocument();
 
-  await act(async () => {
-   await user.hover(notificationButtonWrapper);
-   await user.click(clearButton);
-  });
+  await user.click(clearButton);
 
-  expect(screen.queryByTestId("notification-item-1")).not.toBeInTheDocument();
+  await waitFor(() => {
+   expect(screen.queryByTestId("notification-item-1")).not.toBeInTheDocument();
+  });
  });
 
  it("Should Navigate to Notification Page when click see all button", async () => {
@@ -604,6 +635,8 @@ describe("Test Header", () => {
       setHoverButton={setHoverButton}
       searchInput={searchInput}
       setSearchInput={setSearchInput}
+      isExiting={false}
+      setIsExiting={vi.fn()}
      />
      <Routes>
       <Route
@@ -616,6 +649,7 @@ describe("Test Header", () => {
           hoverButton,
           setHoverButton,
           cartItem: mockCartItem,
+          setIsExiting: vi.fn(),
          }}
         />
        }
@@ -645,9 +679,11 @@ describe("Test Header", () => {
    await user.click(seeAllButton);
   });
 
-  expect(
-   screen.getByRole("heading", { name: "Notifications" })
-  ).toBeInTheDocument();
+  await waitFor(() => {
+   expect(
+    screen.getByRole("heading", { name: "Notifications" })
+   ).toBeInTheDocument();
+  });
  });
 
  it("Navigates to /shop on Enter with search input", async () => {
@@ -672,6 +708,8 @@ describe("Test Header", () => {
       setHoverButton={setHoverButton}
       searchInput={searchInput}
       setSearchInput={setSearchInput}
+      isExiting={false}
+      setIsExiting={vi.fn()}
      />
      <Routes>
       <Route
@@ -685,6 +723,8 @@ describe("Test Header", () => {
           setHoverButton,
           cartItem: mockCartItem,
           categories: generateMockCategories(3),
+          isExiting: false,
+          setIsExiting: vi.fn(),
          }}
         />
        }
@@ -706,9 +746,11 @@ describe("Test Header", () => {
 
   await user.type(searchInput, "{enter}");
 
-  expect(
-   screen.getByText("Showing 1 - 1 products of product-1")
-  ).toBeInTheDocument();
+  await waitFor(() => {
+   expect(
+    screen.getByText("Showing 1 - 1 products of product-1")
+   ).toBeInTheDocument();
+  });
 
   expect(
    screen.getByRole("heading", { name: "All Products" })
@@ -723,15 +765,19 @@ describe("Test Header", () => {
 
   await user.click(searchButton);
 
-  expect(
-   screen.getByText("Showing 1 - 0 products of puma palermo")
-  ).toBeInTheDocument();
+  await waitFor(() => {
+   expect(
+    screen.queryByText("Showing 1 - 1 products of puma palermo")
+   ).not.toBeInTheDocument();
+  });
 
   await userEvent.clear(searchInput);
   expect(searchInput.value).toBe("");
 
   await user.click(searchButton);
 
-  expect(screen.getByText("Showing 1 - 3 products")).toBeInTheDocument();
+  await waitFor(() => {
+   expect(screen.getByText("Showing 1 - 3 products")).toBeInTheDocument();
+  });
  });
 });

@@ -48,7 +48,7 @@ describe("Test Aside From Shop Page", () => {
   expect(asideCategoriesHeader).toBeInTheDocument();
   expect(categoryLists).toBeInTheDocument();
   expect(categoryLists.children).toHaveLength(2);
-  expect(screen.getByText("category-1")).toBeInTheDocument();
-  expect(screen.getByText("category-2")).toBeInTheDocument();
+  expect(screen.getByTestId("category-1")).toBeInTheDocument();
+  expect(screen.getByTestId("category-2")).toBeInTheDocument();
  });
 });

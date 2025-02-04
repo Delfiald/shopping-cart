@@ -1,10 +1,11 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import Home from "./Home";
 import { MemoryRouter, Outlet, Route, Routes } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
 import Cart from "../Cart/Cart";
 import PropTypes from "prop-types";
 import Shop from "../Shop/Shop";
+import { vi } from "vitest";
 
 const generateMockProducts = (num) => {
  const mockProducts = [];
@@ -34,6 +35,7 @@ const MockRouter = () => {
        context={{
         products: generateMockProducts(5),
         categories: mockCategories,
+        setIsExiting: vi.fn(),
        }}
       />
      }
@@ -61,12 +63,14 @@ describe("Home Page Test", () => {
   const event = userEvent.setup();
   render(<MockRouter />);
 
-  const ctaButton = screen.getByRole("button", { name: "Shop Now" });
+  const ctaButton = screen.getByTestId("cta-button");
   expect(ctaButton).toBeInTheDocument();
 
   await event.click(ctaButton);
 
-  const shopMainHeading = screen.getByText("All Products");
-  expect(shopMainHeading).toBeInTheDocument();
+  await waitFor(() => {
+   const shopMainHeading = screen.getByText("All Products");
+   expect(shopMainHeading).toBeInTheDocument();
+  });
  });
 });

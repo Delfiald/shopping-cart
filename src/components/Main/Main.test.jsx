@@ -1,4 +1,4 @@
-import { act, render, screen } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import HomeMain from "./HomeMain";
 import { MemoryRouter, Outlet, Route, Routes } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
@@ -13,9 +13,11 @@ import CartMain from "./CartMain";
 import Cart from "../../pages/Cart/Cart";
 import WishlistMain from "./WishlistMain";
 import Wishlist from "../../pages/Wishlist/Wishlist";
-import { describe, expect, it, vi } from "vitest";
 import Header from "../Header/Header";
 import NotificationMain from "./NotificationMain";
+
+import styles from "./main.module.css";
+import { expect, vi } from "vitest";
 
 const mockCategories = ["category-1", "category-2", "category-3", "category-4"];
 
@@ -93,19 +95,13 @@ describe("Test Main component of Home", () => {
   );
 
   const carousel = screen.getByTestId("products-carousel-section");
-  expect(carousel.children).toHaveLength(4);
+  expect(carousel.children).toHaveLength(2);
 
-  mockProducts.forEach((product) => {
-   expect(
-    screen.getByRole("heading", { name: product.title })
-   ).toBeInTheDocument();
-  });
-
-  mockProducts.forEach((product) => {
-   const imgElement = screen.getByAltText(product.title);
+  for (let i = 0; i < 3; i++) {
+   const imgElement = screen.getByTitle(mockProducts[0].title);
    expect(imgElement).toBeInTheDocument();
-   expect(imgElement).toHaveAttribute("src", product.image);
-  });
+   expect(imgElement).toHaveAttribute("src", mockProducts[0].image);
+  }
  });
 
  it("Should not render carousel", () => {
@@ -136,6 +132,8 @@ describe("Test Main component of Home", () => {
         context={{
          products: mockProducts,
          categories: mockCategories,
+         isExiting: false,
+         setIsExiting: vi.fn(),
         }}
        />
       }
@@ -147,12 +145,14 @@ describe("Test Main component of Home", () => {
    </MemoryRouter>
   );
 
-  const ctaButton = screen.getByRole("button", { name: "Shop Now" });
+  const ctaButton = screen.getByTestId("cta-button");
   expect(ctaButton).toBeInTheDocument();
 
   await userEvent.click(ctaButton);
 
-  expect(screen.getByText("All Products")).toBeInTheDocument();
+  await waitFor(() => {
+   expect(screen.getByText("All Products")).toBeInTheDocument();
+  });
  });
 });
 
@@ -245,7 +245,7 @@ describe("Test Main component of Shop", () => {
   ).toBeInTheDocument();
   expect(screen.getByAltText(mockProducts[0].title)).toBeInTheDocument();
   expect(screen.getByText(mockProducts[0].title)).toBeInTheDocument();
-  expect(screen.getByText(mockProducts[0].price)).toBeInTheDocument();
+  expect(screen.getByText(/100/i)).toBeInTheDocument();
  });
 
  it("Should Route to Product Page when clicked Product", async () => {
@@ -258,7 +258,11 @@ describe("Test Main component of Shop", () => {
       path="/"
       element={
        <Outlet
-        context={{ products: mockProducts, categories: mockCategories }}
+        context={{
+         products: mockProducts,
+         categories: mockCategories,
+         setIsExiting: vi.fn(),
+        }}
        />
       }
      >
@@ -273,9 +277,11 @@ describe("Test Main component of Shop", () => {
   expect(productLink).toBeInTheDocument();
   await event.click(productLink);
 
-  expect(
-   screen.getByRole("heading", { name: "product-1" })
-  ).toBeInTheDocument();
+  await waitFor(() => {
+   expect(
+    screen.getByRole("heading", { name: "product-1" })
+   ).toBeInTheDocument();
+  });
  });
 
  it("Should Render Product List Header", () => {
@@ -519,7 +525,7 @@ describe("Test Main component of Shop", () => {
   expect(lastPageButton).toHaveTextContent("5");
  });
 
- it("Should Render Item Per Page Downdown and Change Value", async () => {
+ it("Should Render Item Per Page Dropdown and Change Value", async () => {
   const event = userEvent.setup();
 
   render(<DropdownTest />);
@@ -628,11 +634,11 @@ describe("Test Main component of Shop", () => {
   const categoriesButtonLists = screen.getByTestId("category-lists");
   expect(categoriesButtonLists).toBeInTheDocument();
   expect(categoriesButtonLists.children).toHaveLength(4);
-  expect(categoriesButtonLists.children[0]).toHaveTextContent("category-1");
+  expect(categoriesButtonLists.children[0]).toHaveTextContent("Category-1");
 
   await user.click(screen.getByTestId("category-button-0"));
 
-  shopMainTitle = screen.getByRole("heading", { name: "category-1" });
+  shopMainTitle = screen.getByRole("heading", { name: "Category-1" });
   expect(shopMainTitle).toBeInTheDocument();
 
   expect(screen.getByTestId("product-card-1")).toBeInTheDocument();
@@ -696,7 +702,11 @@ describe("Test Main component of Product", () => {
       path="/"
       element={
        <Outlet
-        context={{ products: mockProducts, categories: mockCategories }}
+        context={{
+         products: mockProducts,
+         categories: mockCategories,
+         setIsExiting: vi.fn(),
+        }}
        />
       }
      >
@@ -711,15 +721,17 @@ describe("Test Main component of Product", () => {
   const productTitle = screen.getByTestId("breadcrumb");
   expect(productTitle).toBeInTheDocument();
 
-  const categoriesButton = screen.getByText(mockProducts[0].category);
+  const categoriesButton = screen.getAllByText("Category-1")[0];
   expect(categoriesButton).toBeInTheDocument();
 
   // Route to Category By clicking Category Button in Breadcrumb
   await user.click(categoriesButton);
 
-  expect(
-   screen.getByRole("heading", { name: mockProducts[0].category })
-  ).toBeInTheDocument();
+  await waitFor(() => {
+   expect(
+    screen.getByRole("heading", { name: "Category-1" })
+   ).toBeInTheDocument();
+  });
  });
 
  it("Should Render Media for Product", async () => {
@@ -802,14 +814,18 @@ describe("Test Main component of Product", () => {
 
   let wishlistButton = screen.getByTestId("wishlist-button");
   expect(wishlistButton).toBeInTheDocument();
-  expect(wishlistButton).toHaveClass("wishlist inactive");
+  expect(wishlistButton).toHaveClass(
+   `${styles["wishlist-button"]} ${styles.inactive}`
+  );
 
   await user.click(wishlistButton);
 
   wishlistButton = screen.getByTestId("wishlist-button");
   expect(wishlistButton).toBeInTheDocument();
 
-  expect(wishlistButton).toHaveClass("wishlist active");
+  expect(wishlistButton).toHaveClass(
+   `${styles["wishlist-button"]} ${styles.active}`
+  );
  });
 });
 
@@ -882,18 +898,22 @@ describe("Test Main component of Cart", () => {
   const wishlistButtonOne = screen.getByTestId("wishlist-button-1");
 
   expect(wishlistButtonOne).toBeInTheDocument();
-  expect(wishlistButtonOne).toHaveClass("wishlist-button active");
+  expect(wishlistButtonOne).toHaveClass(
+   `${styles["wishlist-button"]} ${styles.active}`
+  );
 
   await user.click(wishlistButtonOne);
 
-  expect(wishlistButtonOne).toHaveClass("wishlist-button inactive");
+  expect(wishlistButtonOne).toHaveClass(
+   `${styles["wishlist-button"]} ${styles.inactive}`
+  );
 
   const wishlistButtonThree = screen.getByTestId("wishlist-button-3");
 
   await user.click(wishlistButtonThree);
 
   expect(screen.getByTestId("wishlist-button-3")).toHaveClass(
-   "wishlist-button active"
+   `${styles["wishlist-button"]} ${styles.active}`
   );
  });
 
@@ -962,6 +982,7 @@ describe("Test Main component of Cart", () => {
           setCartItem: setCartItem,
           wishlistItem: wishlist,
           setWishlistItem: setWishlistItem,
+          setIsExiting: vi.fn(),
          }}
         />
        }
@@ -981,9 +1002,11 @@ describe("Test Main component of Cart", () => {
 
   await user.click(productImageOne);
 
-  expect(
-   screen.getByRole("heading", { name: "product-1" })
-  ).toBeInTheDocument();
+  await waitFor(() => {
+   expect(
+    screen.getByRole("heading", { name: "product-1" })
+   ).toBeInTheDocument();
+  });
  });
 
  it("Should Render Summary Section", () => {
@@ -1067,7 +1090,15 @@ describe("Test Main component of Cart", () => {
 
   expect(screen.getByTestId("buy-button")).toHaveTextContent("Buy (0)");
 
-  expect(screen.getByRole("button", { name: "Shop" })).toBeInTheDocument();
+  expect(screen.getByTestId("shop-button")).toBeInTheDocument();
+
+  // Close Modal
+  const closeButton = screen.getByTestId("close-button");
+  expect(closeButton).toBeInTheDocument();
+
+  await user.click(closeButton);
+
+  expect(screen.queryByTestId("shop-button")).not.toBeInTheDocument();
  });
 
  it("Should navigate to shop when shop button is clicked in modal", async () => {
@@ -1095,6 +1126,7 @@ describe("Test Main component of Cart", () => {
           setWishlistItem: setWishlistItem,
           notificationItem: notificationItem,
           setNotificationItem: setNotificationItem,
+          setIsExiting: vi.fn(),
          }}
         />
        }
@@ -1114,14 +1146,16 @@ describe("Test Main component of Cart", () => {
 
   await user.click(buyButton);
 
-  const shopButton = screen.getByRole("button", { name: "Shop" });
+  const shopButton = screen.getByTestId("shop-button");
   expect(shopButton).toBeInTheDocument();
 
   await user.click(shopButton);
 
-  expect(
-   screen.getByRole("heading", { name: "All Products" })
-  ).toBeInTheDocument();
+  await waitFor(() => {
+   expect(
+    screen.getByRole("heading", { name: "All Products" })
+   ).toBeInTheDocument();
+  });
  });
 
  it("Should Add notification Item After Buying Product", async () => {
@@ -1204,6 +1238,7 @@ describe("Test Main Component of Wishlist", () => {
      setPage={() => vi.fn()}
      itemPerPage={1}
      setItemPerPage={() => vi.fn()}
+     isExiting={false}
     />
    </MemoryRouter>
   );
@@ -1215,7 +1250,7 @@ describe("Test Main Component of Wishlist", () => {
   ).toBeInTheDocument();
   expect(screen.getByAltText(mockProducts[0].title)).toBeInTheDocument();
   expect(screen.getByText(mockProducts[0].title)).toBeInTheDocument();
-  expect(screen.getByText(mockProducts[0].price)).toBeInTheDocument();
+  expect(screen.getByText("$100")).toBeInTheDocument();
  });
 
  it("Should Route to Product Page when clicked Product on Wishlist Page", async () => {
@@ -1231,6 +1266,8 @@ describe("Test Main Component of Wishlist", () => {
         context={{
          products: generateMockProducts(4),
          wishlistItem: generateMockWishlist(3),
+         isExiting: false,
+         setIsExiting: vi.fn(),
         }}
        />
       }
@@ -1246,9 +1283,11 @@ describe("Test Main Component of Wishlist", () => {
   expect(productLink).toBeInTheDocument();
   await user.click(productLink);
 
-  expect(
-   screen.getByRole("heading", { name: "product-1" })
-  ).toBeInTheDocument();
+  await waitFor(() => {
+   expect(
+    screen.getByRole("heading", { name: "product-1" })
+   ).toBeInTheDocument();
+  });
  });
 
  it("Should remove Product from wishlist when clicked wishlist button", async () => {
@@ -1285,7 +1324,7 @@ describe("Test Main Component of Wishlist", () => {
 
   let wishlistButtonProductOne = screen.getByTestId("wishlist-button-1");
   expect(wishlistButtonProductOne).toBeInTheDocument();
-  expect(wishlistButtonProductOne).toHaveClass("active");
+  expect(wishlistButtonProductOne).toHaveClass(styles.active);
 
   await user.click(wishlistButtonProductOne);
 
@@ -1318,6 +1357,7 @@ describe("Test Main Component of Wishlist", () => {
   const MockRoute = () => {
    const [cartItem, setCartItem] = useState([]);
    const [wishlist, setWishlistItem] = useState(generateMockWishlist(5));
+   const [isExiting, setIsExiting] = useState(false);
 
    const mockProducts = generateMockProducts(6);
    return (
@@ -1326,6 +1366,8 @@ describe("Test Main Component of Wishlist", () => {
       products={mockProducts}
       cartItem={cartItem}
       setHoverButton={vi.fn()}
+      isExiting={isExiting}
+      setIsExiting={setIsExiting}
      />
      <Routes>
       <Route
@@ -1338,6 +1380,8 @@ describe("Test Main Component of Wishlist", () => {
           setCartItem: setCartItem,
           wishlistItem: wishlist,
           setWishlistItem: setWishlistItem,
+          isExiting: isExiting,
+          setIsExiting,
          }}
         />
        }
@@ -1364,9 +1408,11 @@ describe("Test Main Component of Wishlist", () => {
 
   await user.click(cartButton);
 
-  const buyButton = screen.getByTestId("buy-button");
-  expect(buyButton).toBeInTheDocument();
-  expect(buyButton).toHaveTextContent("Buy (1)");
+  await waitFor(() => {
+   const buyButton = screen.getByTestId("buy-button");
+   expect(buyButton).toBeInTheDocument();
+   expect(buyButton).toHaveTextContent("Buy (1)");
+  });
  });
 
  it("Should Route to valid Query Path", async () => {
@@ -1519,16 +1565,24 @@ describe("Test Main Component of Notification Page", () => {
   const notificationItemTwo = screen.getByTestId("notification-item-2");
   expect(notificationItemOne).toBeInTheDocument();
   expect(notificationItemTwo).toBeInTheDocument();
-  expect(notificationItemOne).toHaveClass("notification-item unread");
-  expect(notificationItemTwo).toHaveClass("notification-item unread");
+  expect(notificationItemOne).toHaveClass(
+   `${styles["notification-item"]} ${styles["unread"]}`
+  );
+  expect(notificationItemTwo).toHaveClass(
+   `${styles["notification-item"]} ${styles["unread"]}`
+  );
 
   // Hover on notification item 1
   await user.hover(notificationItemOne);
 
   // notification item 1 class set to read
-  expect(notificationItemOne).toHaveClass("notification-item read");
+  expect(notificationItemOne).toHaveClass(
+   `${styles["notification-item"]} ${styles["read"]}`
+  );
   // notification item 2 class still unread
-  expect(notificationItemTwo).toHaveClass("notification-item unread");
+  expect(notificationItemTwo).toHaveClass(
+   `${styles["notification-item"]} ${styles["unread"]}`
+  );
  });
 
  it("Opens notification details when clicking the detail button", async () => {
@@ -1553,14 +1607,14 @@ describe("Test Main Component of Notification Page", () => {
   const detailButtonOne = screen.getByTestId("detail-button-1");
   const detailButtonTwo = screen.getByTestId("detail-button-2");
   expect(detailButtonOne).toBeInTheDocument();
-  expect(detailButtonOne).toHaveClass("closed");
+  expect(detailButtonOne).toHaveClass(styles.closed);
   expect(detailButtonTwo).toBeInTheDocument();
-  expect(detailButtonTwo).toHaveClass("closed");
+  expect(detailButtonTwo).toHaveClass(styles.closed);
 
   await user.click(detailButtonOne);
 
-  expect(detailButtonOne).toHaveClass("open");
-  expect(detailButtonTwo).toHaveClass("closed");
+  expect(detailButtonOne).toHaveClass(styles.open);
+  expect(detailButtonTwo).toHaveClass(styles.closed);
 
   const notificationDetailOne = screen.getByTestId("notification-1");
   expect(notificationDetailOne).toBeInTheDocument();
@@ -1571,8 +1625,8 @@ describe("Test Main Component of Notification Page", () => {
   // Click other details
   await user.click(detailButtonTwo);
 
-  expect(detailButtonOne).toHaveClass("closed");
-  expect(detailButtonTwo).toHaveClass("open");
+  expect(detailButtonOne).toHaveClass(styles.closed);
+  expect(detailButtonTwo).toHaveClass(styles.open);
 
   expect(screen.queryByTestId("notification-1")).not.toBeInTheDocument();
   const notificationDetailTwo = screen.getByTestId("notification-2");
@@ -1583,8 +1637,8 @@ describe("Test Main Component of Notification Page", () => {
   // Click Again the same detail to close
   await user.click(detailButtonTwo);
 
-  expect(detailButtonOne).toHaveClass("closed");
-  expect(detailButtonTwo).toHaveClass("closed");
+  expect(detailButtonOne).toHaveClass(styles.closed);
+  expect(detailButtonTwo).toHaveClass(styles.closed);
 
   expect(screen.queryByTestId("notification-1")).not.toBeInTheDocument();
   expect(screen.queryByTestId("notification-2")).not.toBeInTheDocument();

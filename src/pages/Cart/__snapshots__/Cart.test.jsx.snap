@@ -2,22 +2,24 @@
 
 exports[`Test Cart Page > Should Render Cart Page 1`] = `
 <div>
-  <main>
+  <main
+    class="_cart_716e15 _fade-out_716e15 "
+  >
     <h2>
       Cart
     </h2>
     <section
-      class="cart-contents"
+      class="_cart-contents_716e15"
     >
       <div
-        class="item-list"
+        class="_item-list_716e15"
         data-testid="item-list"
       >
         <div
-          class="item"
+          class="_item_716e15"
         >
           <div
-            class="product-image"
+            class="_product-image_716e15"
           >
             <img
               alt="product-1"
@@ -25,54 +27,74 @@ exports[`Test Cart Page > Should Render Cart Page 1`] = `
             />
           </div>
           <div
-            class="product-title"
+            class="_product-title_716e15"
           >
             product-1
           </div>
           <div
-            class="product-price"
+            class="_product-price_716e15"
           >
             $
             110
           </div>
           <div
-            class="product-option"
+            class="_product-option_716e15"
           >
             <div
-              class="wishlist-button active"
+              class="_wishlist-button_716e15 _active_716e15"
               data-testid="wishlist-button-1"
             >
-              <svg
-                class="lucide lucide-heart"
-                fill="none"
-                height="16"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                viewBox="0 0 24 24"
-                width="16"
-                xmlns="http://www.w3.org/2000/svg"
+              <div
+                class="_heart-icon_716e15"
               >
-                <path
-                  d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
-                />
-              </svg>
+                <svg
+                  class="lucide lucide-heart"
+                  fill="none"
+                  height="16"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+                  />
+                </svg>
+                <svg
+                  class="lucide lucide-heart _active-icon_716e15"
+                  fill="none"
+                  height="16"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+                  />
+                </svg>
+              </div>
             </div>
             <div
-              class="remove-button"
+              class="_remove-button_716e15"
               data-testid="remove-button-1"
             >
               <svg
                 class="lucide lucide-trash"
                 fill="none"
-                height="16"
+                height="18"
                 stroke="currentColor"
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
                 viewBox="0 0 24 24"
-                width="16"
+                width="18"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
@@ -87,10 +109,10 @@ exports[`Test Cart Page > Should Render Cart Page 1`] = `
               </svg>
             </div>
             <div
-              class="product-amount"
+              class="_product-amount_716e15"
             >
               <button
-                class="reduce-button"
+                class="_reduce-button_716e15"
                 data-testid="reduce-button-1"
                 disabled=""
               >
@@ -112,13 +134,13 @@ exports[`Test Cart Page > Should Render Cart Page 1`] = `
                 </svg>
               </button>
               <div
-                class="amount"
+                class="_amount_716e15"
                 data-testid="amount-1"
               >
                 1
               </div>
               <button
-                class="add-button"
+                class="_add-button_716e15"
                 data-testid="add-button-1"
               >
                 <svg
@@ -145,10 +167,10 @@ exports[`Test Cart Page > Should Render Cart Page 1`] = `
           </div>
         </div>
         <div
-          class="item"
+          class="_item_716e15"
         >
           <div
-            class="product-image"
+            class="_product-image_716e15"
           >
             <img
               alt="product-2"
@@ -156,54 +178,74 @@ exports[`Test Cart Page > Should Render Cart Page 1`] = `
             />
           </div>
           <div
-            class="product-title"
+            class="_product-title_716e15"
           >
             product-2
           </div>
           <div
-            class="product-price"
+            class="_product-price_716e15"
           >
             $
             120
           </div>
           <div
-            class="product-option"
+            class="_product-option_716e15"
           >
             <div
-              class="wishlist-button active"
+              class="_wishlist-button_716e15 _active_716e15"
               data-testid="wishlist-button-2"
             >
-              <svg
-                class="lucide lucide-heart"
-                fill="none"
-                height="16"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                viewBox="0 0 24 24"
-                width="16"
-                xmlns="http://www.w3.org/2000/svg"
+              <div
+                class="_heart-icon_716e15"
               >
-                <path
-                  d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
-                />
-              </svg>
+                <svg
+                  class="lucide lucide-heart"
+                  fill="none"
+                  height="16"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+                  />
+                </svg>
+                <svg
+                  class="lucide lucide-heart _active-icon_716e15"
+                  fill="none"
+                  height="16"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+                  />
+                </svg>
+              </div>
             </div>
             <div
-              class="remove-button"
+              class="_remove-button_716e15"
               data-testid="remove-button-2"
             >
               <svg
                 class="lucide lucide-trash"
                 fill="none"
-                height="16"
+                height="18"
                 stroke="currentColor"
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
                 viewBox="0 0 24 24"
-                width="16"
+                width="18"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
@@ -218,10 +260,10 @@ exports[`Test Cart Page > Should Render Cart Page 1`] = `
               </svg>
             </div>
             <div
-              class="product-amount"
+              class="_product-amount_716e15"
             >
               <button
-                class="reduce-button"
+                class="_reduce-button_716e15"
                 data-testid="reduce-button-2"
                 disabled=""
               >
@@ -243,13 +285,13 @@ exports[`Test Cart Page > Should Render Cart Page 1`] = `
                 </svg>
               </button>
               <div
-                class="amount"
+                class="_amount_716e15"
                 data-testid="amount-2"
               >
                 1
               </div>
               <button
-                class="add-button"
+                class="_add-button_716e15"
                 data-testid="add-button-2"
               >
                 <svg
@@ -278,30 +320,42 @@ exports[`Test Cart Page > Should Render Cart Page 1`] = `
       </div>
     </section>
     <section
-      class="summary"
+      class="_summary_716e15"
     >
       <div>
         Shopping Summary
       </div>
       <div
-        class="total"
+        class="_total_716e15"
       >
         <p>
           Total
         </p>
         <div
+          class="_total-price_716e15"
           data-testid="total-price"
         >
-          230
+          $230
         </div>
       </div>
       <button
-        class="buy-button"
+        class="_buy-button_716e15"
         data-testid="buy-button"
       >
-        Buy (
-        2
-        )
+        <div
+          class="_displayed_716e15"
+        >
+          Buy (
+          2
+          )
+        </div>
+        <div
+          class="_hovered_716e15"
+        >
+          Buy (
+          2
+          )
+        </div>
       </button>
     </section>
   </main>

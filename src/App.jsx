@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Footer from "./components/Footer/Footer";
 import { fetchData } from "./services/fakeStoreAPI";
 import Header from "./components/Header/Header";
@@ -19,24 +19,29 @@ function App() {
  const [categories, setCategories] = useState([]);
  const [products, setProducts] = useState([]);
 
- //  const handleProducts = (productsData) => {
- //   setProducts(productsData)
- //  }
+ const [isExiting, setIsExiting] = useState(false);
 
- //  const handleCategories = (categoriesData) => {
- //   setCategories(categoriesData)
- //  }
+ const handleProducts = (productsData) => {
+  setProducts(productsData);
+ };
 
- //  useEffect(() => {
- //   const fetchDataFromAPI = async() => {
- //     const productsData = await fetchData(setError, setLoading).getAllProducts();
- //     const categoriesData = await fetchData(setError, setLoading).getProductsCategory();
- //     handleProducts(productsData)
- //     handleCategories(categoriesData)
- //   }
+ const handleCategories = (categoriesData) => {
+  setCategories(categoriesData);
+ };
 
- //   fetchDataFromAPI()
- //  }, [])
+ useEffect(() => {
+  const fetchDataFromAPI = async () => {
+   const productsData = await fetchData(setError, setLoading).getAllProducts();
+   const categoriesData = await fetchData(
+    setError,
+    setLoading
+   ).getProductsCategory();
+   handleProducts(productsData);
+   handleCategories(categoriesData);
+  };
+
+  fetchDataFromAPI();
+ }, []);
 
  useEffect(() => {
   const savedCart = getItem("cart");
@@ -56,6 +61,20 @@ function App() {
   }
  }, []);
 
+ const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  const [previousPath, setPreviousPath] = useState(pathname);
+
+  useEffect(() => {
+   if (previousPath !== pathname) {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    setPreviousPath(pathname);
+   }
+  }, [pathname, previousPath]);
+
+  return null;
+ };
+
  return (
   <>
    <Header
@@ -68,7 +87,9 @@ function App() {
     setHoverButton={setHoverButton}
     searchInput={searchInput}
     setSearchInput={setSearchInput}
+    setIsExiting={setIsExiting}
    />
+   <ScrollToTop />
    <Outlet
     context={{
      categories,
@@ -79,8 +100,11 @@ function App() {
      setCartItem,
      wishlistItem,
      setWishlistItem,
+     notificationItem,
      setNotificationItem,
      searchInput,
+     isExiting,
+     setIsExiting,
     }}
    />
    <Feedback error={error} setError={setError} loading={loading} />

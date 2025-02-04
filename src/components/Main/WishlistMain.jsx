@@ -1,5 +1,5 @@
 import styles from "./main.module.css";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import {
  ChevronDown,
@@ -10,14 +10,22 @@ import {
  Plus,
 } from "lucide-react";
 import { setItem } from "../../utils/localStorage";
+import { useEffect, useState } from "react";
+import formatText from "../../utils/formatText";
 
 const ITEM_PER_PAGE = {
  FIVE: 5,
  TEN: 10,
- SHOW_ALL: null,
+ SHOW_ALL: Infinity,
 };
 
-function Card({ product, setCartItem, wishlistItem, setWishlistItem }) {
+function Card({
+ product,
+ setCartItem,
+ wishlistItem,
+ setWishlistItem,
+ handleNavigate,
+}) {
  const handleAddToCart = () => {
   setCartItem((prevCartItem) => {
    const exists = prevCartItem.find((item) => item.id === product.id);
@@ -55,29 +63,41 @@ function Card({ product, setCartItem, wishlistItem, setWishlistItem }) {
 
  return (
   <div className={styles.card}>
-   <Link
+   <div
     data-testid={`product-card-${product.id}`}
-    to={`/product/${product.id}`}
+    onClick={() => handleNavigate(`/product/${product.id}`)}
    >
-    <img src={product.image} alt={product.title} />
+    <div className={styles["image-wrapper"]}>
+     <img src={product.image} alt={product.title} />
+    </div>
     <div className={styles["product-name"]}>{product.title}</div>
-    <div className={styles["product-price"]}>{product.price}</div>
-   </Link>
-   <div className="card-action">
+    <div className={styles["product-price"]}>
+     {formatText.priceText(product.price)}
+    </div>
+   </div>
+   <div className={styles["card-action"]}>
     <button
      data-testid={`wishlist-button-${product.id}`}
-     className={`wishlist-button ${isWishlist() ? "active" : "inactive"}`}
+     className={`${styles["wishlist-button"]} ${
+      styles[isWishlist() ? "active" : "inactive"]
+     }`}
      onClick={handleWishlistItem}
     >
-     <Heart size={16} />
+     <Heart size={20} />
     </button>
     <button
      data-testid={`add-to-cart-button-${product.id}`}
-     className="add-to-cart"
+     className={styles["add-to-cart"]}
      onClick={handleAddToCart}
     >
-     <Plus size={16} />
-     <p>Cart</p>
+     <div className={styles.displayed}>
+      <Plus size={16} />
+      <p>Cart</p>
+     </div>
+     <div className={styles.hovered}>
+      <Plus size={16} />
+      <p>Cart</p>
+     </div>
     </button>
    </div>
   </div>
@@ -109,13 +129,13 @@ function WishlistListHeader(props) {
   <div className={styles["product-list-header"]}>
    <div data-testid="list-header">
     <div className={styles["item-information"]}>
-     {`Showing ${props.page && (props.page - 1) * props.itemPerPage + 1} - ${
-      props.totalProducts &&
-      Math.min(props.page * props.itemPerPage, props.totalProducts)
-     } products`}
+     {props.totalProducts > 0 &&
+      `Showing ${props.page && (props.page - 1) * props.itemPerPage + 1} - ${
+       props.totalProducts &&
+       Math.min(props.page * props.itemPerPage, props.totalProducts)
+      } products`}
     </div>
-    <div className={styles["sort-wrapper"]}>
-     <p>Sort:</p>
+    <div className={styles["option-wrapper"]}>
      <div
       data-testid="sort-button"
       className={styles["sort-button"]}
@@ -136,72 +156,76 @@ function WishlistListHeader(props) {
          data-testid="sort-option-1"
          onClick={() => props.setSort("name-asc")}
         >
-         Name Asc
+         <div>Name Asc</div>
         </div>
         <div
          data-testid="sort-option-2"
          onClick={() => props.setSort("name-desc")}
         >
-         Name Desc
+         <div>Name Desc</div>
         </div>
         <div
          data-testid="sort-option-3"
          onClick={() => props.setSort("price-asc")}
         >
-         Lowest Price
+         <div>Lowest Price</div>
         </div>
         <div
          data-testid="sort-option-4"
          onClick={() => props.setSort("price-desc")}
         >
-         Highest Price
+         <div>Highest Price</div>
         </div>
        </div>
       )}
      </div>
-    </div>
-    <div
-     data-testid="item-per-page"
-     className={styles["item-per-page"]}
-     onMouseEnter={() => props.setHoverButton("item-per-page")}
-     onMouseLeave={handleMouseLeave}
-    >
      <div
-      data-testid="item-per-page-value"
-      className={styles["item-per-page-value"]}
+      data-testid="item-per-page"
+      className={styles["item-per-page"]}
+      onMouseEnter={() => props.setHoverButton("item-per-page")}
+      onMouseLeave={handleMouseLeave}
      >
-      <p>{props.itemPerPage ? props.itemPerPage : "Show All"}</p>
-      {props.hoverButton && props.hoverButton === "item-per-page" ? (
-       <ChevronUp size={16} />
-      ) : (
-       <ChevronDown size={16} />
+      <div
+       data-testid="item-per-page-value"
+       className={styles["item-per-page-value"]}
+      >
+       <p>
+        {!Number.isNaN(parseInt(props.itemPerPage))
+         ? props.itemPerPage
+         : "Show All"}
+       </p>
+       {props.hoverButton && props.hoverButton === "item-per-page" ? (
+        <ChevronUp size={16} />
+       ) : (
+        <ChevronDown size={16} />
+       )}
+      </div>
+      {props.hoverButton && props.hoverButton === "item-per-page" && (
+       <div
+        data-testid="item-per-page-dropdown"
+        className={styles["dropdown-wrapper"]}
+       >
+        <div
+         data-testid="item-per-page-option-1"
+         onClick={() => handleItemPerPageDropdown(ITEM_PER_PAGE.FIVE)}
+        >
+         <div>5</div>
+        </div>
+        <div
+         data-testid="item-per-page-option-2"
+         onClick={() => handleItemPerPageDropdown(ITEM_PER_PAGE.TEN)}
+        >
+         <div>10</div>
+        </div>
+        <div
+         data-testid="item-per-page-option-3"
+         onClick={() => handleItemPerPageDropdown(ITEM_PER_PAGE.SHOW_ALL)}
+        >
+         <div>Show All</div>
+        </div>
+       </div>
       )}
      </div>
-     {props.hoverButton && props.hoverButton === "item-per-page" && (
-      <div
-       data-testid="item-per-page-dropdown"
-       className={styles["dropdown-wrapper"]}
-      >
-       <div
-        data-testid="item-per-page-option-1"
-        onClick={() => handleItemPerPageDropdown(ITEM_PER_PAGE.FIVE)}
-       >
-        5
-       </div>
-       <div
-        data-testid="item-per-page-option-2"
-        onClick={() => handleItemPerPageDropdown(ITEM_PER_PAGE.TEN)}
-       >
-        10
-       </div>
-       <div
-        data-testid="item-per-page-option-3"
-        onClick={() => handleItemPerPageDropdown(ITEM_PER_PAGE.SHOW_ALL)}
-       >
-        Show All
-       </div>
-      </div>
-     )}
     </div>
    </div>
   </div>
@@ -212,24 +236,28 @@ function WishlistListWrapper(props) {
  if (!props.products || props.products.length === 0) {
   return (
    <div data-testid="no-wishlist" className={styles["no-wishlist"]}>
-    <p>
+    <div>
      You have no items in your wishlist. Browse products and add them to your
      favorites!
-    </p>
-    <Link data-testid="shop-button" className="shop-button" to={"/shop"}>
-     Explore Products
-    </Link>
+    </div>
+    <button
+     data-testid="shop-button"
+     className={styles["shop-button"]}
+     onClick={() => props.handleNavigate("/shop")}
+    >
+     <div className={styles.displayed}>Explore Products</div>
+     <div className={styles.hovered}>Explore Products</div>
+    </button>
    </div>
   );
  }
 
- const currentProducts =
-  props.itemPerPage === null
-   ? props.products
-   : props.products.slice(
-      (props.page - 1) * props.itemPerPage,
-      props.page * props.itemPerPage
-     );
+ const currentProducts = Number.isNaN(props.itemPerPage)
+  ? props.products
+  : props.products.slice(
+     (props.page - 1) * props.itemPerPage,
+     props.page * props.itemPerPage
+    );
 
  return (
   <section
@@ -244,6 +272,7 @@ function WishlistListWrapper(props) {
       setCartItem={props.setCartItem}
       wishlistItem={props.wishlistItem}
       setWishlistItem={props.setWishlistItem}
+      handleNavigate={props.handleNavigate}
      />
     ))}
   </section>
@@ -372,7 +401,19 @@ function WishlistMain({
  setSort,
  hoverButton,
  setHoverButton,
+ isExiting,
+ setIsExiting,
 }) {
+ const navigate = useNavigate();
+ const [isVisible, setIsVisible] = useState(false);
+
+ const handleNavigate = (path) => {
+  setIsExiting(true);
+  setTimeout(() => {
+   navigate(path);
+   setIsExiting(false);
+  }, 500);
+ };
  const displayedProducts = products
   ? [...products].sort((a, b) => {
      switch (sort) {
@@ -390,8 +431,16 @@ function WishlistMain({
     })
   : products;
 
+ useEffect(() => {
+  setIsVisible(true);
+ }, []);
+
  return (
-  <main>
+  <main
+   className={`${styles.wishlist} ${isVisible ? styles["fade-out"] : ""} ${
+    isExiting ? styles["fade-in"] : ""
+   }`}
+  >
    <h2>Wishlist</h2>
    {products && (
     <WishlistListHeader
@@ -412,6 +461,7 @@ function WishlistMain({
     setCartItem={setCartItem}
     wishlistItem={wishlistItem}
     setWishlistItem={setWishlistItem}
+    handleNavigate={handleNavigate}
    />
    {products && (
     <WishlistListBottom
@@ -438,6 +488,8 @@ WishlistMain.propTypes = {
  setSort: PropTypes.func,
  hoverButton: PropTypes.string,
  setHoverButton: PropTypes.func,
+ isExiting: PropTypes.bool,
+ setIsExiting: PropTypes.func,
 };
 
 Card.propTypes = {
@@ -445,6 +497,7 @@ Card.propTypes = {
  setCartItem: PropTypes.func,
  wishlistItem: PropTypes.array,
  setWishlistItem: PropTypes.func,
+ handleNavigate: PropTypes.func,
 };
 
 WishlistListHeader.propTypes = {
@@ -465,6 +518,7 @@ WishlistListWrapper.propTypes = {
  setCartItem: PropTypes.func,
  wishlistItem: PropTypes.array,
  setWishlistItem: PropTypes.func,
+ handleNavigate: PropTypes.func,
 };
 
 WishlistListBottom.propTypes = {

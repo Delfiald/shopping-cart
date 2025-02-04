@@ -1,19 +1,21 @@
+import styles from "./main.module.css";
+
 import { Heart, Minus, Plus, Trash } from "lucide-react";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BuyModal } from "../Modal/Modal";
 import { format } from "date-fns";
 import { removeItem, setItem } from "../../utils/localStorage";
+import formatText from "../../utils/formatText";
 
 function CartContents({
  wishlistItem = [],
  setCartItem,
  setWishlistItem,
  getCartDetails,
+ handleNavigate,
 }) {
- const navigate = useNavigate();
-
  const handleRemoveCart = (productId) => {
   setCartItem((prevItem) => {
    const updatedCart = prevItem.filter((item) => item.id !== productId);
@@ -58,78 +60,99 @@ function CartContents({
  };
 
  return (
-  <section className="cart-contents">
-   <div data-testid="item-list" className="item-list">
-    {getCartDetails().map((cartItemProduct) => {
-     const isWishlist = wishlistItem.some(
-      (wishlist) => wishlist.id === cartItemProduct.id
-     );
-     return (
-      <div className="item" key={cartItemProduct.id}>
-       {/* Product Image */}
-       <div
-        className="product-image"
-        onClick={() => navigate(`/product/${cartItemProduct.id}`)}
-       >
-        <img src={cartItemProduct.image} alt={cartItemProduct.title} />
-       </div>
-
-       {/* Product Title */}
-       <div
-        className="product-title"
-        onClick={() => navigate(`/product/${cartItemProduct.id}`)}
-       >
-        {cartItemProduct.title}
-       </div>
-
-       {/* Product Price */}
-       <div className="product-price">${cartItemProduct.price}</div>
-
-       {/* Product Options */}
-       <div className="product-option">
-        {/* Wishlist Button */}
+  <section className={styles["cart-contents"]}>
+   <div data-testid="item-list" className={styles["item-list"]}>
+    {getCartDetails().length > 0 ? (
+     getCartDetails().map((cartItemProduct) => {
+      const isWishlist = wishlistItem.some(
+       (wishlist) => wishlist.id === cartItemProduct.id
+      );
+      return (
+       <div className={styles.item} key={cartItemProduct.id}>
+        {/* Product Image */}
         <div
-         data-testid={`wishlist-button-${cartItemProduct.id}`}
-         className={`wishlist-button ${isWishlist ? "active" : "inactive"}`}
-         onClick={() => handleWishlistItem(cartItemProduct)}
+         className={styles["product-image"]}
+         onClick={() => handleNavigate(`/product/${cartItemProduct.id}`)}
         >
-         <Heart size={16} />
+         <img src={cartItemProduct.image} alt={cartItemProduct.title} />
         </div>
 
-        {/* Remove Button */}
+        {/* Product Title */}
         <div
-         data-testid={`remove-button-${cartItemProduct.id}`}
-         className="remove-button"
-         onClick={() => handleRemoveCart(cartItemProduct.id)}
+         className={styles["product-title"]}
+         onClick={() => handleNavigate(`/product/${cartItemProduct.id}`)}
         >
-         <Trash size={16} />
+         {cartItemProduct.title}
         </div>
 
-        {/* Amount Control */}
-        <div className="product-amount">
-         <button
-          data-testid={`reduce-button-${cartItemProduct.id}`}
-          className="reduce-button"
-          disabled={cartItemProduct.amount <= 1}
-          onClick={() => handleAmount(-1, cartItemProduct.id)}
+        {/* Product Price */}
+        <div className={styles["product-price"]}>${cartItemProduct.price}</div>
+
+        {/* Product Options */}
+        <div className={styles["product-option"]}>
+         {/* Wishlist Button */}
+         <div
+          data-testid={`wishlist-button-${cartItemProduct.id}`}
+          className={`${styles["wishlist-button"]} ${
+           styles[isWishlist ? "active" : "inactive"]
+          }`}
+          onClick={() => handleWishlistItem(cartItemProduct)}
          >
-          <Minus size={16} />
-         </button>
-         <div data-testid={`amount-${cartItemProduct.id}`} className="amount">
-          {cartItemProduct.amount}
+          <div className={styles["heart-icon"]}>
+           <Heart size={16} />
+           {isWishlist && <Heart className={styles["active-icon"]} size={16} />}
+          </div>
          </div>
-         <button
-          data-testid={`add-button-${cartItemProduct.id}`}
-          className="add-button"
-          onClick={() => handleAmount(1, cartItemProduct.id)}
+
+         {/* Remove Button */}
+         <div
+          data-testid={`remove-button-${cartItemProduct.id}`}
+          className={styles["remove-button"]}
+          onClick={() => handleRemoveCart(cartItemProduct.id)}
          >
-          <Plus size={16} />
-         </button>
+          <Trash size={18} />
+         </div>
+
+         {/* Amount Control */}
+         <div className={styles["product-amount"]}>
+          <button
+           data-testid={`reduce-button-${cartItemProduct.id}`}
+           className={styles["reduce-button"]}
+           disabled={cartItemProduct.amount <= 1}
+           onClick={() => handleAmount(-1, cartItemProduct.id)}
+          >
+           <Minus size={16} />
+          </button>
+          <div
+           data-testid={`amount-${cartItemProduct.id}`}
+           className={styles.amount}
+          >
+           {cartItemProduct.amount}
+          </div>
+          <button
+           data-testid={`add-button-${cartItemProduct.id}`}
+           className={styles["add-button"]}
+           onClick={() => handleAmount(1, cartItemProduct.id)}
+          >
+           <Plus size={16} />
+          </button>
+         </div>
         </div>
        </div>
-      </div>
-     );
-    })}
+      );
+     })
+    ) : (
+     <div className={styles["empty-cart"]}>
+      <div>Your cart is empty. Start adding some products!</div>
+      <button
+       onClick={() => handleNavigate("/shop")}
+       className={styles["go-to-shop"]}
+      >
+       <div className={styles.displayed}>Go to Shop</div>
+       <div className={styles.hovered}>Go to Shop</div>
+      </button>
+     </div>
+    )}
    </div>
   </section>
  );
@@ -137,14 +160,22 @@ function CartContents({
 
 function Summary({ totalPrice, orderAmount, handleBuy }) {
  return (
-  <section className="summary">
+  <section className={styles.summary}>
    <div>Shopping Summary</div>
-   <div className="total">
+   <div className={styles.total}>
     <p>Total</p>
-    <div data-testid="total-price">{totalPrice()}</div>
+    <div data-testid="total-price" className={styles["total-price"]}>
+     {formatText.priceText(totalPrice())}
+    </div>
    </div>
-   <button data-testid="buy-button" className="buy-button" onClick={handleBuy}>
-    Buy ({orderAmount()})
+   <button
+    data-testid="buy-button"
+    className={styles["buy-button"]}
+    onClick={handleBuy}
+    disabled={orderAmount() === 0}
+   >
+    <div className={styles.displayed}>Buy ({orderAmount()})</div>
+    <div className={styles.hovered}>Buy ({orderAmount()})</div>
    </button>
   </section>
  );
@@ -157,8 +188,20 @@ function CartMain({
  wishlistItem = [],
  setWishlistItem,
  setNotificationItem,
+ isExiting,
+ setIsExiting,
 }) {
+ const navigate = useNavigate();
  const [modal, setModal] = useState("");
+ const [isVisible, setIsVisible] = useState(false);
+
+ const handleNavigate = (path) => {
+  setIsExiting(true);
+  setTimeout(() => {
+   navigate(path);
+   setIsExiting(false);
+  }, 500);
+ };
 
  const getCartDetails = () => {
   return cartItem.map((cart) => {
@@ -182,6 +225,9 @@ function CartMain({
  };
 
  const handleBuy = () => {
+  if (!cartItem.length || cartItem.length < 1) {
+   return;
+  }
   const timeStamp = Date.now();
   const formattedDate = format(timeStamp, "dd/MM/yyyy HH:mm");
   setModal("buy-modal");
@@ -190,7 +236,9 @@ function CartMain({
     ...prevNotification,
     {
      id: prevNotification.length + 1,
-     message: `Purchase Complete, total Price: ${totalPrice()}`,
+     message: `Purchase Complete, total Price: ${formatText.priceText(
+      totalPrice()
+     )}`,
      products: [...cartItem],
      timeStamp: formattedDate,
      isRead: false,
@@ -206,9 +254,17 @@ function CartMain({
   removeItem("cart");
  };
 
+ useEffect(() => {
+  setIsVisible(true);
+ }, []);
+
  return (
   <>
-   <main>
+   <main
+    className={`${styles.cart} ${isVisible ? styles["fade-out"] : ""} ${
+     isExiting ? styles["fade-in"] : ""
+    }`}
+   >
     <h2>Cart</h2>
     <CartContents
      setCartItem={setCartItem}
@@ -216,6 +272,7 @@ function CartMain({
      setWishlistItem={setWishlistItem}
      setModal={setModal}
      getCartDetails={getCartDetails}
+     handleNavigate={handleNavigate}
     />
     <Summary
      totalPrice={totalPrice}
@@ -223,7 +280,9 @@ function CartMain({
      handleBuy={handleBuy}
     />
    </main>
-   {modal === "buy-modal" ? <BuyModal setModal={setModal} /> : null}
+   {modal === "buy-modal" ? (
+    <BuyModal setModal={setModal} setIsExiting={setIsExiting} />
+   ) : null}
   </>
  );
 }
@@ -235,6 +294,8 @@ CartMain.propTypes = {
  wishlistItem: PropTypes.array,
  setWishlistItem: PropTypes.func,
  setNotificationItem: PropTypes.func,
+ isExiting: PropTypes.bool,
+ setIsExiting: PropTypes.func,
 };
 
 CartContents.propTypes = {
@@ -243,6 +304,7 @@ CartContents.propTypes = {
  wishlistItem: PropTypes.array,
  setWishlistItem: PropTypes.func,
  getCartDetails: PropTypes.func,
+ handleNavigate: PropTypes.func,
 };
 
 Summary.propTypes = {

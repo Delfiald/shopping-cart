@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import Cart from "./pages/Cart/Cart";
 import Shop from "./pages/Shop/Shop";
@@ -8,7 +8,7 @@ import Home from "./pages/Home/Home";
 import PropTypes from "prop-types";
 import ErrorPage from "./router/ErrorPage";
 import userEvent from "@testing-library/user-event";
-import { expect } from "vitest";
+import { beforeAll, expect } from "vitest";
 
 const MockRouter = ({ initialPath = "/" }) => {
  return (
@@ -31,6 +31,9 @@ MockRouter.propTypes = {
 };
 
 describe("It Render App", () => {
+ beforeAll(() => {
+  globalThis.window.scrollTo = vi.fn();
+ });
  it("render app", () => {
   const { container } = render(<MockRouter />);
   expect(container).toMatchSnapshot();
@@ -68,7 +71,7 @@ describe("It Render App", () => {
 
   await user.click(returnButton);
 
-  expect(screen.getByRole("heading", { name: "Shoppers" })).toBeInTheDocument();
+  expect(screen.getAllByText("Shoppers")[0]).toBeInTheDocument();
  });
 
  it("Should Routes to Cart Page when Click Cart Button on Header", async () => {
@@ -78,9 +81,10 @@ describe("It Render App", () => {
   const shoppingCartButton = screen.getByTestId("cart-button");
   await user.click(shoppingCartButton);
 
-  const cartHeading = screen.getByText("Cart");
-
-  expect(cartHeading).toBeInTheDocument();
+  await waitFor(() => {
+   const cartHeading = screen.getByText("Cart");
+   expect(cartHeading).toBeInTheDocument();
+  });
 
   const cartMain = screen.getByRole("heading", { name: "Cart" });
   expect(cartMain).toBeInTheDocument();
@@ -90,11 +94,13 @@ describe("It Render App", () => {
   const user = userEvent.setup();
   render(<MockRouter />);
 
-  const ctaButton = screen.getByRole("button", { name: "Shop Now" });
+  const ctaButton = screen.getByTestId("cta-button");
   await user.click(ctaButton);
 
-  const shopHeading = screen.getByText("All Products");
+  await waitFor(() => {
+   const shopHeading = screen.getByText("All Products");
 
-  expect(shopHeading).toBeInTheDocument();
+   expect(shopHeading).toBeInTheDocument();
+  });
  });
 });

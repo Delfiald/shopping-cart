@@ -1,3 +1,5 @@
+import styles from "./main.module.css";
+
 import {
  ChevronLeft,
  ChevronRight,
@@ -5,11 +7,13 @@ import {
  Minus,
  Plus,
  Share,
+ X,
 } from "lucide-react";
 import PropTypes from "prop-types";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { setItem } from "../../utils/localStorage";
+import formatText from "../../utils/formatText";
 
 function Media(props) {
  const trackRef = useRef(null);
@@ -26,24 +30,24 @@ function Media(props) {
  };
 
  return (
-  <section className="media">
-   <div className="display-image">
+  <section className={styles.media}>
+   <div className={styles["display-image"]}>
     <img
      data-testid="display-image"
      src={props.displayedImage}
      alt={props.title}
     />
    </div>
-   <div className="image-carousel">
-    <div className="left-arrow" onClick={handleScrollLeft}>
-     <ChevronLeft size={16} />
+   <div className={styles["image-carousel"]}>
+    <div className={styles["left-arrow"]} onClick={handleScrollLeft}>
+     <ChevronLeft size={24} />
     </div>
     {/* Use Map if Image more than one (in an array) */}
-    <div className="carousel-track" ref={trackRef}>
+    <div className={styles["carousel-track"]} ref={trackRef}>
      <div
       data-testid="image-1"
-      className={`image ${
-       props.image === props.displayedImage ? "displayed" : ""
+      className={`${styles.image} ${
+       styles[props.image === props.displayedImage ? "displayed" : ""]
       }`}
       onClick={() => props.setDisplayedImage(props.image)}
      >
@@ -51,8 +55,8 @@ function Media(props) {
      </div>
      <div
       data-testid="image-2"
-      className={`image ${
-       props.image === props.displayedImage ? "displayed" : ""
+      className={`${styles.image} ${
+       styles[props.image === props.displayedImage ? "displayed" : ""]
       }`}
       onClick={() => props.setDisplayedImage(props.image)}
      >
@@ -60,8 +64,8 @@ function Media(props) {
      </div>
      <div
       data-testid="image-3"
-      className={`image ${
-       props.image === props.displayedImage ? "displayed" : ""
+      className={`${styles.image} ${
+       styles[props.image === props.displayedImage ? "displayed" : ""]
       }`}
       onClick={() => props.setDisplayedImage(props.image)}
      >
@@ -69,16 +73,16 @@ function Media(props) {
      </div>
      <div
       data-testid="image-4"
-      className={`image ${
-       props.image === props.displayedImage ? "displayed" : ""
+      className={`${styles.image} ${
+       styles[props.image === props.displayedImage ? "displayed" : ""]
       }`}
       onClick={() => props.setDisplayedImage(props.image)}
      >
       <img src={props.image} alt={props.title} />
      </div>
     </div>
-    <div className="right-arrow" onClick={handleScrollRight}>
-     <ChevronRight size={16} />
+    <div className={styles["right-arrow"]} onClick={handleScrollRight}>
+     <ChevronRight size={24} />
     </div>
    </div>
   </section>
@@ -87,42 +91,51 @@ function Media(props) {
 
 function Detail(props) {
  return (
-  <section className="detail">
-   <div className="top-detail">
-    <h2 className="product-title">{props.title}</h2>
-    <div className="product-price">{props.price}</div>
+  <section className={styles.detail}>
+   <div className={styles["top-detail"]}>
+    <h2 className={styles["product-title"]}>{props.title}</h2>
+    <div className={styles["product-price"]}>
+     {formatText.priceText(props.price)}
+    </div>
    </div>
-   <div className="main-detail">
-    <div className="detail-option">
+   <div className={styles["main-detail"]}>
+    <div className={styles["detail-option"]}>
      <div
       data-testid="detail-button"
-      className="detail-button"
+      className={`${styles["detail-button"]} ${
+       styles[props.detail === "detail" ? "active" : ""]
+      }`}
       onClick={() => props.setDetail("detail")}
      >
       Detail
      </div>
      <div
       data-testid="info-button"
-      className="info-button"
+      className={`${styles["info-button"]} ${
+       styles[props.detail === "info" ? "active" : ""]
+      }`}
       onClick={() => props.setDetail("info")}
      >
       Important Information
      </div>
     </div>
-    <div className="detail-content">
+    <div className={styles["detail-content"]}>
      {props.detail === "detail" ? (
-      <div className="product-detail">
-       <div className="min-order">Min Order: 1 Pcs</div>
+      <div className={styles["product-detail"]}>
+       <div className={styles["min-order"]}>Min Order: 1 Pcs</div>
        <div
-        className="product-category"
+        className={styles["product-category"]}
         onClick={() => props.handleNavigate(`/shop?category=${props.category}`)}
        >
-        Category: {props.category ? props.category : "-"}
+        Category:
+        <div>
+         {props.category ? formatText.capitalizedWords(props.category) : "-"}
+        </div>
        </div>
-       <div className="product-description">{props.description}</div>
+       <div className={styles["product-description"]}>{props.description}</div>
       </div>
      ) : (
-      <div className="important-information">
+      <div className={styles["important-information"]}>
        <div>
         Lorem ipsum, dolor sit amet consectetur adipisicing elit. Cumque
         mollitia doloribus quo consequatur nostrum quod.
@@ -136,6 +149,8 @@ function Detail(props) {
 }
 
 function Option(props) {
+ const [shareIndicator, setShareIndicator] = useState(false);
+ const [timeoutId, setTimeoutId] = useState(null);
  const handleAmount = (change) => {
   const newAmount = props.amount + change;
   if (newAmount > 0) {
@@ -143,72 +158,134 @@ function Option(props) {
   }
  };
 
+ const handleShareIndicator = () => {
+  setShareIndicator(true);
+
+  if (timeoutId) clearTimeout(timeoutId);
+
+  const newTimeout = setTimeout(() => {
+   setShareIndicator(false);
+   setTimeoutId(null);
+  }, 3250);
+
+  setTimeoutId(newTimeout);
+ };
+
+ const handleShare = () => {
+  const currentUrl = window.location.href;
+
+  navigator.clipboard.writeText(currentUrl);
+
+  handleShareIndicator();
+ };
+
  return (
   <aside>
-   <div className="option-container">
+   <div className={styles["option-container"]}>
     <div>Order Option</div>
-    <div className="product-image">
+    <div className={styles["product-image"]}>
      <img src={props.image} alt={props.title} />
     </div>
-    <div className="order-amount">
+    <div className={styles["order-amount"]}>
      <button
       data-testid="reduce-amount"
       disabled={props.amount <= 1}
-      className="reduce-amount"
+      className={styles["reduce-amount"]}
       onClick={() => handleAmount(-1)}
      >
       <Minus size={16} />
      </button>
-     <div data-testid="amount" className="amount">
+     <div data-testid="amount" className={styles.amount}>
       {props.amount}
      </div>
      <button
       data-testid="add-amount"
-      className="add-amount"
+      className={styles["add-amount"]}
       onClick={() => handleAmount(1)}
      >
       <Plus size={16} />
      </button>
     </div>
-    <div className="sub-total">
+    <div className={styles["subtotal"]}>
      <p>Subtotal</p>
-     <p data-testid="subtotal">{`$ ${props.price * props.amount}`}</p>
+     <p data-testid="subtotal">
+      {formatText.priceText(props.price * props.amount)}
+     </p>
     </div>
     <button
      data-testid="add-to-cart"
-     className="add-to-cart"
+     className={styles["add-to-cart"]}
      onClick={props.handleAddToCart}
     >
-     <Plus size={16} />
-     Add to Cart
+     <div className={styles.displayed}>
+      <Plus size={16} />
+      Add to Cart
+     </div>
+     <div className={styles.hovered}>
+      <Plus size={16} />
+      Add to Cart
+     </div>
     </button>
-    <div className="actions">
+    <div className={styles.actions}>
      <div
       data-testid="wishlist-button"
-      className={`wishlist ${props.isWishlistItem() ? "active" : "inactive"}`}
+      className={`${styles["wishlist-button"]} ${
+       styles[props.isWishlistItem() ? "active" : "inactive"]
+      }`}
       onClick={props.handleWishlistItem}
      >
-      <Heart size={16} />
+      <div className={styles["heart-icon"]}>
+       <Heart size={16} />
+       {props.isWishlistItem() && (
+        <Heart className={styles["active-icon"]} size={16} />
+       )}
+      </div>
       Wishlist
      </div>
-     <div className="share">
+     <div className={styles["share-button"]} onClick={handleShare}>
       <Share size={16} />
       Share
      </div>
     </div>
    </div>
+   {shareIndicator && (
+    <div className={styles["share-indicator"]}>
+     <div className={styles["share-indicator-wrapper"]}>
+      <div>Link copied to clipboard</div>
+      <div
+       onClick={() => setShareIndicator(false)}
+       className={styles["close-button"]}
+      >
+       <X size={16} />
+      </div>
+     </div>
+    </div>
+   )}
   </aside>
  );
 }
 
-function ProductMain({ product, setCartItem, wishlistItem, setWishlistItem }) {
+function ProductMain({
+ product,
+ setCartItem,
+ wishlistItem,
+ setWishlistItem,
+ isExiting,
+ setIsExiting,
+}) {
  const navigate = useNavigate();
  const [detail, setDetail] = useState("detail");
  const [displayedImage, setDisplayedImage] = useState(product.image);
  const [amount, setAmount] = useState(1);
 
+ const [isVisible, setIsVisible] = useState(false);
+
  const handleNavigate = (entries = "/") => {
-  navigate(entries);
+  setIsExiting(true);
+  setTimeout(() => {
+   navigate(entries);
+   setIsExiting(false);
+  }, 500);
  };
 
  const handleAddToCart = () => {
@@ -237,6 +314,7 @@ function ProductMain({ product, setCartItem, wishlistItem, setWishlistItem }) {
  const handleWishlistItem = () => {
   setWishlistItem((prevWishlistItem) => {
    const exists = prevWishlistItem.find((item) => item.id === product.id);
+
    const updatedWishlist = exists
     ? prevWishlistItem.filter((item) => item.id !== product.id)
     : [...prevWishlistItem, { id: product.id }];
@@ -247,20 +325,32 @@ function ProductMain({ product, setCartItem, wishlistItem, setWishlistItem }) {
   });
  };
 
+ useEffect(() => {
+  setDisplayedImage(product.image);
+ }, [product]);
+
+ useEffect(() => {
+  setIsVisible(true);
+ }, []);
+
  return (
-  <main>
-   <div data-testid="breadcrumb" className="breadcrumb">
-    <div onClick={handleNavigate}>Home</div>
+  <main
+   className={`${styles.product} ${isVisible ? styles["fade-out"] : ""} ${
+    isExiting ? styles["fade-in"] : ""
+   }`}
+  >
+   <div data-testid="breadcrumb" className={styles.breadcrumb}>
+    <div onClick={() => handleNavigate("/")}>Home</div>
     <ChevronRight size={16} />
     <div onClick={() => handleNavigate("/shop")}>Shop</div>
     <ChevronRight size={16} />
     <div onClick={() => handleNavigate(`/shop?category=${product.category}`)}>
-     {product.category}
+     {formatText.capitalizedWords(product.category)}
     </div>
     <ChevronRight size={16} />
     {product.title}
    </div>
-   <main>
+   <div className={styles["product-overview"]}>
     <Media
      image={product.image}
      title={product.title}
@@ -286,7 +376,7 @@ function ProductMain({ product, setCartItem, wishlistItem, setWishlistItem }) {
      handleWishlistItem={handleWishlistItem}
      isWishlistItem={isWishlist}
     />
-   </main>
+   </div>
   </main>
  );
 }
@@ -296,6 +386,8 @@ ProductMain.propTypes = {
  setCartItem: PropTypes.func,
  wishlistItem: PropTypes.array.isRequired,
  setWishlistItem: PropTypes.func,
+ isExiting: PropTypes.bool,
+ setIsExiting: PropTypes.func,
 };
 
 Media.propTypes = {
