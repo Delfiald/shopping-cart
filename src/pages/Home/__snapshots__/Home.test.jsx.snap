@@ -1,0 +1,171 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Home Page Test > Renders Home Page 1`] = `
+<div>
+  <main
+    class="_home_716e15 _fade-out_716e15 "
+  >
+    <div
+      class="_hero_716e15"
+    >
+      <div
+        class="_carousel_716e15"
+        data-testid="products-carousel-section"
+      >
+        <div
+          class="_item-display_716e15 "
+        >
+          <div
+            class="_displayed-image_716e15"
+          >
+            <img
+              alt=""
+              src=""
+            />
+          </div>
+          <h2 />
+        </div>
+        <div
+          class="_carousel-item-wrapper_716e15"
+        >
+          <div
+            class="sc-KXCwU bGPffd _loading-bar_716e15"
+          />
+          <div
+            class="_carousel-item_716e15 __716e15"
+          >
+            <div
+              class="_image-wrapper_716e15"
+            >
+              <img
+                alt="product-1"
+                src="/image/product-1.png"
+                title="product-1"
+              />
+            </div>
+          </div>
+          <div
+            class="_carousel-item_716e15 __716e15"
+          >
+            <div
+              class="_image-wrapper_716e15"
+            >
+              <img
+                alt="product-2"
+                src="/image/product-2.png"
+                title="product-2"
+              />
+            </div>
+          </div>
+          <div
+            class="_carousel-item_716e15 __716e15"
+          >
+            <div
+              class="_image-wrapper_716e15"
+            >
+              <img
+                alt="product-3"
+                src="/image/product-3.png"
+                title="product-3"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="_categories_716e15"
+      data-testid="categories-section"
+    >
+      <h2>
+        Categories
+      </h2>
+      <div
+        class="_category_716e15"
+      >
+        <img
+          alt="category-1"
+          src="Categories/category-1.jpg"
+        />
+        <h3>
+          category-1
+        </h3>
+      </div>
+      <div
+        class="_category_716e15"
+      >
+        <img
+          alt="category-2"
+          src="Categories/category-2.jpg"
+        />
+        <h3>
+          category-2
+        </h3>
+      </div>
+      <div
+        class="_category_716e15"
+      >
+        <img
+          alt="category-3"
+          src="Categories/category-3.jpg"
+        />
+        <h3>
+          category-3
+        </h3>
+      </div>
+      <div
+        class="_category_716e15"
+      >
+        <img
+          alt="category-4"
+          src="Categories/category-4.jpg"
+        />
+        <h3>
+          category-4
+        </h3>
+      </div>
+    </div>
+    <div
+      class="_call-to-action_716e15"
+    >
+      <div
+        class="_cta-wrapper_716e15"
+      >
+        <div
+          class="_premises-text_716e15"
+        >
+          <h2>
+            Don’t miss out on exclusive deals!
+          </h2>
+          <div>
+            Tap the button and start your shopping journey
+          </div>
+        </div>
+        <button
+          class="_cta-button_716e15"
+          data-testid="cta-button"
+        >
+          <div
+            class="_displayed_716e15"
+          >
+            Shop Now
+          </div>
+          <div
+            class="_hovered_716e15"
+          >
+            Shop Now
+          </div>
+        </button>
+      </div>
+      <div
+        class="_cta-background-wrapper_716e15"
+      >
+        <img
+          alt="Call to Action Background"
+          src="/image/product-3.png"
+        />
+      </div>
+    </div>
+  </main>
+</div>
+`;

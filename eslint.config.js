@@ -10,7 +10,17 @@ export default [
   files: ["**/*.{js,jsx}"],
   languageOptions: {
    ecmaVersion: 2020,
-   globals: globals.browser,
+   globals: {
+    ...globals.browser,
+    expect: "readonly",
+    afterEach: "readonly",
+    cleanup: "readonly",
+    describe: "readonly",
+    it: "readonly",
+    test: "readonly",
+    vi: "readonly",
+    beforeEach: "readonly",
+   },
    parserOptions: {
     ecmaVersion: "latest",
     ecmaFeatures: { jsx: true },
@@ -33,7 +43,7 @@ export default [
     "warn",
     { allowConstantExport: true },
    ],
-   "react/prop-types": "off",
+   "react/prop-types": "error",
   },
  },
 ];
