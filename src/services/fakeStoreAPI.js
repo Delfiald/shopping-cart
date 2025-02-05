@@ -53,20 +53,6 @@ export const fetchData = (setError, setLoading) => {
   }
  };
 
- const getProductById = async (id) => {
-  setLoading(true);
-  try {
-   const product = await fakeStoreAPI(`${BASE_URL}/${id}`);
-   structureCheck(product).allProducts();
-   return product;
-  } catch (error) {
-   setError(error.message);
-   return null;
-  } finally {
-   setLoading(false);
-  }
- };
-
  const getProductsCategory = async () => {
   setLoading(true);
   try {
@@ -79,24 +65,8 @@ export const fetchData = (setError, setLoading) => {
   }
  };
 
- const getProductsBasedOnCategory = async (category) => {
-  setLoading(true);
-  try {
-   const products = await fakeStoreAPI(`${BASE_URL}/category/${category}`);
-   structureCheck(products).allProducts();
-
-   return products;
-  } catch (error) {
-   setError(error.message);
-  } finally {
-   setLoading(false);
-  }
- };
-
  return {
   getAllProducts,
-  getProductById,
   getProductsCategory,
-  getProductsBasedOnCategory,
  };
 };

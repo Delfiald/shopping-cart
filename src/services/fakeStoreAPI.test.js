@@ -64,20 +64,6 @@ describe("Test Fake Store API Fetching", () => {
   expect(setLoading).toHaveBeenCalledWith(false);
  });
 
- it("Should return only one product based on id", async () => {
-  vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
-   ok: true,
-   json: async () => mockData[1],
-  });
-
-  const setError = vi.fn();
-  const setLoading = vi.fn();
-
-  const product = await fetchData(setError, setLoading).getProductById(2);
-  expect(product).toEqual(mockData[1]);
-  expect(fetch).toHaveBeenCalledWith(`${BASE_URL}/2`);
- });
-
  it("Should handle error when API returns 404", async () => {
   vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
    ok: false,
@@ -88,14 +74,14 @@ describe("Test Fake Store API Fetching", () => {
   const setError = vi.fn();
   const setLoading = vi.fn();
 
-  const product = await fetchData(setError, setLoading).getProductById(99);
+  const product = await fetchData(setError, setLoading).getAllProducts();
 
   expect(product).toBeNull();
   expect(setError).toHaveBeenCalledOnce();
   expect(setError).toHaveBeenCalledWith(
    "Failed to fetch data. HTTP Status: 404 - Not Found."
   );
-  expect(fetch).toHaveBeenCalledWith(`${BASE_URL}/99`);
+  expect(fetch).toHaveBeenCalledWith(`${BASE_URL}`);
  });
 
  it("Should handle 500 error when server fails", async () => {
@@ -109,10 +95,10 @@ describe("Test Fake Store API Fetching", () => {
   const setError = vi.fn();
   const setLoading = vi.fn();
 
-  const product = await fetchData(setError, setLoading).getProductById(2);
+  const product = await fetchData(setError, setLoading).getAllProducts();
 
   expect(product).toBeNull();
-  expect(fetch).toHaveBeenCalledWith(`${BASE_URL}/2`);
+  expect(fetch).toHaveBeenCalledWith(`${BASE_URL}`);
   expect(setError).toHaveBeenCalledOnce();
   expect(setError).toHaveBeenCalledWith(
    "Failed to fetch data. HTTP Status: 500 - Internal Server Error."
@@ -127,7 +113,7 @@ describe("Test Fake Store API Fetching", () => {
   const setError = vi.fn();
   const setLoading = vi.fn();
 
-  await fetchData(setError, setLoading).getProductById(2);
+  await fetchData(setError, setLoading).getAllProducts();
 
   expect(setError).toHaveBeenCalledWith("Network Error");
   expect(setLoading).toHaveBeenCalledTimes(2);
@@ -191,7 +177,7 @@ describe("Test Fake Store API Fetching", () => {
   const setError = vi.fn();
   const setLoading = vi.fn();
 
-  const product = await fetchData(setError, setLoading).getProductById(1);
+  const product = await fetchData(setError, setLoading).getAllProducts();
 
   expect(product).toHaveProperty("id", 1);
   expect(product).toHaveProperty("title", "Product 1");
@@ -221,29 +207,5 @@ describe("Test Fake Store API Fetching", () => {
   expect(setLoading).toHaveBeenCalledTimes(2);
   expect(setLoading).toHaveBeenCalledWith(true);
   expect(setLoading).toHaveBeenCalledWith(false);
- });
-
- it("Should return products based on categories", async () => {
-  const mockProducts = mockData.filter((data) => data.category === "category1");
-  vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
-   ok: true,
-   json: async () => mockProducts,
-  });
-
-  const setError = vi.fn();
-  const setLoading = vi.fn();
-
-  const products = await fetchData(
-   setError,
-   setLoading
-  ).getProductsBasedOnCategory("category1");
-
-  expect(products).toEqual(mockProducts);
-  expect(fetch).toHaveBeenCalledWith(`${BASE_URL}/category/category1`);
-
-  expect(setLoading).toHaveBeenCalledWith(true);
-  expect(setLoading).toHaveBeenCalledWith(false);
-
-  expect(setError).not.toHaveBeenCalled();
  });
 });
